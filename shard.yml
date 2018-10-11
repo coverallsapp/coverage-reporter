@@ -1,0 +1,9 @@
+name: coverage-reporter
+version: 0.1.0
+
+authors:
+  - Jordan Oroshiba <jordan@oroshiba.me>
+
+crystal: 0.26.1
+
+license: MIT
