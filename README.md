@@ -1,1 +1,1 @@
-# coverage-reporter
+# Coveralls Coverage Reporter
