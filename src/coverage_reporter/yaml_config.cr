@@ -11,5 +11,9 @@ module CoverageReporter
 
       @config["repo_token"]
     end
+
+    def config
+      @config
+    end
   end
 end

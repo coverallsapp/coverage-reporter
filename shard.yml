@@ -4,6 +4,10 @@ version: 0.1.0
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
 
+dependencies:
+  crest:
+    github: mamantoha/crest
+
 crystal: 0.26.1
 
 license: MIT

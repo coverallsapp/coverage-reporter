@@ -34,7 +34,6 @@ parser = OptionParser.parse! do |parser|
 end
 
 begin
-  puts()
   CoverageReporter.run(filename, repo_token, config_path)
 rescue ex : ArgumentError
   STDERR.puts <<-ERROR
