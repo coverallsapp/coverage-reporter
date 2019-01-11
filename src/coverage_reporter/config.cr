@@ -12,7 +12,6 @@ module CoverageReporter
     def get_config
       config = {} of Symbol => String | Nil
       config[:repo_token] = repo_token
-      puts @token
       config[:flag_name] = ENV["COVERALLS_FLAG_NAME"] if ENV["COVERALLS_FLAG_NAME"]?
       config[:service_name] = ENV["COVERALLS_SERVICE_NAME"] if ENV["COVERALLS_SERVICE_NAME"]?
 
@@ -23,7 +22,6 @@ module CoverageReporter
     end
 
     private def get_ci_config
-
       get_service_params_for_travis(@yaml ? @yaml.config["service_name"].to_s : "") ||
         get_service_params_for_circleci ||
         get_service_params_for_semaphore ||

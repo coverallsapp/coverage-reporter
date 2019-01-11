@@ -41,10 +41,10 @@ rescue ex : ArgumentError
   #{parser}
   Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
   ERROR
-rescue Errno
-  STDERR.puts <<-ERROR
-  Oops! It looks like you have not configured coveralls
-  Please add a configuration file in $HOME/.coveralls.yml that looks like this:
-  ---
-  ERROR
+# rescue Errno
+#   STDERR.puts <<-ERROR
+#   Oops! It looks like you have not configured coveralls
+#   Please add a configuration file in $HOME/.coveralls.yml that looks like this:
+#   ---
+#   ERROR
 end
