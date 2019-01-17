@@ -1,6 +1,5 @@
 module CoverageReporter
   class LcovParser
-    intHash = Hash(Int32, Int32)
     def initialize(@tracefile : String)
     end
 
@@ -16,11 +15,11 @@ module CoverageReporter
     end
 
     private def parse_tracefile
-      # begin
-        lcov_info = Hash(String, Hash(String, Hash(Int32, Int32))).new do |h, k|
+      begin
+        lcov_info = Hash(String, NamedTuple(coverage: Hash(Int32, Int32), branches: Hash(Int32, Hash(Int32, Hash(Int32, Int32))))).new do |h, k|
           h[k] = {
-            "coverage" => {} of Int32 => Int32,
-            "branches" => {} of Int32 => Int32,
+            coverage: {} of Int32 => Int32,
+            branches: {} of Int32 => Hash(Int32, Hash(Int32, Int32)),
           }
         end
         source_file = nil
@@ -31,30 +30,28 @@ module CoverageReporter
           when /\ADA:(\d+),(\d+)/
             line_no = $1.to_i
             count = $2.to_i
-            coverage = lcov_info[source_file]["coverage"]
+            coverage = lcov_info[source_file][:coverage]
             coverage[line_no] = (coverage[line_no]? || 0) + count
-          # when /\ABRDA:(\d+),(\d+),(\d+),(\d+|-)/
-          #   line_no = $1.to_i
-          #   block_no = $2.to_i
-          #   branch_no = $3.to_i
-          #   hits = 0
-          #   unless $4 == "-"
-          #     hits = $4.to_i
-          #   end
-          #   branches = lcov_info[source_file]["branches"]
-          #   branches_line = branches[line_no] = branches[line_no] || {} of Int32 => Int32
-          #   branches_block = branches_line[block_no] = branches_line[block_no] || {} of Int32 => Int32
-          #   branches_block[branch_no] = (branches_block[branch_no] || 0) + hits
+          when /\ABRDA:(\d+),(\d+),(\d+),(\d+|-)/
+            line_no = $1.to_i
+            block_no = $2.to_i
+            branch_no = $3.to_i
+            hits = $4 == "-" ? $4.to_i : 0
+
+            branches = lcov_info[source_file][:branches]
+            branches_line = branches[line_no] = branches[line_no] || {} of Int32 => Hash(Int32, Int32)
+            branches_block = branches_line[block_no] = branches_line[block_no] || {} of Int32 => Int32
+            branches_block[branch_no] = (branches_block[branch_no] || 0) + hits
           when /\Aend_of_record/
             source_file = nil
           end
         end
         lcov_info
-      # rescue ex
-      #   puts "Could not read tracefile: #{@tracefile}"
-      #   puts "#{ex.class}: #{ex.message}"
-      #   exit(1)
-      # end
+      rescue ex
+        puts "Could not process tracefile: #{@tracefile}"
+        puts "#{ex.class}: #{ex.message}"
+        exit(1)
+      end
     end
 
   private def parse_sourcefile(filename, info, source_encoding = "utf-8")
@@ -62,7 +59,7 @@ module CoverageReporter
 
     coverage = Array(Int32 | Nil).new(lines.size, 0)
     lines.each_with_index do |_line, index|
-      coverage[index] = info["coverage"][index + 1]? || nil
+      coverage[index] = info[:coverage][index + 1]? || nil
     end
 
     top_src_dir = Dir.current
@@ -70,16 +67,16 @@ module CoverageReporter
       :name => filename.sub(top_src_dir, ""),
       :coverage => coverage,
     }
-    unless info["branches"]?
-      # branches = [] of Array(Int32)
-      # info[:branches].each do |line_no, blocks_no|
-      #   blocks_no.each do |block_no, branches_no|
-      #     branches_no.each do |branch_no, hits|
-      #       branches.push(line_no, block_no, branch_no, hits)
-      #     end
-      #   end
-      # end
-      # source_file[:branches] = branches
+    unless info[:branches].empty?
+      branches = [] of Int32 | Nil
+      info[:branches].each do |line_no, blocks_no|
+        blocks_no.each do |block_no, branches_no|
+          branches_no.each do |branch_no, hits|
+            branches.push(line_no, block_no, branch_no, hits)
+          end
+        end
+      end
+      source_file[:branches] = branches
     end
 
     source_file
