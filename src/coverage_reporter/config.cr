@@ -4,9 +4,8 @@ module CoverageReporter
   class Config
     DEFAULT_LOCATION = ".coveralls.yml"
 
-    def initialize(repo_token : String | Nil, yaml_file : YamlConfig)
+    def initialize(repo_token : String | Nil, @yaml : YamlConfig)
       @token = repo_token.blank? ? nil : repo_token
-      @yaml = yaml_file
     end
 
     def get_config
