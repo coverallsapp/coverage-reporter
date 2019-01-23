@@ -4,13 +4,15 @@ module CoverageReporter
   class Config
     DEFAULT_LOCATION = ".coveralls.yml"
 
-    def initialize(repo_token : String | Nil, @yaml : YamlConfig)
+    def initialize(repo_token : String | Nil, job_flag : String | Nil, @yaml : YamlConfig)
       @token = repo_token.blank? ? nil : repo_token
+      @job_flag = job_flag.blank? ? nil : job_flag
     end
 
     def get_config
       config = {} of Symbol => String | Nil
       config[:repo_token] = repo_token
+      config[:job_flag] = @job_flag if @job_flag
       config[:flag_name] = ENV["COVERALLS_FLAG_NAME"] if ENV["COVERALLS_FLAG_NAME"]?
       config[:service_name] = ENV["COVERALLS_SERVICE_NAME"] if ENV["COVERALLS_SERVICE_NAME"]?
 

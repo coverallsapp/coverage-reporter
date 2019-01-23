@@ -4,6 +4,7 @@ require "./coverage_reporter"
 filename = ""
 repo_token = ENV.fetch("COVERALLS_REPO_TOKEN", "")
 config_path = CoverageReporter::Config::DEFAULT_LOCATION
+job_flag = ""
 
 parser = OptionParser.parse! do |parser|
   parser.banner = "Usage coveralls [arguments]"
@@ -27,6 +28,10 @@ parser = OptionParser.parse! do |parser|
     filename = name
   end
 
+  parser.on("-jFLAG", "--job-flag=FLAG", "Coverage job flag name") do |flag|
+    job_flag = flag
+  end
+
   parser.on("-h", "--help", "Show this help") do
     puts parser
     puts "Coveralls Coverage Reporter v#{CoverageReporter::VERSION}"
@@ -34,17 +39,19 @@ parser = OptionParser.parse! do |parser|
 end
 
 begin
-  CoverageReporter.run(filename, repo_token, config_path)
+  CoverageReporter.run(filename, repo_token, config_path, job_flag)
 rescue ex : ArgumentError
   STDERR.puts <<-ERROR
   Oops! #{ex.message}
   #{parser}
   Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
   ERROR
-# rescue Errno
-#   STDERR.puts <<-ERROR
-#   Oops! It looks like you have not configured coveralls
-#   Please add a configuration file in $HOME/.coveralls.yml that looks like this:
-#   ---
-#   ERROR
+rescue ex : Crest::UnprocessableEntity
+  STDERR.puts <<-ERROR
+
+
+  Oops! It looks like your request was not processible by Coveralls.
+  This is often the is the result of an incorrectly set repo token.
+  ---
+  ERROR
 end
