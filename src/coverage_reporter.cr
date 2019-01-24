@@ -1,4 +1,5 @@
 require "./coverage_reporter/*"
+require "./coverage_reporter/parser/lcov"
 
 
 module CoverageReporter
@@ -7,7 +8,7 @@ module CoverageReporter
   def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil)
     yaml = YamlConfig.new(yaml_file_location)
     git = GitInfo.run
-    source_files = LcovParser.new(coverage_file).parse
+    source_files = Parser::Lcov.new(coverage_file).parse
     api = Api.new(repo_token, yaml, git, job_flag, source_files)
 
     api.send_request
