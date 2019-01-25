@@ -1,11 +1,16 @@
 module CoverageReporter
-  module Parser
+  module ParserHelpers
     class Lcov
+      alias SourceFilesType = Hash(Symbol, Array(Int32 | Nil) | String)
+
+      alias BranchInfoHashContent = Hash(Int32, Hash(Int32, Int32))
+      alias BranchInfoType = Hash(Int32, BranchInfoHashContent)
+
       def initialize(@tracefile : String)
       end
 
-      def parse
-        source_files = [] of Hash(Symbol, Array(Int32 | Nil) | String)
+      def parse : Array(SourceFilesType)
+        source_files = [] of SourceFilesType
 
         lcov_info = parse_tracefile
         lcov_info.each do |filename, info|
@@ -17,10 +22,10 @@ module CoverageReporter
 
       private def parse_tracefile
         begin
-          lcov_info = Hash(String, NamedTuple(coverage: Hash(Int32, Int32), branches: Hash(Int32, Hash(Int32, Hash(Int32, Int32))))).new do |h, k|
+          lcov_info = Hash(String, NamedTuple(coverage: Hash(Int32, Int32), branches: BranchInfoType)).new do |h, k|
             h[k] = {
               coverage: {} of Int32 => Int32,
-              branches: {} of Int32 => Hash(Int32, Hash(Int32, Int32)),
+              branches: {} of Int32 => BranchInfoHashContent,
             }
           end
           source_file = nil
