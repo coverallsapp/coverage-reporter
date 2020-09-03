@@ -53,12 +53,17 @@ module CoverageReporter
     private def get_service_params_for_circleci
       return unless ENV["CIRCLECI"]?
 
-      {
-        :service_name => "circleci",
-        :service_number =>  ENV["CIRCLE_WORKFLOW_ID"]?,
-        :service_pull_request => (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1],
-        :service_job_number => ENV["CIRCLE_BUILD_NUM"]?,
-      }
+      puts "🏢 Circle CI environment detected, configuring API post using:"
+      puts "  service_number: #{ENV["CIRCLE_WORKFLOW_ID"]? || "none"} (CIRCLE_WORKFLOW_ID)"
+      puts "  service_pull_request: #{ENV["CI_PULL_REQUEST"]? || "none"} (CI_PULL_REQUEST)"
+      puts "  service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
+
+      config = {} of Symbol => String | Nil
+      config[:service_name] = "circleci"
+      config[:service_number] = ENV["CIRCLE_WORKFLOW_ID"] if ENV.has_key?("CIRCLE_WORKFLOW_ID")
+      config[:service_pull_request] = (ENV["CIRCLE_PULL_REQUEST"]? || "")[/(\d+)$/,1] if ENV.has_key?("CIRCLE_PULL_REQUEST")
+      config[:service_job_number] = ENV["CIRCLE_BUILD_NUM"]? if ENV.has_key?("CIRCLE_BUILD_NUM")
+      config
     end
 
     private def get_service_params_for_semaphore

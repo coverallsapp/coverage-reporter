@@ -21,7 +21,13 @@ module CoverageReporter
         end
 
       else
-        @files = [filenames]
+        if File.exists?(filenames)
+          puts "📄 Using coverage file: #{filenames}"
+          @files = [filenames]
+        else
+          puts "🚨 ERROR: Couldn't find specified file: #{filenames}"
+          exit 1
+        end
       end
     end
 
