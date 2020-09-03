@@ -23,7 +23,7 @@ module CoverageReporter
     end
 
     private def get_ci_config
-      get_service_params_for_travis(@yaml ? @yaml.config["service_name"].to_s : "") ||
+      get_service_params_for_travis(@yaml.config["service_name"]?.to_s || "") ||
         get_service_params_for_circleci ||
         get_service_params_for_semaphore ||
         get_service_params_for_jenkins ||

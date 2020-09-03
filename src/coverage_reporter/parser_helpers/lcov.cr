@@ -45,9 +45,9 @@ module CoverageReporter
               hits = $4 == "-" ? $4.to_i : 0
 
               branches = lcov_info[source_file][:branches]
-              branches_line = branches[line_no] = branches[line_no] || {} of Int32 => Hash(Int32, Int32)
-              branches_block = branches_line[block_no] = branches_line[block_no] || {} of Int32 => Int32
-              branches_block[branch_no] = (branches_block[branch_no] || 0) + hits
+              branches_line = branches[line_no] = branches[line_no]? || {} of Int32 => Hash(Int32, Int32)
+              branches_block = branches_line[block_no] = branches_line[block_no]? || {} of Int32 => Int32
+              branches_block[branch_no] = (branches_block[branch_no]? || 0) + hits
             when /\Aend_of_record/
               source_file = nil
             end
@@ -56,6 +56,7 @@ module CoverageReporter
         rescue ex
           puts "Could not process tracefile: #{@tracefile}"
           puts "#{ex.class}: #{ex.message}"
+          raise ex
           exit(1)
         end
       end

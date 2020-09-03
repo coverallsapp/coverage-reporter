@@ -21,11 +21,13 @@ module CoverageReporter
 
     def send_request
       puts build_request
-      Crest.post(
+      res = Crest.post(
         uri,
         headers: { "Content-Type" => "application/json" },
         form: { :json => build_request.to_json.to_s }.to_json
       )
+
+      puts res.body
 
       nil
     end

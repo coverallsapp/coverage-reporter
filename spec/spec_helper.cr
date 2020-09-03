@@ -1,2 +1,2 @@
 require "spec"
-require "../src/coverage-reporter"
+require "../src/coverage_reporter.cr"

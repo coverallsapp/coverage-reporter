@@ -22,7 +22,8 @@ module CoverageReporter
 
     private def parse_file(filename : String)
       case filename
-      when /$\.lcov/
+      when /\.lcov$|lcov\.info$/
+        puts "LCOV detected."
         ParserHelpers::Lcov.new(filename).parse
 
       # when /$\.gcov/
@@ -32,7 +33,7 @@ module CoverageReporter
       # when /\.coverage/
       #   PythonCov.new(filename).parse
       else
-        puts "ERROR, coverage reporter does not yet know how to process this file"
+        puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"
         [] of SourceFilesType
       end
     end
