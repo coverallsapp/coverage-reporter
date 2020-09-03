@@ -6,7 +6,23 @@ module CoverageReporter
     alias SourceFilesType = Hash(Symbol, Array(Int32 | Nil) | String)
 
     def initialize(filenames : String)
-      @files = [filenames]
+      @files = [] of String
+
+      if filenames == ""
+        (Dir["**/lcov.info"] +
+          Dir["**/*.lcov"] +
+          Dir["**/.resultset.json"] +
+          Dir["**/.coverage"]).each do |filename|
+
+          unless filename =~ /node_modules/
+            @files.push(filename)
+            puts "🔍 Detected coverage file: #{filename}"
+          end
+        end
+
+      else
+        @files = [filenames]
+      end
     end
 
     def parse
@@ -21,9 +37,10 @@ module CoverageReporter
     end
 
     private def parse_file(filename : String)
+      # TODO: missing filename, attempt to auto-detect
+
       case filename
       when /\.lcov$|lcov\.info$/
-        puts "LCOV detected."
         ParserHelpers::Lcov.new(filename).parse
 
       # when /$\.gcov/

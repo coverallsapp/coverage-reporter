@@ -47,8 +47,8 @@ begin
    | |    / _ \ \ / / _ \ '__/ _` | | / __|
    | |___| (_) \ V /  __/ | | (_| | | \__ \
     \_____\___/ \_/ \___|_|  \__,_|_|_|___/
-
-STR
+  STR
+  puts "  v#{CoverageReporter::VERSION}\n\n"
 
   CoverageReporter.run(filename, repo_token, config_path, job_flag)
 rescue ex : ArgumentError
@@ -60,9 +60,11 @@ rescue ex : ArgumentError
 rescue ex : Crest::UnprocessableEntity
   STDERR.puts <<-ERROR
   ---
-  Oops! It looks like your request was not processible by Coveralls.
-  This is often the is the result of an incorrectly set repo token.
+  Error: #{ex.message}
   ---
-  #{ex.message}
+  🚨 Oops! It looks like your request was not processible by Coveralls.
+  This is often the is the result of an incorrectly set repo token.
+  More info/troubleshooting here: https://docs.coveralls.io
+  - 💛, Coveralls
   ERROR
 end

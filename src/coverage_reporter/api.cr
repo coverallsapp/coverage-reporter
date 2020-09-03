@@ -20,6 +20,7 @@ module CoverageReporter
     end
 
     def send_request
+      puts "🚀 Posting coverage data to #{uri}"
       puts build_request
       res = Crest.post(
         uri,
@@ -27,7 +28,8 @@ module CoverageReporter
         form: { :json => build_request.to_json.to_s }.to_json
       )
 
-      puts res.body
+      # TODO: include info about account status
+      puts "---\n✅ API Response: #{res.body}\n- 💛, Coveralls"
 
       nil
     end
