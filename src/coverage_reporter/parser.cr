@@ -14,7 +14,7 @@ module CoverageReporter
           Dir["**/*/.resultset.json"] +
           Dir["**/*/.coverage"]).each do |filename|
 
-          unless filename =~ /node_modules/
+          unless filename =~ /node_modules|vendor/
             @files.push(filename)
             puts "🔍 Detected coverage file: #{filename}"
           end
