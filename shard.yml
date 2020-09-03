@@ -1,5 +1,5 @@
 name: coverage-reporter
-version: 0.1.1
+version: 0.1.2
 
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
@@ -9,6 +9,6 @@ dependencies:
   crest:
     github: mamantoha/crest
 
-crystal: 0.26.1
+crystal: 0.35.1
 
 license: MIT

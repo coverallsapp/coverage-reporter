@@ -9,10 +9,10 @@ module CoverageReporter
       @files = [] of String
 
       if filenames == ""
-        (Dir["**/lcov.info"] +
-          Dir["**/*.lcov"] +
-          Dir["**/.resultset.json"] +
-          Dir["**/.coverage"]).each do |filename|
+        (Dir["**/*/lcov.info"] +
+          Dir["**/*/*.lcov"] +
+          Dir["**/*/.resultset.json"] +
+          Dir["**/*/.coverage"]).each do |filename|
 
           unless filename =~ /node_modules/
             @files.push(filename)
@@ -37,18 +37,19 @@ module CoverageReporter
     end
 
     private def parse_file(filename : String)
-      # TODO: missing filename, attempt to auto-detect
-
       case filename
       when /\.lcov$|lcov\.info$/
         ParserHelpers::Lcov.new(filename).parse
 
+      when /\.resultset\.json$/
+        ParserHelpers::SimpleCov.new(filename).parse
+
       # when /$\.gcov/
-      #   Gcov.new(filename).parse
-      # when /\.resultset.json/
-      #   SimpleCov.new(filename).parse
+      #   ParserHelpers::Gcov.new(filename).parse
+
       # when /\.coverage/
-      #   PythonCov.new(filename).parse
+      #   ParserHelpers::PythonCov.new(filename).parse
+
       else
         puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"
         [] of SourceFilesType
