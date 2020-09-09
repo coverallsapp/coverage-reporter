@@ -16,7 +16,7 @@ module CoverageReporter
           source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
       )
         @parallel = parallel || (ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
-        puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --finished`"
+        puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --finished`" unless CoverageReporter.quiet?
         @sauce = source_files || {} of String => Array(Int32)
 
         @general_config = Config.new(token, @job_flag, @yaml)
@@ -26,10 +26,12 @@ module CoverageReporter
         data = build_request
         api_url = uri("api/#{API_VERSION}/jobs")
 
-        puts "  ·job_flag: #{@job_flag}" if @job_flag != ""
-        puts "  ·parallel: true" if @parallel
+        unless quiet?
+          puts "  ·job_flag: #{@job_flag}" if @job_flag != ""
+          puts "  ·parallel: true" if @parallel
 
-        puts "🚀 Posting coverage data to #{api_url}"
+          puts "🚀 Posting coverage data to #{api_url}"
+        end
 
         res = Crest.post(
           api_url,
@@ -38,8 +40,7 @@ module CoverageReporter
         )
 
         show_response(res)
-
-        nil
+        true
       end
 
       private def build_request
@@ -66,7 +67,10 @@ module CoverageReporter
 
     def send_request
         webhook_url = uri("webhook")
-        puts "⭐️ Calling parallel finished webhook: #{webhook_url}"
+
+        unless quiet?
+          puts "⭐️ Calling parallel finished webhook: #{webhook_url}"
+        end
 
         data = {
           :repo_token => @token,
@@ -83,11 +87,12 @@ module CoverageReporter
         )
 
         show_response(res)
-        nil
+        true
       end
     end
 
     private def show_response(res)
+      return if quiet?
       # TODO: include info about account status
       puts "---\n✅ API Response: #{res.body}\n- 💛, Coveralls"
     end
@@ -103,6 +108,10 @@ module CoverageReporter
       end
 
       "#{domain}/#{path}"
+    end
+
+    private def quiet?
+      CoverageReporter.quiet?
     end
   end
 end

@@ -1,5 +1,5 @@
 name: coverage-reporter
-version: 0.1.3
+version: 0.1.4
 
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
@@ -8,6 +8,11 @@ authors:
 dependencies:
   crest:
     github: mamantoha/crest
+
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr
+    branch: master
 
 crystal: 0.35.1
 

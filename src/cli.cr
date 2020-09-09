@@ -48,15 +48,20 @@ parser = OptionParser.parse do |parser|
     no_logo = true
   end
 
+  parser.on("-q", "--quiet", "Suppress all output") do 
+    CoverageReporter.quiet!
+  end
+
   parser.on("-h", "--help", "Show this help") do
     # TODO: add environment variable notes
-    puts parser
     puts "Coveralls Coverage Reporter v#{CoverageReporter::VERSION}"
+    puts parser
+    exit 0
   end
 end
 
 begin
-  unless no_logo
+  unless no_logo || CoverageReporter.quiet?
     puts " "
     puts " ⠀⠀⠀⠀⠀⠀#{"c".colorize(Colorize::Color256.new(88))}#{"o".colorize(Colorize::Color256.new(196))}#{"v".colorize(Colorize::Color256.new(88))}"
     puts " ⠀⠀⠀⠀⠀#{"e".colorize(Colorize::Color256.new(88))}#{"ral".colorize(Colorize::Color256.new(196))}#{"l".colorize(Colorize::Color256.new(88))}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"

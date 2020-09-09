@@ -16,13 +16,13 @@ module CoverageReporter
 
           unless filename =~ /node_modules|vendor/
             @files.push(filename)
-            puts "🔍 Detected coverage file: #{filename}"
+            puts "🔍 Detected coverage file: #{filename}" unless CoverageReporter.quiet?
           end
         end
 
       else
         if File.exists?(filenames)
-          puts "📄 Using coverage file: #{filenames}"
+          puts "📄 Using coverage file: #{filenames}" unless CoverageReporter.quiet?
           @files = [filenames]
         else
           puts "🚨 ERROR: Couldn't find specified file: #{filenames}"

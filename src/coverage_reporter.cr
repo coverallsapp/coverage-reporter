@@ -19,4 +19,12 @@ module CoverageReporter
 
     api.send_request
   end
+
+  def self.quiet!
+    @@quiet = true
+  end
+
+  def self.quiet?
+    @@quiet
+  end
 end

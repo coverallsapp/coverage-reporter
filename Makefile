@@ -11,3 +11,5 @@ release_mac:
 
 release: | release_linux release_mac
 
+test:
+	crystal spec
