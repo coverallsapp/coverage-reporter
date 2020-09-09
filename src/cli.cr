@@ -8,7 +8,7 @@ config_path = CoverageReporter::Config::DEFAULT_LOCATION
 job_flag = ""
 no_logo = false
 parallel = false
-parallel_finished = false
+parallel_done = false
 
 parser = OptionParser.parse do |parser|
   parser.banner = "Usage coveralls [arguments]"
@@ -28,7 +28,7 @@ parser = OptionParser.parse do |parser|
       config_path = path
     end
 
-  parser.on("-fFILENAME", "--file=FILENAME ", "Coverage artifact file to be reported, e.g. coverage/lcov.info") do |name|
+  parser.on("-fFILENAME", "--file=FILENAME ", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
     filename = name
   end
 
@@ -36,12 +36,12 @@ parser = OptionParser.parse do |parser|
     job_flag = flag
   end
 
-  parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion.") do
+  parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done).") do
     parallel = true
   end
 
-  parser.on("-f", "--finished", "Calls webhook after all parallel jobs finished.") do
-    parallel_finished = true
+  parser.on("-d", "--done", "Call webhook after all parallel jobs (-p) done.") do
+    parallel_done = true
   end
 
   parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do 
@@ -75,8 +75,8 @@ begin
     puts "⭐️ Coveralls.io Coverage Reporter v#{CoverageReporter::VERSION}"
   end
 
-  if parallel_finished
-    CoverageReporter.parallel_finished(repo_token, config_path)
+  if parallel_done
+    CoverageReporter.parallel_done(repo_token, config_path)
   else
     CoverageReporter.run(filename, repo_token, config_path, job_flag, parallel)
   end

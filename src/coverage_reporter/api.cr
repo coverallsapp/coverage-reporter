@@ -16,7 +16,7 @@ module CoverageReporter
           source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
       )
         @parallel = parallel || (ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
-        puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --finished`" unless CoverageReporter.quiet?
+        puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --done`" unless CoverageReporter.quiet?
         @sauce = source_files || {} of String => Array(Int32)
 
         @general_config = Config.new(token, @job_flag, @yaml)
@@ -69,7 +69,7 @@ module CoverageReporter
         webhook_url = uri("webhook")
 
         unless quiet?
-          puts "⭐️ Calling parallel finished webhook: #{webhook_url}"
+          puts "⭐️ Calling parallel done webhook: #{webhook_url}"
         end
 
         data = {

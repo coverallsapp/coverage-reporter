@@ -15,17 +15,18 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter v0.1.4
+Coveralls Coverage Reporter v0.1.5
 Usage coveralls [arguments]
     -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
     -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
-    -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info
+    -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
-    -p, --parallel                   Set the parallel flag. Requires webhook for completion.
-    -f, --finished                   Calls webhook after all parallel jobs finished.
+    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done).
+    -d, --done                       Call webhook after all parallel jobs (-p) done.
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
     -h, --help                       Show this help
+➜  coverage-reporter git:(master) ✗
 ```
 
 ## CI Usage Examples:

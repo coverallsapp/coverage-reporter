@@ -24,7 +24,7 @@ describe CoverageReporter do
       it "handles webhook" do
         repo_token = "asdfasdf"
 
-        res = CoverageReporter.parallel_finished repo_token, ""
+        res = CoverageReporter.parallel_done repo_token, ""
         res.should be_true
       end
     end

@@ -2,7 +2,7 @@ require "./coverage_reporter/*"
 
 
 module CoverageReporter
-  VERSION = "0.1.4"
+  VERSION = "0.1.5"
 
   def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil, parallel : Bool)
     yaml = YamlConfig.new(yaml_file_location)
@@ -13,7 +13,7 @@ module CoverageReporter
     api.send_request
   end
 
-  def self.parallel_finished(repo_token : String | Nil, yaml_file_location : String)
+  def self.parallel_done(repo_token : String | Nil, yaml_file_location : String)
     yaml = YamlConfig.new(yaml_file_location)
     api = Api::Webhook.new(repo_token, yaml)
 

@@ -42,7 +42,7 @@ module CoverageReporter
               line_no = $1.to_i
               block_no = $2.to_i
               branch_no = $3.to_i
-              hits = $4 == "-" ? $4.to_i : 0
+              hits = $4 == "-" ? 0 : $4.to_i
 
               branches = lcov_info[source_file][:branches]
               branches_line = branches[line_no] = branches[line_no]? || {} of Int32 => Hash(Int32, Int32)
