@@ -63,12 +63,12 @@ end
 begin
   unless no_logo || CoverageReporter.quiet?
     puts " "
-    puts " ⠀⠀⠀⠀⠀⠀#{"c".colorize(Colorize::Color256.new(88))}#{"o".colorize(Colorize::Color256.new(196))}#{"v".colorize(Colorize::Color256.new(88))}"
-    puts " ⠀⠀⠀⠀⠀#{"e".colorize(Colorize::Color256.new(88))}#{"ral".colorize(Colorize::Color256.new(196))}#{"l".colorize(Colorize::Color256.new(88))}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
-    puts " #{"s".colorize(Colorize::Color256.new(88))}#{"coverallscove".colorize(Colorize::Color256.new(196))}#{"r".colorize(Colorize::Color256.new(88))}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
-    puts " ⠀⠀#{"a".colorize(Colorize::Color256.new(88))}#{"llscovera".colorize(Colorize::Color256.new(196))}#{"l".colorize(Colorize::Color256.new(88))}⠀⠀  ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
-    puts "⠀ ⠀ #{"l".colorize(Colorize::Color256.new(88))}#{"sco".colorize(Colorize::Color256.new(196))}#{"v".colorize(Colorize::Color256.new(52))}#{"era".colorize(Colorize::Color256.new(196))}#{"l".colorize(Colorize::Color256.new(88))}⠀⠀ ⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
-    puts " ⠀ #{"l".colorize(Colorize::Color256.new(88))}#{"sc".colorize(Colorize::Color256.new(196))}#{"o".colorize(Colorize::Color256.new(88))}#{"ver".colorize(Colorize::Color256.new(52))}#{"a".colorize(Colorize::Color256.new(88))}#{"ll".colorize(Colorize::Color256.new(196))}#{"s".colorize(Colorize::Color256.new(88))}⠀⠀"
+    puts "⠀⠀⠀⠀⠀⠀#{"⣿".colorize(Colorize::Color256.new(196))}"
+    puts "⠀⠀⠀⠀⠀#{"⣼⣿⣧".colorize(Colorize::Color256.new(196))}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
+    puts "#{"⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶".colorize(Colorize::Color256.new(196))}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
+    puts "⠀⠀#{"⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁".colorize(Colorize::Color256.new(196))}⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
+    puts "⠀⠀#{"⢠⣿⣿⣿⠿⣿⣿⣿⡄".colorize(Colorize::Color256.new(196))}⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
+    puts "⠀#{"⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀".colorize(Colorize::Color256.new(196))}⠀⠀"
     puts " "
     puts "  v#{CoverageReporter::VERSION}\n\n"
   else
