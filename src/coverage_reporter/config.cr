@@ -6,7 +6,7 @@ module CoverageReporter
 
     def initialize(repo_token : String | Nil, job_flag : String | Nil, @yaml : YamlConfig)
       @token = repo_token.blank? ? nil : repo_token
-      @job_flag = job_flag.blank? ? nil : job_flag
+      @job_flag = !job_flag || job_flag.blank? ? nil : job_flag
     end
 
     def get_config
@@ -54,9 +54,9 @@ module CoverageReporter
       return unless ENV["CIRCLECI"]?
 
       puts "🏢 Circle CI environment detected, configuring API post using:"
-      puts "  service_number: #{ENV["CIRCLE_WORKFLOW_ID"]? || "none"} (CIRCLE_WORKFLOW_ID)"
-      puts "  service_pull_request: #{ENV["CI_PULL_REQUEST"]? || "none"} (CI_PULL_REQUEST)"
-      puts "  service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
+      puts "  ·service_number: #{ENV["CIRCLE_WORKFLOW_ID"]? || "none"} (CIRCLE_WORKFLOW_ID)"
+      puts "  ·service_pull_request: #{ENV["CI_PULL_REQUEST"]? || "none"} (CI_PULL_REQUEST)"
+      puts "  ·service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
 
       config = {} of Symbol => String | Nil
       config[:service_name] = "circleci"

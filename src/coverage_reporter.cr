@@ -2,13 +2,20 @@ require "./coverage_reporter/*"
 
 
 module CoverageReporter
-  VERSION = "0.1.3"
+  VERSION = "0.1.4"
 
-  def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil)
+  def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil, parallel : Bool)
     yaml = YamlConfig.new(yaml_file_location)
     git = GitInfo.run
     source_files = Parser.new(coverage_file).parse
-    api = Api.new(repo_token, yaml, git, job_flag, source_files)
+    api = Api::Poster.new(repo_token, yaml, git, job_flag, parallel, source_files)
+
+    api.send_request
+  end
+
+  def self.parallel_finished(repo_token : String | Nil, yaml_file_location : String)
+    yaml = YamlConfig.new(yaml_file_location)
+    api = Api::Webhook.new(repo_token, yaml)
 
     api.send_request
   end

@@ -6,46 +6,93 @@ module CoverageReporter
   class Api
     API_VERSION = "v1"
 
-    def initialize(
-        token : String,
-        yaml : YamlConfig,
-        git : Hash(Symbol, String | Hash(Symbol, String)),
-        job_flag : String,
-        source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
-    )
-      @yaml = yaml
-      @git = git
-      @sauce = source_files || {} of String => Array(Int32)
-      @general_config = Config.new(token, job_flag, @yaml)
+    class Poster < Api
+      def initialize(
+          token : String,
+          @yaml : YamlConfig,
+          @git : Hash(Symbol, String | Hash(Symbol, String)),
+          @job_flag : String,
+          parallel : Bool,
+          source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
+      )
+        @parallel = parallel || (ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
+        puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --finished`"
+        @sauce = source_files || {} of String => Array(Int32)
+
+        @general_config = Config.new(token, @job_flag, @yaml)
+      end
+
+      def send_request
+        data = build_request
+        api_url = uri("api/#{API_VERSION}/jobs")
+
+        puts "  ·job_flag: #{@job_flag}" if @job_flag != ""
+        puts "  ·parallel: true" if @parallel
+
+        puts "🚀 Posting coverage data to #{api_url}"
+
+        res = Crest.post(
+          api_url,
+          headers: { "Content-Type" => "application/json" },
+          form: { :json => data.to_json.to_s }.to_json
+        )
+
+        show_response(res)
+
+        nil
+      end
+
+      private def build_request
+        @general_config.get_config.merge(
+          {
+            :source_files => @sauce,
+            :git => @git,
+            :parallel => @parallel,
+          }
+        )
+      end
     end
+
+    class Webhook < Api
+      @token : String | Nil
+      @build_num : String | Nil
+
+      def initialize(token : String, yaml : YamlConfig)
+        config = Config.new(token, nil, yaml).get_config
+
+        @token = config[:repo_token]
+        @build_num = config[:service_number]
+      end
 
     def send_request
-      data = build_request
+        webhook_url = uri("webhook")
+        puts "⭐️ Calling parallel finished webhook: #{webhook_url}"
 
-      puts "🚀 Posting coverage data to #{uri}"
+        data = {
+          :repo_token => @token,
+          :payload => { 
+            :build_num => @build_num, 
+            :status => "done" 
+          }
+        }
 
-      res = Crest.post(
-        uri,
-        headers: { "Content-Type" => "application/json" },
-        form: { :json => data.to_json.to_s }.to_json
-      )
+        res = Crest.post(
+          webhook_url,
+          headers: { "Content-Type" => "application/json" },
+          form: data.to_json
+        )
 
+        show_response(res)
+        nil
+      end
+    end
+
+    private def show_response(res)
       # TODO: include info about account status
       puts "---\n✅ API Response: #{res.body}\n- 💛, Coveralls"
-
-      nil
     end
 
-    private def build_request
-      @general_config.get_config.merge(
-        {
-          :source_files => @sauce,
-          :git => @git,
-        }
-      )
-    end
-
-    private def uri
+    private def uri(path)
       if ENV["COVERALLS_ENDPOINT"]?
         host = ENV["COVERALLS_ENDPOINT"]?
         domain = ENV["COVERALLS_ENDPOINT"]?
@@ -55,7 +102,7 @@ module CoverageReporter
         domain = "#{protocol}://#{host}"
       end
 
-      return "#{domain}/api/#{API_VERSION}/jobs"
+      "#{domain}/#{path}"
     end
   end
 end
