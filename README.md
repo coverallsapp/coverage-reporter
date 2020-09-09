@@ -1,8 +1,10 @@
-# Coveralls.io Universal Coverage Reporter
+# Coveralls Universal Coverage Reporter
+
+Auto-detects your coverage artifact files and CI environment to post to [Coveralls.io](https://coveralls.io).
 
 ## Usage:
 
-```bash
+```
 $ coveralls -h
 Coveralls Coverage Reporter v0.1.4
 Usage coveralls [arguments]
@@ -17,7 +19,7 @@ Usage coveralls [arguments]
     -h, --help                       Show this help
 ```
 
-## Examples:
+## CI Usage Examples:
 
 * CircleCI workflow.yml:
 
@@ -35,6 +37,13 @@ Coming soon:
 * PyCov
 * Gcov
 
+## Auto-Configuration Supported CIs:
+
+* CircleCI
+* Travis
+
+[Docs on environment variables for other CI support.](https://docs.coveralls.io/supported-ci-services#insert-your-ci-here)
+
 ---
 
 # Development
@@ -43,12 +52,12 @@ To get started you will need crystal [installed](https://crystal-lang.org/instal
 
 ```bash
 shards install
-make
+make # dist/coverals will be created
 ```
 
 Self-contained binary compiling:
 
 ```bash
-make release_mac
-make release_linux
+make release_mac # dist/coverals-mac.tar.gz will be created
+make release_linux # dist/coverals-linux.tar.gz will be created
 ```
