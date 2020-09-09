@@ -26,7 +26,6 @@ Usage coveralls [arguments]
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
     -h, --help                       Show this help
-➜  coverage-reporter git:(master) ✗
 ```
 
 ## CI Usage Examples:
