@@ -62,18 +62,18 @@ module CoverageReporter
     private def get_service_params_for_circleci
       return unless ENV["CIRCLECI"]?
 
-      puts "🏢 Circle CI environment detected, configuring API post using:"
-      puts "  ·service_branch: #{ENV["CIRCLE_BRANCH"]? || "none"} (CIRCLE_BRANCH)"
-      puts "  ·service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
-      puts "  ·service_number: #{ENV["CIRCLE_WORKFLOW_ID"]? || "none"} (CIRCLE_WORKFLOW_ID)"
-      puts "  ·service_pull_request: #{ENV["CI_PULL_REQUEST"]? || "none"} (CI_PULL_REQUEST)"
-
       config = {} of Symbol => String | Nil
       config[:service_name] = "circleci"
       config[:service_number] = ENV["CIRCLE_WORKFLOW_ID"] if ENV.has_key?("CIRCLE_WORKFLOW_ID")
-      config[:service_pull_request] = (ENV["CIRCLE_PULL_REQUEST"]? || "")[/(\d+)$/,1] if ENV.has_key?("CIRCLE_PULL_REQUEST")
+      config[:service_pull_request] = (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1] if ENV.has_key?("CI_PULL_REQUEST")
       config[:service_job_number] = ENV["CIRCLE_BUILD_NUM"]? if ENV.has_key?("CIRCLE_BUILD_NUM")
       config[:service_branch] = ENV["CIRCLE_BRANCH"]? if ENV.has_key?("CIRCLE_BRANCH")
+
+      puts "🏢 Circle CI environment detected, configuring API post using:"
+      puts "  ·service_branch: #{config[:service_branch]? || "none"} (CIRCLE_BRANCH)"
+      puts "  ·service_job_number: #{config[:service_job_number]? || "none"} (CIRCLE_BUILD_NUM)"
+      puts "  ·service_number: #{config[:service_number]? || "none"} (CIRCLE_WORKFLOW_ID)"
+      puts "  ·service_pull_request: #{config[:service_pull_request]? || "none"} (CI_PULL_REQUEST)"
 
       config
     end

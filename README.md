@@ -43,7 +43,7 @@ Usage coveralls [arguments]
 
 Coming soon:
 
-* PyCov
+* Pytest-Cov
 * Gcov
 
 ## Auto-Configuration Supported CIs:
