@@ -4,14 +4,18 @@ module CoverageReporter
   class Config
     DEFAULT_LOCATION = ".coveralls.yml"
 
-    def initialize(repo_token : String | Nil, job_flag : String | Nil, @yaml : YamlConfig)
-      @token = repo_token.blank? ? nil : repo_token
+    def initialize(@token : String | Nil, job_flag : String | Nil, @yaml : YamlConfig)
       @job_flag = !job_flag || job_flag.blank? ? nil : job_flag
+
+      if !repo_token || repo_token == ""
+        puts "🚨 Missing Repo Token. Set using `-r <token>` or `COVERALLS_REPO_TOKEN=<token>`"
+        exit 1
+      end
     end
 
     def get_config
       config = {} of Symbol => String | Nil
-      config[:repo_token] = repo_token
+      config[:repo_token] = @token
       config[:job_flag] = @job_flag if @job_flag
       config[:flag_name] = ENV["COVERALLS_FLAG_NAME"] if ENV["COVERALLS_FLAG_NAME"]?
       config[:service_name] = ENV["COVERALLS_SERVICE_NAME"] if ENV["COVERALLS_SERVICE_NAME"]?
@@ -47,6 +51,11 @@ module CoverageReporter
       config[:service_name] = service_name || "travis-ci"
       config[:service_branch] = ENV["TRAVIS_BRANCH"]?
 
+      puts "🏢 Travis CI environment detected, configuring API post using:"
+      puts "  ·service_branch: #{config[:service_branch]? || "none"} (TRAVIS_BRANCH)"
+      puts "  ·service_job_number: #{config[:service_job_id]? || "none"} (TRAVIS_JOB_ID)"
+      puts "  ·service_pull_request: #{config[:service_pull_request]? || "none"} (TRAVIS_PULL_REQUEST)"
+
       config
     end
 
@@ -54,15 +63,18 @@ module CoverageReporter
       return unless ENV["CIRCLECI"]?
 
       puts "🏢 Circle CI environment detected, configuring API post using:"
+      puts "  ·service_branch: #{ENV["CIRCLE_BRANCH"]? || "none"} (CIRCLE_BRANCH)"
+      puts "  ·service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
       puts "  ·service_number: #{ENV["CIRCLE_WORKFLOW_ID"]? || "none"} (CIRCLE_WORKFLOW_ID)"
       puts "  ·service_pull_request: #{ENV["CI_PULL_REQUEST"]? || "none"} (CI_PULL_REQUEST)"
-      puts "  ·service_job_number: #{ENV["CIRCLE_BUILD_NUM"]? || "none"} (CIRCLE_BUILD_NUM)"
 
       config = {} of Symbol => String | Nil
       config[:service_name] = "circleci"
       config[:service_number] = ENV["CIRCLE_WORKFLOW_ID"] if ENV.has_key?("CIRCLE_WORKFLOW_ID")
       config[:service_pull_request] = (ENV["CIRCLE_PULL_REQUEST"]? || "")[/(\d+)$/,1] if ENV.has_key?("CIRCLE_PULL_REQUEST")
       config[:service_job_number] = ENV["CIRCLE_BUILD_NUM"]? if ENV.has_key?("CIRCLE_BUILD_NUM")
+      config[:service_branch] = ENV["CIRCLE_BRANCH"]? if ENV.has_key?("CIRCLE_BRANCH")
+
       config
     end
 
@@ -135,13 +147,12 @@ module CoverageReporter
     end
 
     private def set_standard_service_params_for_generic_ci(config)
-
       config[:service_name] ||= ENV["CI_NAME"]?
       config[:service_number] ||= ENV["CI_BUILD_NUMBER"]?
       config[:service_job_id] ||= ENV["CI_JOB_ID"]?
       config[:service_build_url] ||= ENV["CI_BUILD_URL"]?
       config[:service_branch] ||= ENV["CI_BRANCH"]?
-      #config[:service_pull_request] ||= (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1]
+      config[:service_pull_request] ||= (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1]?
     end
 
   end

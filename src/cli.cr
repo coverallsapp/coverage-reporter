@@ -86,6 +86,7 @@ rescue ex : Crest::UnprocessableEntity
   STDERR.puts <<-ERROR
   ---
   Error: #{ex.message}
+  Response: #{ex.response}
   ---
   🚨 Oops! It looks like your request was not processible by Coveralls.
   This is often the is the result of an incorrectly set repo token.
