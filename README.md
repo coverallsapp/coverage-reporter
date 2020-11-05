@@ -53,6 +53,16 @@ Coming soon:
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/supported-ci-services#insert-your-ci-here)
 
+## Coveralls Enterprise
+
+Set this environment variable to your instance's host:
+
+`COVERALLS_ENDPOINT=https://coveralls-enterprise.example.com`
+
+SSL check will be automatically disabled to allow self-signed certificates.
+
+More info: [https://enterprise.coveralls.io](https://enterprise.coveralls.io)
+
 ---
 
 # Development
