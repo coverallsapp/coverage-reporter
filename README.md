@@ -64,6 +64,12 @@ shards install
 make # dist/coverals will be created
 ```
 
+Run specs:
+
+```bash
+make test
+```
+
 Self-contained binary compiling:
 
 ```bash
@@ -75,7 +81,7 @@ make release # both
 # Release
 
 1) Bump version in `coverage_reporter.cr` and `shards.yml`
-2) Push
+2) Commit, Push
 3) Run `make release` (Docker must be running)
 4) Create a new release on GitHub
 5) Upload `dist/coverals-mac.tar.gz` and `dist/coverals-linux.tar.gz` to the Release Attachments

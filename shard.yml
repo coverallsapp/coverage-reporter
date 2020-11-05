@@ -1,5 +1,5 @@
 name: coverage-reporter
-version: 0.1.6
+version: 0.1.7
 
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
@@ -13,6 +13,8 @@ development_dependencies:
   webmock:
     github: manastech/webmock.cr
     branch: master
+  spectator:
+    gitlab: arctic-fox/spectator
 
 crystal: 0.35.1
 

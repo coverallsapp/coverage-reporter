@@ -40,7 +40,8 @@ module CoverageReporter
         res = Crest.post(
           api_url,
           headers: { "Content-Type" => "application/json" },
-          form: { :json => data.to_json.to_s }.to_json
+          form: { :json => data.to_json.to_s }.to_json,
+          tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
         )
 
         show_response(res)
@@ -87,7 +88,8 @@ module CoverageReporter
         res = Crest.post(
           webhook_url,
           headers: { "Content-Type" => "application/json" },
-          form: data.to_json
+          form: data.to_json,
+          tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
         )
 
         show_response(res)
