@@ -7,7 +7,7 @@
 ⠀⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀⠀⠀
 ```
 
-# Coveralls Universal Reporter
+# Coveralls Universal Reporter ![GitHub Action](https://github.com/coverallsapp/coverage-reporter/workflows/Build/badge.svg)
 
 Auto-detects your coverage artifact files and CI environment to post to [Coveralls.io](https://coveralls.io).
 
