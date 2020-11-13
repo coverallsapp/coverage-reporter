@@ -2,7 +2,7 @@ require "./coverage_reporter/*"
 
 
 module CoverageReporter
-  VERSION = "0.1.7"
+  VERSION = "0.1.8"
 
   def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil, parallel : Bool)
     yaml = YamlConfig.new(yaml_file_location)
@@ -26,5 +26,13 @@ module CoverageReporter
 
   def self.quiet?
     @@quiet
+  end
+
+  def self.debug!
+    @@debug = true
+  end
+
+  def self.debug?
+    @@debug
   end
 end

@@ -52,6 +52,10 @@ parser = OptionParser.parse do |parser|
     CoverageReporter.quiet!
   end
 
+  parser.on("--debug", "Debug mode. Data being sent to Coveralls will be outputted to console.") do 
+    CoverageReporter.debug!
+  end
+
   parser.on("-h", "--help", "Show this help") do
     # TODO: add environment variable notes
     puts "Coveralls Coverage Reporter v#{CoverageReporter::VERSION}"

@@ -15,7 +15,7 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter v0.1.5
+Coveralls Coverage Reporter vX.Y.Z
 Usage coveralls [arguments]
     -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
     -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
@@ -25,6 +25,7 @@ Usage coveralls [arguments]
     -d, --done                       Call webhook after all parallel jobs (-p) done.
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
+    --debug                          Debug mode. Data being sent to Coveralls will be outputted to console.
     -h, --help                       Show this help
 ```
 

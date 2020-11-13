@@ -37,6 +37,10 @@ module CoverageReporter
           puts "🚀 Posting coverage data to #{api_url}"
         end
 
+        if debug?
+          puts "---\n⛑ Debug Output:\n#{data.to_json}"
+        end
+
         res = Crest.post(
           api_url,
           headers: { "Content-Type" => "application/json" },
@@ -85,6 +89,10 @@ module CoverageReporter
           }
         }
 
+        if debug?
+          puts "---\n⛑ Debug Output:\n#{data.to_json}"
+        end
+
         res = Crest.post(
           webhook_url,
           headers: { "Content-Type" => "application/json" },
@@ -118,6 +126,10 @@ module CoverageReporter
 
     private def quiet?
       CoverageReporter.quiet?
+    end
+
+    private def debug?
+      CoverageReporter.debug?
     end
   end
 end
