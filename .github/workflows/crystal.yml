@@ -19,4 +19,6 @@ jobs:
     - name: Install dependencies
       run: shards install
     - name: Run tests
-      run: crystal spec
+      run: make test
+    - name: Build Release
+      run: make release_linux && cat checksums/linux

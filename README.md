@@ -31,11 +31,17 @@ Usage coveralls [arguments]
 
 ## CI Usage Examples:
 
-* CircleCI workflow.yml:
+* CircleCI workflow.yml, `platform` can be "linux" or "mac":
 
 ```yaml
-- run: wget -cq https://coveralls.io/coveralls-linux.tar.gz -O - | tar -xz && ./coveralls
+- run: |
+    platform=linux
+    curl -sL https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-$platform.tar.gz | tar -xz
+    if [[ $(curl -s -H "Accept: application/vnd.github.3.raw" https://api.github.com/repos/coverallsapp/coverage-reporter/contents/checksums/$platform) == `openssl sha256 coveralls` ]]; 
+    then ./coveralls; else echo 'CHECKSUM ERROR'; exit 1; fi
 ```
+
+Security note: The executable's checksum will be confirmed against the repo's before proceeding and will fail if a mismatch is encountered. 
 
 ## Supported Coverage File Types:
 
@@ -63,6 +69,16 @@ Set this environment variable to your instance's host:
 SSL check will be automatically disabled to allow self-signed certificates.
 
 More info: [https://enterprise.coveralls.io](https://enterprise.coveralls.io)
+
+## Binary Security
+
+To verify checksum, run this command from the directory containing the `coveralls` executable and update the platform var as needed:
+
+```bash
+    platform=linux # or mac
+    if [[ $(curl -s -H "Accept: application/vnd.github.3.raw" https://api.github.com/repos/coverallsapp/coverage-reporter/contents/checksums/$platform) == `openssl sha256 coveralls` ]]; 
+    then echo 'CORRECT'; else echo 'CHECKSUM ERROR'; fi
+```
 
 ---
 
