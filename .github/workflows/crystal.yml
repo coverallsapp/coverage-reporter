@@ -20,6 +20,7 @@ jobs:
       run: make release_linux
     - uses: actions/upload-artifact@v2
       with:
+        name: binary-and-checksum
         path: |
           dist/coveralls-linux.tar.gz
           checksums/linux

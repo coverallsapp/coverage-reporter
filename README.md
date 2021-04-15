@@ -108,7 +108,7 @@ make release # both
 # Release
 
 1) Bump version in `coverage_reporter.cr` and `shards.yml`
-2) Commit, Push
-3) Run `make release` (Docker must be running)
+2) Run `make release` (Docker must be running)
+3) Commit updated checksums, Push
 4) Create a new release on GitHub
 5) Upload `dist/coverals-mac.tar.gz` and `dist/coverals-linux.tar.gz` to the Release Attachments
