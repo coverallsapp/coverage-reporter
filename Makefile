@@ -7,7 +7,7 @@ release_linux:
 		else crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress; \
 	fi;
 	cd dist && openssl sha256 coveralls > ../checksums/linux
-	cd dist && && tar -cvzf coveralls-linux.tar.gz coveralls
+	cd dist && tar -cvzf coveralls-linux.tar.gz coveralls
 
 release_mac:
 	crystal build src/cli.cr -o dist/coveralls --release --no-debug --progress
