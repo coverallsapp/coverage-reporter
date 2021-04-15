@@ -2,7 +2,10 @@ compile:
 	crystal build src/cli.cr -o dist/coveralls --progress
 
 release_linux:
-	docker run --rm -it -v $(shell pwd):/app -w /app crystallang/crystal:latest-alpine crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress
+	if [[ "$$OSTYPE" == "darwin"* ]]; then \
+		echo 'docker' && docker run --rm -it -v $(shell pwd):/app -w /app crystallang/crystal:latest-alpine crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress; \
+		else crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress; \
+	fi;
 	cd dist && openssl sha256 coveralls > ../checksums/linux
 	cd dist && && tar -cvzf coveralls-linux.tar.gz coveralls
 

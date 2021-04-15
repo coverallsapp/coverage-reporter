@@ -17,4 +17,9 @@ jobs:
     - name: Run tests
       run: make test
     - name: Build Release
-      run: make release_linux && cat checksums/linux
+      run: make release_linux
+    - uses: actions/upload-artifact@v2
+      with:
+        path: |
+          dist/coveralls-linux.tar.gz
+          checksums/linux
