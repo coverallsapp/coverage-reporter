@@ -28,7 +28,7 @@ parser = OptionParser.parse do |parser|
       config_path = path
     end
 
-  parser.on("-fFILENAME", "--file=FILENAME ", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
+  parser.on("-fFILENAME", "--file=FILENAME", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
     filename = name
   end
 
