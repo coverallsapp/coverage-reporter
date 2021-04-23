@@ -37,6 +37,17 @@ Usage coveralls [arguments]
 - run: wget -cq https://coveralls.io/coveralls-linux.tar.gz -O - | tar -xz && ./coveralls
 ```
 
+* __Secure download__ - Use this command for checksum verification on download, where `platform={linux|mac}` (`linux` shown):
+
+```
+- run: |
+    platform=linux
+    wget -cq https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-$platform.tar.gz -O - | tar -xz
+    if [[ $(curl -H "Accept: application/vnd.github.3.raw" https://api.github.com/repos/coverallsapp/coverage-reporter/contents/checksums/$platform) == `openssl sha256 coveralls` ]];
+    then ./coveralls; else echo 'CHECKSUM ERROR'; exit 1; fi
+```
+
+
 ## Supported Coverage File Types:
 
 * Lcov
