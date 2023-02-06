@@ -8,12 +8,12 @@ module CoverageReporter
 
     class Poster < Api
       def initialize(
-          token : String,
-          @yaml : YamlConfig,
-          @git : Hash(Symbol, String | Hash(Symbol, String)),
-          @job_flag : String,
-          parallel : Bool,
-          source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
+        token : String,
+        @yaml : YamlConfig,
+        @git : Hash(Symbol, String | Hash(Symbol, String)),
+        @job_flag : String,
+        parallel : Bool,
+        source_files : Array(Hash(Symbol, Array(Int32 | Nil) | String))
       )
         @parallel = parallel || (ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
 
@@ -21,7 +21,7 @@ module CoverageReporter
           puts "⭐️ Running in parallel mode. You must call the webhook after all jobs finish: `coveralls --done`" unless CoverageReporter.quiet?
         end
 
-        @sauce = source_files || {} of String => Array(Int32)
+        @source = source_files || {} of String => Array(Int32)
 
         @general_config = Config.new(token, @job_flag, @yaml)
       end
@@ -43,8 +43,8 @@ module CoverageReporter
 
         res = Crest.post(
           api_url,
-          headers: { "Content-Type" => "application/json" },
-          form: { :json => data.to_json.to_s }.to_json,
+          headers: {"Content-Type" => "application/json"},
+          form: {:json => data.to_json.to_s}.to_json,
           tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
         )
 
@@ -55,9 +55,9 @@ module CoverageReporter
       private def build_request
         @general_config.get_config.merge(
           {
-            :source_files => @sauce,
-            :git => @git,
-            :parallel => @parallel,
+            :source_files => @source,
+            :git          => @git,
+            :parallel     => @parallel,
           }
         )
       end
@@ -74,7 +74,7 @@ module CoverageReporter
         @build_num = config[:service_number]
       end
 
-    def send_request
+      def send_request
         webhook_url = uri("webhook")
 
         unless quiet?
@@ -83,10 +83,10 @@ module CoverageReporter
 
         data = {
           :repo_token => @token,
-          :payload => { 
-            :build_num => @build_num, 
-            :status => "done" 
-          }
+          :payload    => {
+            :build_num => @build_num,
+            :status    => "done",
+          },
         }
 
         if debug?
@@ -95,7 +95,7 @@ module CoverageReporter
 
         res = Crest.post(
           webhook_url,
-          headers: { "Content-Type" => "application/json" },
+          headers: {"Content-Type" => "application/json"},
           form: data.to_json,
           tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
         )

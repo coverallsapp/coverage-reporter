@@ -9,17 +9,17 @@ module CoverageReporter
       @files = [] of String
 
       if filenames == ""
-        (Dir["**/*/lcov.info"] +
-          Dir["**/*/*.lcov"] +
-          Dir["**/*/.resultset.json"] +
-          Dir["**/*/.coverage"]).each do |filename|
-
+        (
+          Dir["**/*/lcov.info"] +
+            Dir["**/*/*.lcov"] +
+            Dir["**/*/.resultset.json"] +
+            Dir["**/*/.coverage"]
+        ).each do |filename|
           unless filename =~ /node_modules|vendor/
             @files.push(filename)
             puts "🔍 Detected coverage file: #{filename}" unless CoverageReporter.quiet?
           end
         end
-
       else
         if File.exists?(filenames)
           puts "📄 Using coverage file: #{filenames}" unless CoverageReporter.quiet?
@@ -46,15 +46,13 @@ module CoverageReporter
       case filename
       when /\.lcov$|lcov\.info$/
         ParserHelpers::Lcov.new(filename).parse
-
       when /\.resultset\.json$/
         ParserHelpers::SimpleCov.new(filename).parse
+        # when /$\.gcov/
+        #   ParserHelpers::Gcov.new(filename).parse
 
-      # when /$\.gcov/
-      #   ParserHelpers::Gcov.new(filename).parse
-
-      # when /\.coverage/
-      #   ParserHelpers::PythonCov.new(filename).parse
+        # when /\.coverage/
+        #   ParserHelpers::PythonCov.new(filename).parse
 
       else
         puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"

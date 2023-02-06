@@ -15,7 +15,9 @@ development_dependencies:
     branch: master
   spectator:
     gitlab: arctic-fox/spectator
+  ameba:
+    github: crystal-ameba/ameba
 
-crystal: 0.35.1
+crystal: 1.7.2
 
 license: MIT

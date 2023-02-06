@@ -1,10 +1,15 @@
 require "./coverage_reporter/*"
 
-
 module CoverageReporter
   VERSION = "0.1.8"
 
-  def self.run(coverage_file : String, repo_token : String | Nil, yaml_file_location : String, job_flag : String | Nil, parallel : Bool)
+  def self.run(
+    coverage_file : String,
+    repo_token : String | Nil,
+    yaml_file_location : String,
+    job_flag : String | Nil,
+    parallel : Bool
+  )
     yaml = YamlConfig.new(yaml_file_location)
     git = GitInfo.run
     source_files = Parser.new(coverage_file).parse

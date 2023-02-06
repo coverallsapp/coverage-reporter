@@ -13,3 +13,6 @@ release: | release_linux release_mac
 
 test:
 	crystal spec
+
+lint:
+	bin/ameba

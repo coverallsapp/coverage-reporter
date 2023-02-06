@@ -10,23 +10,23 @@ no_logo = false
 parallel = false
 parallel_done = false
 
-parser = OptionParser.parse do |parser|
+option_parser = OptionParser.parse do |parser|
   parser.banner = "Usage coveralls [arguments]"
   parser.on(
     "-rTOKEN",
     "--repo-token=TOKEN",
     "Sets coveralls repo token, overrides settings in yaml or environment variable"
-    ) do |token|
-      repo_token = token
-    end
+  ) do |token|
+    repo_token = token
+  end
 
   parser.on(
     "-cPATH",
     "--config-path=PATH",
     "Set the coveralls yaml config file location, will default to check '.coveralls.yml'"
-    ) do |path|
-      config_path = path
-    end
+  ) do |path|
+    config_path = path
+  end
 
   parser.on("-fFILENAME", "--file=FILENAME ", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
     filename = name
@@ -44,15 +44,15 @@ parser = OptionParser.parse do |parser|
     parallel_done = true
   end
 
-  parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do 
+  parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
     no_logo = true
   end
 
-  parser.on("-q", "--quiet", "Suppress all output") do 
+  parser.on("-q", "--quiet", "Suppress all output") do
     CoverageReporter.quiet!
   end
 
-  parser.on("--debug", "Debug mode. Data being sent to Coveralls will be outputted to console.") do 
+  parser.on("--debug", "Debug mode. Data being sent to Coveralls will be outputted to console.") do
     CoverageReporter.debug!
   end
 
@@ -65,18 +65,19 @@ parser = OptionParser.parse do |parser|
 end
 
 begin
-  unless no_logo || CoverageReporter.quiet?
+  red = Colorize::Color256.new(196)
+  if no_logo || CoverageReporter.quiet?
+    puts "⭐️ Coveralls.io Coverage Reporter v#{CoverageReporter::VERSION}"
+  else
     puts " "
-    puts "⠀⠀⠀⠀⠀⠀#{"⣿".colorize(Colorize::Color256.new(196))}"
-    puts "⠀⠀⠀⠀⠀#{"⣼⣿⣧".colorize(Colorize::Color256.new(196))}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
-    puts "#{"⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶".colorize(Colorize::Color256.new(196))}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
-    puts "⠀⠀#{"⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁".colorize(Colorize::Color256.new(196))}⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
-    puts "⠀⠀#{"⢠⣿⣿⣿⠿⣿⣿⣿⡄".colorize(Colorize::Color256.new(196))}⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
-    puts "⠀#{"⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀".colorize(Colorize::Color256.new(196))}⠀⠀"
+    puts "⠀⠀⠀⠀⠀⠀#{"⣿".colorize(red)}"
+    puts "⠀⠀⠀⠀⠀#{"⣼⣿⣧".colorize(red)}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
+    puts "#{"⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶".colorize(red)}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
+    puts "⠀⠀#{"⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁".colorize(red)}⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
+    puts "⠀⠀#{"⢠⣿⣿⣿⠿⣿⣿⣿⡄".colorize(red)}⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
+    puts "⠀#{"⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀".colorize(red)}⠀⠀"
     puts " "
     puts "  v#{CoverageReporter::VERSION}\n\n"
-  else
-    puts "⭐️ Coveralls.io Coverage Reporter v#{CoverageReporter::VERSION}"
   end
 
   if parallel_done
@@ -84,11 +85,10 @@ begin
   else
     CoverageReporter.run(filename, repo_token, config_path, job_flag, parallel)
   end
-
 rescue ex : ArgumentError
   STDERR.puts <<-ERROR
   Oops! #{ex.message}
-  #{parser}
+  #{option_parser}
   Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
   ERROR
 rescue ex : Crest::UnprocessableEntity

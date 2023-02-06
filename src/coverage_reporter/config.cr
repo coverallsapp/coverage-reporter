@@ -65,7 +65,7 @@ module CoverageReporter
       config = {} of Symbol => String | Nil
       config[:service_name] = "circleci"
       config[:service_number] = ENV["CIRCLE_WORKFLOW_ID"] if ENV.has_key?("CIRCLE_WORKFLOW_ID")
-      config[:service_pull_request] = (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1] if ENV.has_key?("CI_PULL_REQUEST")
+      config[:service_pull_request] = (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/, 1] if ENV.has_key?("CI_PULL_REQUEST")
       config[:service_job_number] = ENV["CIRCLE_BUILD_NUM"]? if ENV.has_key?("CIRCLE_BUILD_NUM")
       config[:service_branch] = ENV["CIRCLE_BRANCH"]? if ENV.has_key?("CIRCLE_BRANCH")
 
@@ -82,8 +82,8 @@ module CoverageReporter
       return unless ENV["SEMAPHORE"]?
 
       {
-        :service_name => "semaphore",
-        :service_number => ENV["SEMAPHORE_BUILD_NUMBER"]?,
+        :service_name         => "semaphore",
+        :service_number       => ENV["SEMAPHORE_BUILD_NUMBER"]?,
         :service_pull_request => ENV["PULL_RE,QUEST_NUMBER"]?,
       }
     end
@@ -92,9 +92,9 @@ module CoverageReporter
       return unless ENV["JENKINS_URL"]? || ENV["JENKINS_HOME"]?
 
       {
-        :service_name => "jenkins",
-        :service_number => ENV["BUILD_NUMBER"]?,
-        :service_branch => ENV["BRANH_NAME"]?,
+        :service_name         => "jenkins",
+        :service_number       => ENV["BUILD_NUMBER"]?,
+        :service_branch       => ENV["BRANH_NAME"]?,
         :service_pull_request => ENV["ghprbPullId"]?,
       }
     end
@@ -103,10 +103,10 @@ module CoverageReporter
       return unless ENV["APPVEYOR"]?
 
       {
-        :service_name => "appveyor",
-        :service_number => ENV["APPVEYOR_BUILD_VERSION"]?,
-        :service_branch => ENV["APPVEYOR_REPO_BRANCH"]?,
-        :commit_sha => ENV["APPVEYOR_REPO_COMMIT"]?,
+        :service_name      => "appveyor",
+        :service_number    => ENV["APPVEYOR_BUILD_VERSION"]?,
+        :service_branch    => ENV["APPVEYOR_REPO_BRANCH"]?,
+        :commit_sha        => ENV["APPVEYOR_REPO_COMMIT"]?,
         :service_build_url => "https://ci.appveyor.com/project/%s/build/%s" % [ENV["APPVEYOR_REPO_NAME"]?, ENV["APPVEYOR_BUILD_VERSION"]?],
       }
     end
@@ -115,12 +115,12 @@ module CoverageReporter
       return unless ENV["TDDIUM"]?
 
       {
-        :service_name => "tddium",
-        :service_number => ENV["TDDIUM_SESSION_ID"]?,
-        :service_job_id => ENV["TDDIUM_TID"]?,
+        :service_name         => "tddium",
+        :service_number       => ENV["TDDIUM_SESSION_ID"]?,
+        :service_job_id       => ENV["TDDIUM_TID"]?,
         :service_pull_request => ENV["TDDIUM_PR_ID"]?,
-        :service_branch => ENV["TDDIUM_CURRENT_BRANCH"]?,
-        :service_build_url => "https://ci.solanolabs.com/reports/#{ENV["TDDIUM_SESSION_ID"]?}",
+        :service_branch       => ENV["TDDIUM_CURRENT_BRANCH"]?,
+        :service_build_url    => "https://ci.solanolabs.com/reports/#{ENV["TDDIUM_SESSION_ID"]?}",
       }
     end
 
@@ -128,11 +128,11 @@ module CoverageReporter
       return unless ENV["GITLAB_CI"]?
 
       {
-        :service_name => "gitlab-ci",
+        :service_name       => "gitlab-ci",
         :service_job_number => ENV["CI_BUILD_NAME"]?,
-        :service_job_id => ENV["CI_BUILD_ID"]?,
-        :service_branch => ENV["CI_BUILD_REF_NAME"]?,
-        :commit_sha => ENV["CI_BUILD_REF"]?
+        :service_job_id     => ENV["CI_BUILD_ID"]?,
+        :service_branch     => ENV["CI_BUILD_REF_NAME"]?,
+        :commit_sha         => ENV["CI_BUILD_REF"]?,
       }
     end
 
@@ -140,8 +140,8 @@ module CoverageReporter
       return unless ENV["COVERALLS_RUN_LOCALLY"]?
 
       {
-        :service_job_id => nil,
-        :service_name => "coveralls-universal",
+        :service_job_id     => nil,
+        :service_name       => "coveralls-universal",
         :service_event_type => "manual",
       }
     end
@@ -152,8 +152,7 @@ module CoverageReporter
       config[:service_job_id] ||= ENV["CI_JOB_ID"]?
       config[:service_build_url] ||= ENV["CI_BUILD_URL"]?
       config[:service_branch] ||= ENV["CI_BRANCH"]?
-      config[:service_pull_request] ||= (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/,1]?
+      config[:service_pull_request] ||= (ENV["CI_PULL_REQUEST"]? || "")[/(\d+)$/, 1]?
     end
-
   end
 end
