@@ -9,12 +9,12 @@ module CoverageReporter
       @files = [] of String
 
       if filenames == ""
-        (
-          Dir["**/*/lcov.info"] +
-            Dir["**/*/*.lcov"] +
-            Dir["**/*/.resultset.json"] +
-            Dir["**/*/.coverage"]
-        ).each do |filename|
+        Dir[
+          "**/*/lcov.info",
+          "**/*/*.lcov",
+          "**/*/.resultset.json",
+          "**/*/.coverage",
+        ].each do |filename|
           unless filename =~ /node_modules|vendor/
             @files.push(filename)
             puts "🔍 Detected coverage file: #{filename}" unless CoverageReporter.quiet?
