@@ -1,4 +1,5 @@
 require "../file_report"
+require "../git"
 require "crest"
 require "json"
 
@@ -10,7 +11,6 @@ module CoverageReporter
       def initialize(
         token : String?,
         @yaml : YamlConfig,
-        @git : Hash(Symbol, String | Hash(Symbol, String)),
         @job_flag : String?,
         parallel : Bool,
         source_files : Array(FileReport)
@@ -52,8 +52,8 @@ module CoverageReporter
         @general_config.get_config.merge(
           {
             :source_files => @source,
-            :git          => @git,
             :parallel     => @parallel,
+            :git          => Git.info,
           }
         )
       end

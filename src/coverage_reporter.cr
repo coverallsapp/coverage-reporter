@@ -13,9 +13,8 @@ module CoverageReporter
     parallel : Bool
   )
     yaml = YamlConfig.new(yaml_file_location)
-    git = GitInfo.run
     source_files = Parser.new(coverage_file).parse
-    api = Api::Jobs.new(repo_token, yaml, git, job_flag, parallel, source_files)
+    api = Api::Jobs.new(repo_token, yaml, job_flag, parallel, source_files)
 
     api.send_request
   end
