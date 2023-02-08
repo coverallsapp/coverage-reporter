@@ -2,12 +2,12 @@ require "./spec_helper"
 
 Spectator.describe CoverageReporter do
   before_all do
-    CoverageReporter.quiet!
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
   describe "run" do
     let(repo_token) { "asdfasdf" }
-    let(filename) { "" }
+    let(filename) { nil }
     let(config_path) { "" }
     let(job_flag) { "unit" }
     let(parallel) { true }

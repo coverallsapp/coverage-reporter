@@ -1,63 +1,57 @@
-require "./parser_helpers/*"
+require "./parsers/*"
 
 module CoverageReporter
   class Parser
-    @files : Array(String)
-    alias SourceFilesType = Hash(Symbol, Array(Int32 | Nil) | String)
+    getter file : String | Nil
 
-    def initialize(filenames : String)
-      @files = [] of String
+    PARSERS = {
+      LcovParser.new,
+      SimplecovParser.new,
+    }
 
-      if filenames == ""
-        Dir[
-          "**/*/lcov.info",
-          "**/*/*.lcov",
-          "**/*/.resultset.json",
-          "**/*/.coverage",
-        ].each do |filename|
-          unless filename =~ /node_modules|vendor/
-            @files.push(filename)
-            puts "🔍 Detected coverage file: #{filename}" unless CoverageReporter.quiet?
-          end
-        end
-      else
-        if File.exists?(filenames)
-          puts "📄 Using coverage file: #{filenames}" unless CoverageReporter.quiet?
-          @files = [filenames]
-        else
-          puts "🚨 ERROR: Couldn't find specified file: #{filenames}"
-          exit 1
-        end
-      end
+    def initialize(@file : String?)
     end
 
-    def parse
-      source_files = [] of SourceFilesType
-      @files.each do |filename|
-        parse_file(filename).each do |source|
-          source_files.push source
+    def files : Array(String)
+      if custom_file = file
+        if !File.exists?(custom_file)
+          puts "🚨 ERROR: Couldn't find specified file: #{custom_file}"
+          exit 1
+        end
+
+        Log.info "📄 Using coverage file: #{custom_file}"
+        return [custom_file]
+      end
+
+      files = [] of String
+      Dir[PARSERS.flat_map(&.globs)].each do |filename|
+        unless filename =~ /node_modules|vendor/
+          files.push(filename)
+          Log.info "🔍 Detected coverage file: #{filename}"
         end
       end
 
-      source_files
+      files
+    end
+
+    def parse : Array(FileReport)
+      reports = [] of FileReport
+      files.flat_map do |filename|
+        parse_file(filename)
+      end
+
+      reports
     end
 
     private def parse_file(filename : String)
-      case filename
-      when /\.lcov$|lcov\.info$/
-        ParserHelpers::Lcov.new(filename).parse
-      when /\.resultset\.json$/
-        ParserHelpers::SimpleCov.new(filename).parse
-        # when /$\.gcov/
-        #   ParserHelpers::Gcov.new(filename).parse
+      PARSERS.each do |parser|
+        next unless parser.matches?(filename)
 
-        # when /\.coverage/
-        #   ParserHelpers::PythonCov.new(filename).parse
-
-      else
-        puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"
-        [] of SourceFilesType
+        return parser.parse(filename)
       end
+
+      puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"
+      [] of FileReport
     end
   end
 end
