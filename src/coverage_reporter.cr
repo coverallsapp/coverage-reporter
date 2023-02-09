@@ -8,20 +8,24 @@ module CoverageReporter
   def run(
     coverage_file : String?,
     repo_token : String?,
-    yaml_file_location : String,
+    config_path : String,
     job_flag : String?,
     parallel : Bool
   )
-    yaml = YamlConfig.new(yaml_file_location)
+    config = Config.new(
+      repo_token: repo_token,
+      job_flag: job_flag,
+      path: config_path,
+    )
     source_files = Parser.new(coverage_file).parse
-    api = Api::Jobs.new(repo_token, yaml, job_flag, parallel, source_files)
+    api = Api::Jobs.new(config, parallel, source_files)
 
     api.send_request
   end
 
-  def parallel_done(repo_token : String | Nil, yaml_file_location : String)
-    yaml = YamlConfig.new(yaml_file_location)
-    api = Api::Webhook.new(repo_token, yaml)
+  def parallel_done(repo_token : String?, config_path : String)
+    config = Config.new(repo_token: repo_token, path: config_path)
+    api = Api::Webhook.new(config)
 
     api.send_request
   end

@@ -12,6 +12,7 @@ module CoverageReporter
     def initialize(@file : String?)
     end
 
+    # Returns coverage report files that can be parsed by utility.
     def files : Array(String)
       if custom_file = file
         if !File.exists?(custom_file)

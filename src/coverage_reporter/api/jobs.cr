@@ -1,5 +1,6 @@
 require "../file_report"
 require "../git"
+require "../config"
 require "crest"
 require "json"
 
@@ -7,11 +8,10 @@ module CoverageReporter
   module Api
     class Jobs
       @source : Array(Hash(Symbol, String | Array(Int32?)))
+      @job_flag : String?
 
       def initialize(
-        token : String?,
-        @yaml : YamlConfig,
-        @job_flag : String?,
+        @config : Config,
         parallel : Bool,
         source_files : Array(FileReport)
       )
@@ -23,15 +23,14 @@ module CoverageReporter
         end
 
         @source = source_files.map &.to_h
-
-        @general_config = Config.new(token, @job_flag, @yaml)
+        @job_flag = @config[:job_flag]?
       end
 
       def send_request
         data = build_request
         api_url = Api.uri("api/#{API_VERSION}/jobs")
 
-        Log.info "  ·job_flag: #{@job_flag}" if @job_flag != ""
+        Log.info "  ·job_flag: #{@job_flag}" if @job_flag
         Log.info "  ·parallel: true" if @parallel
         Log.info "🚀 Posting coverage data to #{api_url}"
 
@@ -49,7 +48,7 @@ module CoverageReporter
       end
 
       private def build_request
-        @general_config.get_config.merge(
+        @config.to_h.merge(
           {
             :source_files => @source,
             :parallel     => @parallel,

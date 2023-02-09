@@ -1,11 +1,13 @@
-require "./config.cr"
+require "./config"
 require "./api/*"
 
 module CoverageReporter
   module Api
-    API_VERSION = "v1"
-
     extend self
+
+    API_VERSION    = "v1"
+    DEFAULT_DOMAIN = "https://coveralls.io"
+    LOCAL_DOMAIN   = "http://localhost:3000"
 
     def show_response(res)
       # TODO: include info about account status
@@ -13,13 +15,15 @@ module CoverageReporter
     end
 
     def uri(path)
-      if ENV["COVERALLS_ENDPOINT"]?
-        host = ENV["COVERALLS_ENDPOINT"]?
-        domain = ENV["COVERALLS_ENDPOINT"]?
+      if ENV["COVERALLS_ENDPOINT"]?.presence
+        domain = ENV["COVERALLS_ENDPOINT"]
       else
-        host = ENV["COVERALLS_DEVELOPMENT"]? ? "localhost:3000" : "coveralls.io"
-        protocol = ENV["COVERALLS_DEVELOPMENT"]? ? "http" : "https"
-        domain = "#{protocol}://#{host}"
+        domain =
+          if ENV["COVERALLS_DEVELOPMENT"]?.presence
+            LOCAL_DOMAIN
+          else
+            DEFAULT_DOMAIN
+          end
       end
 
       "#{domain}/#{path}"

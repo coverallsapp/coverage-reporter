@@ -7,11 +7,9 @@ module CoverageReporter
       @token : String | Nil
       @build_num : String | Nil
 
-      def initialize(token : String | Nil, yaml : YamlConfig)
-        config = Config.new(token, nil, yaml).get_config
-
-        @token = config[:repo_token]
-        @build_num = config[:service_number]
+      def initialize(config : Config)
+        @token = config[:repo_token]?
+        @build_num = config[:service_number]?
       end
 
       def send_request
@@ -27,7 +25,7 @@ module CoverageReporter
           },
         }
 
-        Log.debug "---\n⛑ Debug Output:\n#{data.to_json}"
+        Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
         res = Crest.post(
           webhook_url,

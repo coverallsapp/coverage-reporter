@@ -2,18 +2,16 @@ require "yaml"
 
 module CoverageReporter
   class YamlConfig
-    def initialize(yaml_filepath)
-      @config = File.exists?(yaml_filepath) ? YAML.parse(File.read(yaml_filepath)) : {} of String => String
+    def initialize(path)
+      @config =
+        if File.exists?(path)
+          YAML.parse(File.read(path))
+        else
+          {} of String => String
+        end
     end
 
-    def repo_token
-      return unless @config
-
-      @config["repo_token"]
-    end
-
-    def config
-      @config
-    end
+    delegate :[], to: @config
+    delegate :[]?, to: @config
   end
 end

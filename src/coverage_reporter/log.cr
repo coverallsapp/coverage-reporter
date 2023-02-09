@@ -10,19 +10,24 @@ module CoverageReporter
 
     @@level = Level::Info
 
-    def set(@@level : Level = Level::Info)
-    end
+    def set(@@level : Level = Level::Info); end
 
     def debug(*args)
-      return if @@level < Level::Debug
-
-      puts *args
+      log(Level::Debug, STDOUT, *args)
     end
 
     def info(*args)
-      return if @@level < Level::Info
+      log(Level::Info, STDOUT, *args)
+    end
 
-      puts *args
+    def error(*args)
+      log(Level::Error, STDERR, *args)
+    end
+
+    private def log(level, io, *args)
+      return if @@level < level
+
+      io.puts *args
     end
   end
 end
