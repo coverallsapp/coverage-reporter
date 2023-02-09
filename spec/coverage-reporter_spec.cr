@@ -27,7 +27,6 @@ Spectator.describe CoverageReporter do
         res = CoverageReporter.parallel_done repo_token, ""
         expect(res).to be_true
       end
-
     end
 
     context "on Coveralls Enterprise" do

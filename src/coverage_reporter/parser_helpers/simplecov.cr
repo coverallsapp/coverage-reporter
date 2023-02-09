@@ -3,7 +3,7 @@ module CoverageReporter
     class SimpleCov
       alias SourceFilesType = Hash(Symbol, Array(Int32 | Nil) | String)
 
-      alias CoverageOrHashType = Array(Int32 | Nil) | Hash(String, Array(Int32 | Nil));
+      alias CoverageOrHashType = Array(Int32 | Nil) | Hash(String, Array(Int32 | Nil))
 
       def initialize(@tracefile : String)
       end
@@ -14,9 +14,8 @@ module CoverageReporter
         # handle SimpleCov versions before 0.18 that don't include branch coverage
         results = Hash(String, Hash(String, Hash(String, CoverageOrHashType) | Int32)).from_json File.read @tracefile
 
-        results.each do |test_runner, output|
+        results.each do |_, output|
           output["coverage"].as(Hash(String, CoverageOrHashType)).each do |filename, coverage_or_hash|
-
             coverage = [] of Int32 | Nil
 
             case coverage_or_hash
@@ -28,15 +27,14 @@ module CoverageReporter
             end
 
             source_files.push({
-              :name => filename.sub(Dir.current,""), 
-              :coverage => coverage
+              :name     => filename.sub(Dir.current, ""),
+              :coverage => coverage,
             })
           end
         end
 
         source_files
       end
-
     end
   end
 end

@@ -21,44 +21,41 @@ module CoverageReporter
       end
 
       private def parse_tracefile
-        begin
-          lcov_info = Hash(String, NamedTuple(coverage: Hash(Int32, Int32), branches: BranchInfoType)).new do |h, k|
-            h[k] = {
-              coverage: {} of Int32 => Int32,
-              branches: {} of Int32 => BranchInfoHashContent,
-            }
-          end
-          source_file = nil
-          File.read_lines(@tracefile).each do |line|
-            case line.chomp
-            when /\ASF:(.+)/
-              source_file = $1
-            when /\ADA:(\d+),(\d+)/
-              line_no = $1.to_i
-              count = $2.to_i
-              coverage = lcov_info[source_file][:coverage]
-              coverage[line_no] = (coverage[line_no]? || 0) + count
-            when /\ABRDA:(\d+),(\d+),(\d+),(\d+|-)/
-              line_no = $1.to_i
-              block_no = $2.to_i
-              branch_no = $3.to_i
-              hits = $4 == "-" ? 0 : $4.to_i
-
-              branches = lcov_info[source_file][:branches]
-              branches_line = branches[line_no] = branches[line_no]? || {} of Int32 => Hash(Int32, Int32)
-              branches_block = branches_line[block_no] = branches_line[block_no]? || {} of Int32 => Int32
-              branches_block[branch_no] = (branches_block[branch_no]? || 0) + hits
-            when /\Aend_of_record/
-              source_file = nil
-            end
-          end
-          lcov_info
-        rescue ex
-          puts "Could not process tracefile: #{@tracefile}"
-          puts "#{ex.class}: #{ex.message}"
-          raise ex
-          exit(1)
+        lcov_info = Hash(String, NamedTuple(coverage: Hash(Int32, Int32), branches: BranchInfoType)).new do |h, k|
+          h[k] = {
+            coverage: {} of Int32 => Int32,
+            branches: {} of Int32 => BranchInfoHashContent,
+          }
         end
+        source_file = nil
+        File.read_lines(@tracefile).each do |line|
+          case line.chomp
+          when /\ASF:(.+)/
+            source_file = $1
+          when /\ADA:(\d+),(\d+)/
+            line_no = $1.to_i
+            count = $2.to_i
+            coverage = lcov_info[source_file][:coverage]
+            coverage[line_no] = (coverage[line_no]? || 0) + count
+          when /\ABRDA:(\d+),(\d+),(\d+),(\d+|-)/
+            line_no = $1.to_i
+            block_no = $2.to_i
+            branch_no = $3.to_i
+            hits = $4 == "-" ? 0 : $4.to_i
+
+            branches = lcov_info[source_file][:branches]
+            branches_line = branches[line_no] = branches[line_no]? || {} of Int32 => Hash(Int32, Int32)
+            branches_block = branches_line[block_no] = branches_line[block_no]? || {} of Int32 => Int32
+            branches_block[branch_no] = (branches_block[branch_no]? || 0) + hits
+          when /\Aend_of_record/
+            source_file = nil
+          end
+        end
+        lcov_info
+      rescue ex
+        puts "Could not process tracefile: #{@tracefile}"
+        puts "#{ex.class}: #{ex.message}"
+        exit(1)
       end
 
       private def parse_sourcefile(filename, info, source_encoding = "utf-8")
@@ -71,7 +68,7 @@ module CoverageReporter
 
         top_src_dir = Dir.current
         source_file = {
-          :name => filename.sub(top_src_dir, ""),
+          :name     => filename.sub(top_src_dir, ""),
           :coverage => coverage,
         }
         unless info[:branches].empty?

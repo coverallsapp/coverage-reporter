@@ -1,0 +1,9 @@
+pre-commit:
+  piped: true
+  commands:
+    1_format:
+      glob: "*.cr"
+      run: crystal tool format {staged_files}
+    2_ameba:
+      glob: "*.cr"
+      run: bin/ameba --fix {staged_files}

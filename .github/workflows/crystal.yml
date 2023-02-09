@@ -7,8 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     container:
@@ -20,3 +19,16 @@ jobs:
       run: shards install
     - name: Run tests
       run: crystal spec
+
+  lint:
+    runs-on: ubuntu-latest
+
+    container:
+      image: crystallang/crystal
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: shards install
+    - name: Run linter
+      run: bin/ameba
