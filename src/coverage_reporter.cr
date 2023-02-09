@@ -18,7 +18,7 @@ module CoverageReporter
       path: config_path,
     )
     source_files = Parser.new(coverage_file).parse
-    api = Api::Jobs.new(config, parallel, source_files)
+    api = Api::Jobs.new(config, parallel, source_files, Git.info)
 
     api.send_request
   end

@@ -19,7 +19,7 @@ module CoverageReporter
       }
     end
 
-    private def command_line(command)
+    private def command_line(command) : String
       io = IO::Memory.new
       Process.run(command, shell: true, output: io)
       io.to_s

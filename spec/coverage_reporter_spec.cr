@@ -18,6 +18,8 @@ Spectator.describe CoverageReporter do
         WebMock.stub(:post, "https://coveralls.io/webhook")
       end
 
+      after_all { WebMock.reset }
+
       it "posts coverage" do
         res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel
         expect(res).to be_true
@@ -35,6 +37,8 @@ Spectator.describe CoverageReporter do
         WebMock.stub(:post, "https://example.com/webhook")
         ENV["COVERALLS_ENDPOINT"] = "https://example.com"
       end
+
+      after_all { WebMock.reset }
 
       it "posts coverage" do
         res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel

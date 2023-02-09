@@ -12,11 +12,10 @@ module CoverageReporter
 
       def initialize(
         @config : Config,
-        parallel : Bool,
-        source_files : Array(FileReport)
+        @parallel : Bool,
+        source_files : Array(FileReport),
+        @git_info : Hash(Symbol, Hash(Symbol, String) | String)
       )
-        @parallel = parallel || (ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
-
         if @parallel
           Log.info "⭐️ Running in parallel mode." \
                    "You must call the webhook after all jobs finish: `coveralls --done`"
@@ -52,7 +51,7 @@ module CoverageReporter
           {
             :source_files => @source,
             :parallel     => @parallel,
-            :git          => Git.info,
+            :git          => @git_info,
           }
         )
       end

@@ -27,15 +27,17 @@ module CoverageReporter::Cli
     else
       CoverageReporter.run(opts.filename, opts.repo_token, opts.config_path, opts.job_flag, opts.parallel?)
     end
-  rescue ex : BaseException
+  rescue ex : BaseException | Socket::Error
     Log.error ex.message
+    exit 1
   rescue ex : ArgumentError
-    STDERR.puts <<-ERROR
+    Log.error <<-ERROR
     Oops! #{ex.message}
     Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
     ERROR
+    exit 1
   rescue ex : Crest::UnprocessableEntity
-    STDERR.puts <<-ERROR
+    Log.error <<-ERROR
     ---
     Error: #{ex.message}
     Response: #{ex.response}
@@ -45,6 +47,10 @@ module CoverageReporter::Cli
     More info/troubleshooting here: https://docs.coveralls.io
     - 💛, Coveralls
     ERROR
+    exit 1
+  rescue ex
+    Log.error ex.inspect
+    exit 1
   end
 
   private class Opts
@@ -53,7 +59,7 @@ module CoverageReporter::Cli
     property repo_token : String?
     property config_path = CoverageReporter::Config::DEFAULT_LOCATION
     property? no_logo = false
-    property? parallel = false
+    property? parallel = !!(ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false") || false
     property? parallel_done = false
   end
 

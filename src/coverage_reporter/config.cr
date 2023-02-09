@@ -17,7 +17,7 @@ module CoverageReporter
 
     def initialize(
       repo_token : String?,
-      path : String,
+      path : String = "",
       @job_flag : String? = nil
     )
       @yaml = YamlConfig.new(path)

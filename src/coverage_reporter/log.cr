@@ -1,4 +1,5 @@
 module CoverageReporter
+  # Console output manager.
   module Log
     extend self
 
@@ -10,7 +11,7 @@ module CoverageReporter
 
     @@level = Level::Info
 
-    def set(@@level : Level = Level::Info); end
+    def set(@@level : Level); end
 
     def debug(*args)
       log(Level::Debug, STDOUT, *args)
