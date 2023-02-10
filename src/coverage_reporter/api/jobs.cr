@@ -17,7 +17,7 @@ module CoverageReporter
         @git_info : Hash(Symbol, Hash(Symbol, String) | String)
       )
         if @parallel
-          Log.info "⭐️ Running in parallel mode." \
+          Log.info "⭐️ Running in parallel mode. " \
                    "You must call the webhook after all jobs finish: `coveralls --done`"
         end
 
@@ -30,7 +30,6 @@ module CoverageReporter
         api_url = Api.uri("api/#{API_VERSION}/jobs")
 
         Log.info "  ·job_flag: #{@job_flag}" if @job_flag
-        Log.info "  ·parallel: true" if @parallel
         Log.info "🚀 Posting coverage data to #{api_url}"
 
         Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"

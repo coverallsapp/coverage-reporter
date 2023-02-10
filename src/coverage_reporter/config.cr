@@ -61,6 +61,7 @@ module CoverageReporter
         CI::Jenkins.params ||
         CI::Appveyor.params ||
         CI::Tddium.params ||
+        CI::Github.params ||
         CI::Gitlab.params ||
         CI::Local.params ||
         {} of Symbol => String

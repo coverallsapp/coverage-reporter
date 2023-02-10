@@ -1,0 +1,26 @@
+require "./params"
+
+module CoverageReporter
+  module CI
+    module Github
+      extend self
+
+      def params
+        return unless ENV["GITHUB_ACTIONS"]?
+
+        if ENV["GITHUB_SERVER_URL"]? && ENV["GITHUB_REPOSITORY"]? && ENV["GITHUB_RUN_ID"]?
+          build_url = "#{ENV["GITHUB_SERVER_URL"]}/#{ENV["GITHUB_REPOSITORY"]}/actions/runs/#{ENV["GITHUB_RUN_ID"]}"
+        end
+
+        Params.new(
+          service_name: "github",
+          service_job_id: ENV["GITHUB_JOB"]?,
+          service_job_number: ENV["GITHUB_RUN_ID"]?,
+          service_branch: ENV["GITHUB_REF_NAME"]?,
+          service_build_url: build_url,
+          commit_sha: ENV["GITHUB_SHA"]?,
+        ).to_h
+      end
+    end
+  end
+end

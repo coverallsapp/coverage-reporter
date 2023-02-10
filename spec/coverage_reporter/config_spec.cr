@@ -3,6 +3,8 @@ require "../spec_helper"
 Spectator.describe CoverageReporter::Config do
   subject { described_class.new(repo_token: repo_token, path: path, job_flag: job_flag) }
 
+  after_each { ENV.clear }
+
   describe ".new" do
     let(repo_token) { nil }
     let(path) { "" }
@@ -55,7 +57,7 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "with ENV preset" do
-      before do
+      before_each do
         ENV["COVERALLS_REPO_TOKEN"] = "env-token"
       end
 
@@ -74,15 +76,13 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for Appveyor CI" do
-      before_all do
+      before_each do
         ENV["APPVEYOR"] = "1"
         ENV["APPVEYOR_BUILD_VERSION"] = "123"
         ENV["APPVEYOR_REPO_BRANCH"] = "appveyor-repo-branch"
         ENV["APPVEYOR_REPO_COMMIT"] = "appveyor-commit-sha"
         ENV["APPVEYOR_REPO_NAME"] = "appveyor-repo-name"
       end
-
-      after_all { ENV.clear }
 
       it "gets info from ENV" do
         expect(subject).to eq({
@@ -97,15 +97,13 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for Circle CI" do
-      before_all do
+      before_each do
         ENV["CIRCLECI"] = "1"
         ENV["CIRCLE_WORKFLOW_ID"] = "9"
         ENV["CI_PULL_REQUEST"] = "PR 987"
         ENV["CIRCLE_BUILD_NUM"] = "8"
         ENV["CIRCLE_BRANCH"] = "circle-branch"
       end
-
-      after_all { ENV.clear }
 
       it "gets info from ENV" do
         expect(subject).to eq({
@@ -121,7 +119,7 @@ Spectator.describe CoverageReporter::Config do
 
     context "for generic CI" do
       # Imagine we are on Circle
-      before_all do
+      before_each do
         ENV["CIRCLECI"] = "1"
         ENV["CIRCLE_WORKFLOW_ID"] = "circle-service-number"
         ENV["CI_PULL_REQUEST"] = "PR 123"
@@ -130,8 +128,6 @@ Spectator.describe CoverageReporter::Config do
         ENV["CI_JOB_ID"] = "ci-job-id"
         ENV["CI_BUILD_URL"] = "ci-build-url"
       end
-
-      after_all { ENV.clear }
 
       it "gets info from ENV" do
         expect(subject).to eq({
@@ -146,16 +142,39 @@ Spectator.describe CoverageReporter::Config do
       end
     end
 
-    context "for Gitlab CI" do
-      before_all do
-        ENV["GITLAB_CI"] = "1"
-        ENV["CI_BUILD_NAME"] = "gitlab-job-number"
-        ENV["CI_BUILD_ID"] = "gitlab-job-id"
-        ENV["CI_BUILD_REF_NAME"] = "gitlab-branch"
-        ENV["CI_BUILD_REF"] = "gitlab-commit-sha"
+    context "for Githab Actions" do
+      before_each do
+        ENV["GITHUB_ACTIONS"] = "true"
+        ENV["GITHUB_SERVER_URL"] = "https://github.com"
+        ENV["GITHUB_REPOSITORY"] = "owner/repo"
+        ENV["GITHUB_RUN_ID"] = "12345"
+        ENV["GITHUB_JOB"] = "test"
+        ENV["GITHUB_REF_NAME"] = "fix/bug"
+        ENV["GITHUB_SHA"] = "github-commit-sha"
       end
 
-      after_all { ENV.clear }
+      it "gets info from ENV" do
+        expect(subject).to eq({
+          :repo_token         => "repo_token",
+          :service_name       => "github",
+          :service_job_number => "12345",
+          :service_job_id     => "test",
+          :service_branch     => "fix/bug",
+          :service_build_url  => "https://github.com/owner/repo/actions/runs/12345",
+          :commit_sha         => "github-commit-sha",
+        })
+      end
+    end
+
+    context "for Gitlab CI" do
+      before_each do
+        ENV["GITLAB_CI"] = "1"
+        ENV["CI_JOB_NAME"] = "gitlab-job-id"
+        ENV["CI_JOB_ID"] = "gitlab-job-number"
+        ENV["CI_COMMIT_REF_NAME"] = "gitlab-branch"
+        ENV["CI_COMMIT_SHA"] = "gitlab-commit-sha"
+        ENV["CI_JOB_URL"] = "https://gitlab.com/job-url"
+      end
 
       it "gets info from ENV" do
         expect(subject).to eq({
@@ -164,20 +183,19 @@ Spectator.describe CoverageReporter::Config do
           :service_job_number => "gitlab-job-number",
           :service_job_id     => "gitlab-job-id",
           :service_branch     => "gitlab-branch",
+          :service_build_url  => "https://gitlab.com/job-url",
           :commit_sha         => "gitlab-commit-sha",
         })
       end
     end
 
     context "for Jenkins CI" do
-      before_all do
+      before_each do
         ENV["JENKINS_HOME"] = "defined"
         ENV["BUILD_NUMBER"] = "jenkins-number"
         ENV["BRANCH_NAME"] = "jenkins-branch"
         ENV["ghprbPullId"] = "jenkins-pr"
       end
-
-      after_all { ENV.clear }
 
       it "gets info from ENV" do
         expect(subject).to eq({
@@ -191,11 +209,9 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for local CI" do
-      before_all do
+      before_each do
         ENV["COVERALLS_RUN_LOCALLY"] = "1"
       end
-
-      after_all { ENV.clear }
 
       it "provides custom params" do
         expect(subject).to eq({
@@ -207,13 +223,11 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for Semaphore CI" do
-      before_all do
+      before_each do
         ENV["SEMAPHORE"] = "1"
         ENV["SEMAPHORE_BUILD_NUMBER"] = "semaphore-build-number"
         ENV["PULL_REQUEST_NUMBER"] = "semaphore-pr"
       end
-
-      after_all { ENV.clear }
 
       it "provides custom params" do
         expect(subject).to eq({
@@ -226,15 +240,13 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for Tddim CI" do
-      before_all do
+      before_each do
         ENV["TDDIUM"] = "1"
         ENV["TDDIUM_SESSION_ID"] = "tddium-number"
         ENV["TDDIUM_TID"] = "tddium-job-id"
         ENV["TDDIUM_PR_ID"] = "tddium-pr"
         ENV["TDDIUM_CURRENT_BRANCH"] = "tddium-branch"
       end
-
-      after_all { ENV.clear }
 
       it "provides custom params" do
         expect(subject).to eq({
@@ -250,14 +262,12 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for Travis CI" do
-      before_all do
+      before_each do
         ENV["TRAVIS"] = "1"
         ENV["TRAVIS_PULL_REQUEST"] = "travis-pr"
         ENV["TRAVIS_BRANCH"] = "travis-branch"
         ENV["TRAVIS_JOB_ID"] = "travis-job-id"
       end
-
-      after_all { ENV.clear }
 
       it "provides custom params" do
         expect(subject).to eq({
