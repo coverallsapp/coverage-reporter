@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Buildkite
       extend self
 
-      def params
+      def options
         return unless ENV["BUILDKITE"]?
 
-        Params.new(
+        Options.new(
           service_name: "buildkite",
           service_job_number: ENV["BUILDKITE_BUILD_NUMBER"]?,
           service_job_id: ENV["BUILDKITE_BUILD_ID"]?,

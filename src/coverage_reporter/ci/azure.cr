@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Azure
       extend self
 
-      def params
+      def options
         return unless ENV["TF_BUILD"]?
 
-        Params.new(
+        Options.new(
           service_name: "Azure Pipelines",
           service_job_id: ENV["BUILD_BUILDID"]?,
           service_pull_request: ENV["SYSTEM_PULLREQUEST_PULLREQUESTNUMBER"]?,

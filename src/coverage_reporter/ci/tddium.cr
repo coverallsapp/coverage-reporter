@@ -1,4 +1,4 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
@@ -7,10 +7,10 @@ module CoverageReporter
 
       TDDIUM_URL = "https://ci.solanolabs.com"
 
-      def params
+      def options
         return unless ENV["TDDIUM"]?
 
-        Params.new(
+        Options.new(
           service_name: "tddium",
           service_number: ENV["TDDIUM_SESSION_ID"]?,
           service_job_id: ENV["TDDIUM_TID"]?,

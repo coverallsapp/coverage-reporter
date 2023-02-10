@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Surf
       extend self
 
-      def params
+      def options
         return unless ENV["SURF_SHA1"]?
 
-        Params.new(
+        Options.new(
           service_name: "surf",
           service_branch: ENV["SURF_REF"]?,
           commit_sha: ENV["SURF_SHA1"]?,

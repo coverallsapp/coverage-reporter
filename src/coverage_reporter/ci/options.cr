@@ -1,7 +1,7 @@
 module CoverageReporter
   module CI
     # API params that Coveralls accepts.
-    class Params
+    class Options
       def initialize(
         @service_branch : String? = nil,
         @service_build_url : String? = nil,

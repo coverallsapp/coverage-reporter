@@ -213,7 +213,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["COVERALLS_RUN_LOCALLY"] = "1"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token         => "repo_token",
           :service_name       => "coveralls-universal",
@@ -229,7 +229,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["PULL_REQUEST_NUMBER"] = "semaphore-pr"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "semaphore",
@@ -248,7 +248,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["TDDIUM_CURRENT_BRANCH"] = "tddium-branch"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "tddium",
@@ -270,7 +270,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["TRAVIS_BUILD_NUMBER"] = "travis-build-number"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "travis-ci",
@@ -291,7 +291,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["BUILD_SOURCEVERSION"] = "azure-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "Azure Pipelines",
@@ -313,7 +313,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["BUILDKITE_COMMIT"] = "bk-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "buildkite",
@@ -335,7 +335,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["CF_REVISION"] = "cf-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "Codefresh",
@@ -355,7 +355,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["CI_COMMIT_ID"] = "codeship-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token     => "repo_token",
           :service_name   => "codeship",
@@ -376,7 +376,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["DRONE_COMMIT"] = "drone-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "drone",
@@ -394,7 +394,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["SURF_REF"] = "surf-branch"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token     => "repo_token",
           :service_name   => "surf",
@@ -412,7 +412,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["WERCKER_GIT_COMMIT"] = "w-commit"
       end
 
-      it "provides custom params" do
+      it "provides custom options" do
         expect(subject).to eq({
           :repo_token     => "repo_token",
           :service_name   => "wercker",

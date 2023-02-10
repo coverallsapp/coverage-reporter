@@ -1,16 +1,16 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Travis
       extend self
 
-      def params(service_name : String?)
+      def options(service_name : String?)
         return unless ENV["TRAVIS"]?
 
         pull_request = ENV["TRAVIS_PULL_REQUEST"]?
 
-        Params.new(
+        Options.new(
           service_name: service_name || "travis-ci",
           service_number: ENV["TRAVIS_BUILD_NUMBER"]?,
           service_branch: ENV["TRAVIS_BRANCH"]?,

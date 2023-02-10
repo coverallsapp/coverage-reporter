@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Jenkins
       extend self
 
-      def params
+      def options
         return unless ENV["JENKINS_URL"]? || ENV["JENKINS_HOME"]?
 
-        Params.new(
+        Options.new(
           service_name: "jenkins",
           service_number: ENV["BUILD_NUMBER"]?,
           service_job_id: ENV["BUILD_ID"]?,

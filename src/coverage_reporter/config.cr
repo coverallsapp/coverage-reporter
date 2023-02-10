@@ -4,7 +4,7 @@ require "./ci/*"
 
 module CoverageReporter
   class Config
-    @params : Hash(Symbol, String)?
+    @options : Hash(Symbol, String)?
     @repo_token : String?
 
     class MissingTokenException < BaseException
@@ -13,7 +13,7 @@ module CoverageReporter
       end
     end
 
-    CI_PARAMS = {
+    CI_OPTIONS = {
       CI::CircleCI,
       CI::Github,
       CI::Gitlab,
@@ -47,37 +47,33 @@ module CoverageReporter
       raise MissingTokenException.new if !@repo_token
     end
 
-    delegate :[], to: params
-    delegate :[]?, to: params
+    delegate :[], to: to_h
+    delegate :[]?, to: to_h
 
     def to_h
-      params
-    end
-
-    private def params
-      @params ||=
+      @options ||=
         begin
-          params = {
+          options = {
             :repo_token   => @repo_token,
             :job_flat     => @job_flag,
             :flag_name    => ENV["COVERALLS_FLAG_NAME"]?,
             :service_name => ENV["COVERALLS_SERVICE_NAME"]?,
           }.compact
 
-          params.merge!(ci_params)
+          options.merge!(ci_options)
 
-          CI::Generic.params.merge(params)
+          CI::Generic.options.merge(options)
         end
     end
 
-    private def ci_params : Hash(Symbol, String)
+    private def ci_options : Hash(Symbol, String)
       # FIXME: Does CI::Travis really need a *service_name* argument?
       #   Why other CIs don't need it?
-      travis = CI::Travis.params(@yaml["service_name"]?.try(&.to_s))
+      travis = CI::Travis.options(@yaml["service_name"]?.try(&.to_s))
       return travis if travis
 
-      CI_PARAMS.each do |ci|
-        res = ci.params
+      CI_OPTIONS.each do |ci|
+        res = ci.options
         return res if res
       end
 

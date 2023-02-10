@@ -1,4 +1,4 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
@@ -7,10 +7,10 @@ module CoverageReporter
 
       APPVEYOR_URL = "https://ci.appveyor.com"
 
-      def params
+      def options
         return unless ENV["APPVEYOR"]?
 
-        Params.new(
+        Options.new(
           service_name: "appveyor",
           service_number: ENV["APPVEYOR_BUILD_VERSION"]?,
           service_job_number: ENV["APPVEYOR_BUILD_NUMBER"]?,

@@ -10,7 +10,7 @@ Spectator.describe CoverageReporter::Api::Webhook do
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
-  after { WebMock.reset }
+  after_each { WebMock.reset }
 
   it "calls the /webhook endpoint" do
     WebMock.stub(:post, endpoint).with(

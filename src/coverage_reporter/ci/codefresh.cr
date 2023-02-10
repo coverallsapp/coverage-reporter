@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Codefresh
       extend self
 
-      def params
+      def options
         return unless ENV["CF_BRANCH"]?
 
-        Params.new(
+        Options.new(
           service_name: "Codefresh",
           service_job_id: ENV["CF_BUILD_ID"]?,
           service_pull_request: ENV["CF_PULL_REQUEST_ID"]?,

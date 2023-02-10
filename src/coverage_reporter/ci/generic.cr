@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
-    # Provides the params that can be used in any CI as a fallback
-    # for CI-specific ENV params.
+    # Provides the options that can be used in any CI as a fallback
+    # for CI-specific ENV options.
     module Generic
       extend self
 
-      def params
-        Params.new(
+      def options
+        Options.new(
           service_name: ENV["CI_NAME"]?,
           service_number: ENV["CI_BUILD_NUMBER"]?,
           service_job_id: ENV["CI_JOB_ID"]?,

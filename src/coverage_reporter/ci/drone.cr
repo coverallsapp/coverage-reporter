@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Drone
       extend self
 
-      def params
+      def options
         return unless ENV["DRONE"]?
 
-        Params.new(
+        Options.new(
           service_name: "drone",
           service_job_id: ENV["DRONE_BUILD_NUMBER"]?,
           service_pull_request: ENV["DRONE_PULL_REQUEST"]?,

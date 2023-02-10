@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Gitlab
       extend self
 
-      def params
+      def options
         return unless ENV["GITLAB_CI"]?
 
-        Params.new(
+        Options.new(
           service_name: "gitlab-ci",
           service_job_number: ENV["CI_JOB_ID"]? || ENV["CI_BUILD_NAME"]?,
           service_job_id: ENV["CI_JOB_NAME"]? || ENV["CI_BUILD_ID"]?,

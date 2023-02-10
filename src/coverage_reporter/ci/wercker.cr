@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Wercker
       extend self
 
-      def params
+      def options
         return unless ENV["WERCKER"]?
 
-        Params.new(
+        Options.new(
           service_name: "wercker",
           service_job_id: ENV["WERCKER_BUILD_ID"]?,
           service_branch: ENV["WERCKER_GIT_BRANCH"]?,

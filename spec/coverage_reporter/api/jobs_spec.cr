@@ -25,7 +25,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
-  after { WebMock.reset }
+  after_each { WebMock.reset }
 
   it "calls the /jobs endpoint" do
     WebMock.stub(:post, endpoint).with(

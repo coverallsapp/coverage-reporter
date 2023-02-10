@@ -1,14 +1,14 @@
-require "./params"
+require "./options"
 
 module CoverageReporter
   module CI
     module Local
       extend self
 
-      def params
+      def options
         return unless ENV["COVERALLS_RUN_LOCALLY"]?
 
-        Params.new(
+        Options.new(
           service_job_id: nil,
           service_name: "coveralls-universal",
           service_event_type: "manual",
