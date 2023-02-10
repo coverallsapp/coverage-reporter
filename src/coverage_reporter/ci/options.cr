@@ -1,6 +1,6 @@
 module CoverageReporter
   module CI
-    # API params that Coveralls accepts.
+    # Coveralls API options that can be retrieved from CI environment variables.
     class Options
       def initialize(
         @service_branch : String? = nil,
