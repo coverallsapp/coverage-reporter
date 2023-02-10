@@ -10,6 +10,8 @@ module CoverageReporter
 
     def globs : Array(String)
       [
+        "*.lcov",
+        "lcov.info",
         "**/*/lcov.info",
         "**/*/*.lcov",
       ]

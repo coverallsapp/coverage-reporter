@@ -9,7 +9,10 @@ module CoverageReporter
     alias SimplecovFormat = Hash(String, Hash(String, FileStats | Timestamp))
 
     def globs : Array(String)
-      ["**/*/.resultset.json"]
+      [
+        ".resultset.json",
+        "**/*/.resultset.json",
+      ]
     end
 
     def matches?(filename : String) : Bool

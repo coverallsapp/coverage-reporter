@@ -10,7 +10,8 @@ module CoverageReporter
     repo_token : String?,
     config_path : String,
     job_flag : String?,
-    parallel : Bool
+    parallel : Bool,
+    dry_run : Bool
   )
     config = Config.new(
       repo_token: repo_token,
@@ -20,13 +21,13 @@ module CoverageReporter
     source_files = Parser.new(coverage_file).parse
     api = Api::Jobs.new(config, parallel, source_files, Git.info)
 
-    api.send_request
+    api.send_request(dry_run)
   end
 
-  def parallel_done(repo_token : String?, config_path : String)
+  def parallel_done(repo_token : String?, config_path : String, dry_run : Bool)
     config = Config.new(repo_token: repo_token, path: config_path)
     api = Api::Webhook.new(config)
 
-    api.send_request
+    api.send_request(dry_run)
   end
 end

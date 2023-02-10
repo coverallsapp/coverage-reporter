@@ -23,9 +23,20 @@ module CoverageReporter::Cli
     end
 
     if opts.parallel_done?
-      CoverageReporter.parallel_done(opts.repo_token, opts.config_path)
+      CoverageReporter.parallel_done(
+        repo_token: opts.repo_token,
+        config_path: opts.config_path,
+        dry_run: opts.dry_run?,
+      )
     else
-      CoverageReporter.run(opts.filename, opts.repo_token, opts.config_path, opts.job_flag, opts.parallel?)
+      CoverageReporter.run(
+        coverage_file: opts.filename,
+        repo_token: opts.repo_token,
+        config_path: opts.config_path,
+        job_flag: opts.job_flag,
+        parallel: opts.parallel?,
+        dry_run: opts.dry_run?,
+      )
     end
   rescue ex : BaseException | Socket::Error
     Log.error ex.message
@@ -61,6 +72,7 @@ module CoverageReporter::Cli
     property? no_logo = false
     property? parallel = !!(ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false") || false
     property? parallel_done = false
+    property? dry_run = false
   end
 
   private def parse_args(args, opts = Opts.new)
@@ -110,6 +122,10 @@ module CoverageReporter::Cli
 
       parser.on("--debug", "Debug mode. Data being sent to Coveralls will be outputted to console.") do
         Log.set(Log::Level::Debug)
+      end
+
+      parser.on("--dry-run", "Dry run (no request sent)") do
+        opts.dry_run = true
       end
 
       parser.on("-h", "--help", "Show this help") do

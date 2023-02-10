@@ -36,12 +36,9 @@ module CoverageReporter
     end
 
     def parse : Array(FileReport)
-      reports = [] of FileReport
       files.flat_map do |filename|
         parse_file(filename)
       end
-
-      reports
     end
 
     private def parse_file(filename : String)

@@ -21,13 +21,13 @@ Spectator.describe CoverageReporter do
       after_all { WebMock.reset }
 
       it "posts coverage" do
-        res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel
-        expect(res).to be_true
+        expect {
+          CoverageReporter.run filename, repo_token, config_path, job_flag, parallel, false
+        }.not_to raise_error
       end
 
       it "handles webhook" do
-        res = CoverageReporter.parallel_done repo_token, ""
-        expect(res).to be_true
+        expect { CoverageReporter.parallel_done repo_token, "", false }.not_to raise_error
       end
     end
 
@@ -41,13 +41,15 @@ Spectator.describe CoverageReporter do
       after_all { WebMock.reset }
 
       it "posts coverage" do
-        res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel
-        expect(res).to be_true
+        expect {
+          CoverageReporter.run filename, repo_token, config_path, job_flag, parallel, false
+        }.not_to raise_error
       end
 
       it "handles webhook" do
-        res = CoverageReporter.parallel_done repo_token, ""
-        expect(res).to be_true
+        expect {
+          CoverageReporter.parallel_done repo_token, "", false
+        }.not_to raise_error
       end
     end
   end

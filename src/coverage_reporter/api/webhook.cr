@@ -12,7 +12,7 @@ module CoverageReporter
         @build_num = config[:service_number]?
       end
 
-      def send_request
+      def send_request(dry_run : Bool = false)
         webhook_url = Api.uri("webhook")
 
         Log.info "⭐️ Calling parallel done webhook: #{webhook_url}"
@@ -27,6 +27,8 @@ module CoverageReporter
 
         Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
+        return if dry_run
+
         res = Crest.post(
           webhook_url,
           headers: {"Content-Type" => "application/json"},
@@ -35,7 +37,6 @@ module CoverageReporter
         )
 
         Api.show_response(res)
-        true
       end
     end
   end

@@ -25,7 +25,7 @@ module CoverageReporter
         @job_flag = @config[:job_flag]?
       end
 
-      def send_request
+      def send_request(dry_run : Bool = false)
         data = build_request
         api_url = Api.uri("api/#{API_VERSION}/jobs")
 
@@ -35,6 +35,8 @@ module CoverageReporter
 
         Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
+        return if dry_run
+
         res = Crest.post(
           api_url,
           headers: {"Content-Type" => "application/json"},
@@ -43,7 +45,6 @@ module CoverageReporter
         )
 
         Api.show_response(res)
-        true
       end
 
       private def build_request

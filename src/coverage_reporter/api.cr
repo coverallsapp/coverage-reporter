@@ -11,7 +11,7 @@ module CoverageReporter
 
     def show_response(res)
       # TODO: include info about account status
-      Log.info "---\n✅ API Response: #{res.body.to_pretty_json}\n- 💛, Coveralls"
+      Log.info "---\n✅ API Response: #{res.body}\n- 💛, Coveralls"
     end
 
     def uri(path)
