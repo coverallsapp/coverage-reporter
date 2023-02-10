@@ -1,9 +1,16 @@
 require "./parsers/*"
 
 module CoverageReporter
+  # General parser that can do the following:
+  # * Automatically find coverage report files.
+  # * Parse coverage report files and return the format that Coveralls API requires.
+  #
+  # New parsers can be easily added. See `BaseParser` for details.
   class Parser
     getter file : String | Nil
 
+    # A list of available parsers.
+    # See `CoverageReporter::BaseParser` for details.
     PARSERS = {
       LcovParser.new,
       SimplecovParser.new,

@@ -233,7 +233,7 @@ Spectator.describe CoverageReporter::Config do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "semaphore",
-          :service_number       => "semaphore-build-number",
+          :service_job_id       => "semaphore-build-number",
           :service_pull_request => "semaphore-pr",
         })
       end
@@ -267,15 +267,158 @@ Spectator.describe CoverageReporter::Config do
         ENV["TRAVIS_PULL_REQUEST"] = "travis-pr"
         ENV["TRAVIS_BRANCH"] = "travis-branch"
         ENV["TRAVIS_JOB_ID"] = "travis-job-id"
+        ENV["TRAVIS_BUILD_NUMBER"] = "travis-build-number"
       end
 
       it "provides custom params" do
         expect(subject).to eq({
           :repo_token           => "repo_token",
           :service_name         => "travis-ci",
+          :service_number       => "travis-build-number",
           :service_branch       => "travis-branch",
           :service_job_id       => "travis-job-id",
           :service_pull_request => "travis-pr",
+        })
+      end
+    end
+
+    context "for Azure" do
+      before_each do
+        ENV["TF_BUILD"] = "1"
+        ENV["BUILD_BUILDID"] = "azure-build-id"
+        ENV["SYSTEM_PULLREQUEST_PULLREQUESTNUMBER"] = "azure-pull-request"
+        ENV["BUILD_SOURCEBRANCHNAME"] = "azure-branch"
+        ENV["BUILD_SOURCEVERSION"] = "azure-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token           => "repo_token",
+          :service_name         => "Azure Pipelines",
+          :service_branch       => "azure-branch",
+          :service_job_id       => "azure-build-id",
+          :service_pull_request => "azure-pull-request",
+          :commit_sha           => "azure-commit",
+        })
+      end
+    end
+
+    context "for Buildkite" do
+      before_each do
+        ENV["BUILDKITE"] = "1"
+        ENV["BUILDKITE_BUILD_NUMBER"] = "bk-job-number"
+        ENV["BUILDKITE_BUILD_ID"] = "bk-job-id"
+        ENV["BUILDKITE_PULL_REQUEST"] = "bk-pr"
+        ENV["BUILDKITE_BRANCH"] = "bk-branch"
+        ENV["BUILDKITE_COMMIT"] = "bk-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token           => "repo_token",
+          :service_name         => "buildkite",
+          :service_branch       => "bk-branch",
+          :service_job_number   => "bk-job-number",
+          :service_job_id       => "bk-job-id",
+          :service_pull_request => "bk-pr",
+          :commit_sha           => "bk-commit",
+        })
+      end
+    end
+
+    context "for Codefresh" do
+      before_each do
+        ENV["CF_BRANCH"] = "cf-branch"
+        ENV["CF_BUILD_ID"] = "cf-job-id"
+        ENV["CF_PULL_REQUEST_ID"] = "cf-pr"
+        ENV["CF_BRANCH"] = "cf-branch"
+        ENV["CF_REVISION"] = "cf-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token           => "repo_token",
+          :service_name         => "Codefresh",
+          :service_branch       => "cf-branch",
+          :service_job_id       => "cf-job-id",
+          :service_pull_request => "cf-pr",
+          :commit_sha           => "cf-commit",
+        })
+      end
+    end
+
+    context "for Codeship" do
+      before_each do
+        ENV["CI_NAME"] = "codeship"
+        ENV["CI_BUILD_NUMBER"] = "codeship-job-id"
+        ENV["CI_BRANCH"] = "codeship-branch"
+        ENV["CI_COMMIT_ID"] = "codeship-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token     => "repo_token",
+          :service_name   => "codeship",
+          :service_branch => "codeship-branch",
+          :service_number => "codeship-job-id",
+          :service_job_id => "codeship-job-id",
+          :commit_sha     => "codeship-commit",
+        })
+      end
+    end
+
+    context "for Drone" do
+      before_each do
+        ENV["DRONE"] = "drone"
+        ENV["DRONE_BUILD_NUMBER"] = "drone-job-id"
+        ENV["DRONE_PULL_REQUEST"] = "drone-pr"
+        ENV["DRONE_BRANCH"] = "drone-branch"
+        ENV["DRONE_COMMIT"] = "drone-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token           => "repo_token",
+          :service_name         => "drone",
+          :service_branch       => "drone-branch",
+          :service_job_id       => "drone-job-id",
+          :service_pull_request => "drone-pr",
+          :commit_sha           => "drone-commit",
+        })
+      end
+    end
+
+    context "for Surf" do
+      before_each do
+        ENV["SURF_SHA1"] = "surf-commit"
+        ENV["SURF_REF"] = "surf-branch"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token     => "repo_token",
+          :service_name   => "surf",
+          :service_branch => "surf-branch",
+          :commit_sha     => "surf-commit",
+        })
+      end
+    end
+
+    context "for Wercker" do
+      before_each do
+        ENV["WERCKER"] = "1"
+        ENV["WERCKER_BUILD_ID"] = "w-job-id"
+        ENV["WERCKER_GIT_BRANCH"] = "w-branch"
+        ENV["WERCKER_GIT_COMMIT"] = "w-commit"
+      end
+
+      it "provides custom params" do
+        expect(subject).to eq({
+          :repo_token     => "repo_token",
+          :service_name   => "wercker",
+          :service_job_id => "w-job-id",
+          :service_branch => "w-branch",
+          :commit_sha     => "w-commit",
         })
       end
     end

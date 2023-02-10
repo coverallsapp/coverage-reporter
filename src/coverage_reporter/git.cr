@@ -2,6 +2,7 @@ require "io"
 require "process"
 
 module CoverageReporter
+  # General Git information required for Coveralls API.
   module Git
     extend self
 

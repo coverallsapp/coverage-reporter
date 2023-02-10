@@ -11,8 +11,9 @@ module CoverageReporter
         Params.new(
           service_name: "jenkins",
           service_number: ENV["BUILD_NUMBER"]?,
+          service_job_id: ENV["BUILD_ID"]?,
           service_branch: ENV["BRANCH_NAME"]?,
-          service_pull_request: ENV["ghprbPullId"]?,
+          service_pull_request: ENV["CHANGE_ID"]? || ENV["ghprbPullId"]?,
         ).to_h
       end
     end

@@ -5,7 +5,7 @@ Spectator.describe CoverageReporter do
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
-  describe "run" do
+  describe "report" do
     let(repo_token) { "asdfasdf" }
     let(filename) { nil }
     let(config_path) { "" }
@@ -22,7 +22,7 @@ Spectator.describe CoverageReporter do
 
       it "posts coverage" do
         expect {
-          CoverageReporter.run filename, repo_token, config_path, job_flag, parallel, false
+          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
         }.not_to raise_error
       end
 
@@ -42,7 +42,7 @@ Spectator.describe CoverageReporter do
 
       it "posts coverage" do
         expect {
-          CoverageReporter.run filename, repo_token, config_path, job_flag, parallel, false
+          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
         }.not_to raise_error
       end
 

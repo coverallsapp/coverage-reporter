@@ -8,11 +8,11 @@ Spectator.describe CoverageReporter::Api::Jobs do
   let(git_info) { {:branch => "chore/add-tests", :head => {:message => "add tests"}} }
   let(source_files) do
     [
-      FileReport.new(
+      CoverageReporter::FileReport.new(
         name: "app/main.cr",
         coverage: [1, 2, nil],
       ),
-      FileReport.new(
+      CoverageReporter::FileReport.new(
         name: "app/helper.cr",
         coverage: [5, nil, 43],
       ),

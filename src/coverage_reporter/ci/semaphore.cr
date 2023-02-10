@@ -10,7 +10,7 @@ module CoverageReporter
 
         Params.new(
           service_name: "semaphore",
-          service_number: ENV["SEMAPHORE_BUILD_NUMBER"]?,
+          service_job_id: ENV["SEMAPHORE_BUILD_NUMBER"]?,
           service_pull_request: ENV["PULL_REQUEST_NUMBER"]?,
         ).to_h
       end

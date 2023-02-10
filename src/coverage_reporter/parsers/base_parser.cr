@@ -1,10 +1,11 @@
 require "../file_report"
 
 module CoverageReporter
-  # Parser interface.
+  # Coverage report parser interface.
   #
-  # To add a new parser create a class in parsers/ folder and implement these
-  # methods. For example, if you add a mycov parser, the code should look like this:
+  # To add a new parser create a class in **src/coverage_reporter/parsers/** folder and
+  # implement three required methods. For example, if you add a `mycov` parser the code
+  # should look like this:
   # ```
   # require "./base_parser"
   #
@@ -24,7 +25,7 @@ module CoverageReporter
   #   end
   # end
   # ```
-  # Them add your parser class to `PARSERS` tuple in `Parser` class.
+  # Them add your parser class to `PARSERS` constant in `Parser` class.
   # ```
   # PARSERS = {
   #   # ...

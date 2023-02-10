@@ -7,13 +7,29 @@ module CoverageReporter
     @params : Hash(Symbol, String)?
     @repo_token : String?
 
-    DEFAULT_LOCATION = ".coveralls.yml"
-
     class MissingTokenException < BaseException
       def message
         "🚨 Missing Repo Token. Set using `-r <token>` or `COVERALLS_REPO_TOKEN=<token>`"
       end
     end
+
+    CI_PARAMS = {
+      CI::CircleCI,
+      CI::Github,
+      CI::Gitlab,
+      CI::Semaphore,
+      CI::Jenkins,
+      CI::Appveyor,
+      CI::Tddium,
+      CI::Azure,
+      CI::Buildkite,
+      CI::Codefresh,
+      CI::Codeship,
+      CI::Surf,
+      CI::Wercker,
+      CI::Drone,
+      CI::Local,
+    }
 
     def initialize(
       repo_token : String?,
@@ -55,16 +71,17 @@ module CoverageReporter
     end
 
     private def ci_params : Hash(Symbol, String)
-      CI::Travis.params(@yaml["service_name"]?.try(&.to_s)) ||
-        CI::CircleCI.params ||
-        CI::Semaphore.params ||
-        CI::Jenkins.params ||
-        CI::Appveyor.params ||
-        CI::Tddium.params ||
-        CI::Github.params ||
-        CI::Gitlab.params ||
-        CI::Local.params ||
-        {} of Symbol => String
+      # FIXME: Does CI::Travis really need a *service_name* argument?
+      #   Why other CIs don't need it?
+      travis = CI::Travis.params(@yaml["service_name"]?.try(&.to_s))
+      return travis if travis
+
+      CI_PARAMS.each do |ci|
+        res = ci.params
+        return res if res
+      end
+
+      {} of Symbol => String
     end
   end
 end

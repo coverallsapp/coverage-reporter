@@ -1,6 +1,9 @@
 require "./base_parser"
 
 module CoverageReporter
+  # Simplecov coverage format parser.
+  #
+  # See: [https://github.com/simplecov-ruby/simplecov](https://github.com/simplecov-ruby/simplecov)
   class SimplecovParser
     alias Coverage = Array(Int32?)
     alias Stats = Hash(String, Array(Int32?))

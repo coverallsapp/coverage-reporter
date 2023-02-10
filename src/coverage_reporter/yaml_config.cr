@@ -1,7 +1,10 @@
 require "yaml"
 
 module CoverageReporter
+  # `.coveralls.yml` config representation.
   class YamlConfig
+    DEFAULT_LOCATION = ".coveralls.yml"
+
     def initialize(path)
       @config =
         if File.exists?(path)
