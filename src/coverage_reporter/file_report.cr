@@ -6,15 +6,17 @@ module CoverageReporter
     def initialize(
       @name : String,
       @coverage : Array(Int64?),
-      @branches : Array(Int64?) | Array(Int64) | Nil = nil
+      @branches : Array(Int64?) | Array(Int64) | Nil = nil,
+      @source_digest : String | Nil = nil
     )
     end
 
     def to_h : Hash(Symbol, String | Array(Int64?) | Array(Int64))
       {
-        :name     => @name,
-        :coverage => @coverage,
-        :branches => @branches,
+        :name          => @name,
+        :coverage      => @coverage,
+        :branches      => @branches,
+        :source_digest => @source_digest,
       }.compact
     end
   end

@@ -10,5 +10,6 @@ Metrics/CyclomaticComplexity:
   MaxComplexity: 10
   Excluded:
   - src/coverage_reporter/parsers/lcov_parser.cr
+  - src/coverage_reporter/parsers/gcov_parser.cr
   Enabled: true
   Severity: Warning

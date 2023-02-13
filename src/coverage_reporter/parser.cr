@@ -16,6 +16,7 @@ module CoverageReporter
       LcovParser,
       SimplecovParser,
       CoberturaParser,
+      GcovParser,
     }
 
     def initialize(@file : String?, base_path : String?)
