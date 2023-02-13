@@ -3,6 +3,7 @@ require "../spec_helper"
 Spectator.describe CoverageReporter::Config do
   subject { described_class.new(repo_token: repo_token, path: path, flag_name: job_flag_name) }
 
+  before_each { ENV.clear }
   after_each { ENV.clear }
 
   describe ".new" do
