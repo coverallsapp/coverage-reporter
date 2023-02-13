@@ -2,8 +2,11 @@ require "io"
 require "process"
 
 module CoverageReporter
-  class GitInfo
-    def self.run
+  # General Git information required for Coveralls API.
+  module Git
+    extend self
+
+    def info
       {
         :head => {
           :id             => ENV.fetch("GIT_ID", command_line("git log -1 --pretty=format:'%H'")),
@@ -17,7 +20,7 @@ module CoverageReporter
       }
     end
 
-    def self.command_line(command)
+    private def command_line(command) : String
       io = IO::Memory.new
       Process.run(command, shell: true, output: io)
       io.to_s

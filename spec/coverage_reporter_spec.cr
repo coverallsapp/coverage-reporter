@@ -2,12 +2,12 @@ require "./spec_helper"
 
 Spectator.describe CoverageReporter do
   before_all do
-    CoverageReporter.quiet!
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
-  describe "run" do
+  describe "report" do
     let(repo_token) { "asdfasdf" }
-    let(filename) { "" }
+    let(filename) { nil }
     let(config_path) { "" }
     let(job_flag) { "unit" }
     let(parallel) { true }
@@ -18,14 +18,16 @@ Spectator.describe CoverageReporter do
         WebMock.stub(:post, "https://coveralls.io/webhook")
       end
 
+      after_all { WebMock.reset }
+
       it "posts coverage" do
-        res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel
-        expect(res).to be_true
+        expect {
+          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
+        }.not_to raise_error
       end
 
       it "handles webhook" do
-        res = CoverageReporter.parallel_done repo_token, ""
-        expect(res).to be_true
+        expect { CoverageReporter.parallel_done repo_token, "", false }.not_to raise_error
       end
     end
 
@@ -36,14 +38,18 @@ Spectator.describe CoverageReporter do
         ENV["COVERALLS_ENDPOINT"] = "https://example.com"
       end
 
+      after_all { WebMock.reset }
+
       it "posts coverage" do
-        res = CoverageReporter.run filename, repo_token, config_path, job_flag, parallel
-        expect(res).to be_true
+        expect {
+          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
+        }.not_to raise_error
       end
 
       it "handles webhook" do
-        res = CoverageReporter.parallel_done repo_token, ""
-        expect(res).to be_true
+        expect {
+          CoverageReporter.parallel_done repo_token, "", false
+        }.not_to raise_error
       end
     end
   end

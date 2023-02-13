@@ -6,4 +6,4 @@ pre-commit:
       run: crystal tool format {staged_files}
     2_ameba:
       glob: "*.cr"
-      run: bin/ameba --fix {staged_files}
+      run: bin/ameba --fix {staged_files} && git add {staged_files}

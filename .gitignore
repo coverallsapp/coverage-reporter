@@ -2,8 +2,8 @@
 /lib/
 /bin/
 /.shards/
+/.crystal/
 *.dwarf
-cli
 # Libraries don't need dependency lock
 # Dependencies will be locked in application that uses them
 /shard.lock
