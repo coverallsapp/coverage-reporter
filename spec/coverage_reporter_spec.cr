@@ -32,13 +32,16 @@ Spectator.describe CoverageReporter do
     end
 
     context "on Coveralls Enterprise" do
-      before_all do
+      before_each do
         WebMock.stub(:post, "https://example.com/api/v1/jobs")
         WebMock.stub(:post, "https://example.com/webhook")
         ENV["COVERALLS_ENDPOINT"] = "https://example.com"
       end
 
-      after_all { WebMock.reset }
+      after_each do
+        WebMock.reset
+        ENV.clear
+      end
 
       it "posts coverage" do
         expect {
