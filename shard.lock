@@ -1,0 +1,30 @@
+version: 2.0
+shards:
+  ameba:
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 1.4.0
+
+  crest:
+    git: https://github.com/mamantoha/crest.git
+    version: 1.3.8
+
+  crystal-kcov:
+    git: https://github.com/vici37/crystal-kcov.git
+    version: 0.2.3+git.commit.7e49fe22d7d47040c9de77eb77a6daa76ce0655d
+
+  http-client-digest_auth:
+    git: https://github.com/mamantoha/http-client-digest_auth.git
+    version: 0.6.0
+
+  http_proxy:
+    git: https://github.com/mamantoha/http_proxy.git
+    version: 0.9.0
+
+  spectator:
+    git: https://gitlab.com/arctic-fox/spectator.git
+    version: 0.11.6
+
+  webmock:
+    git: https://github.com/manastech/webmock.cr.git
+    version: 0.14.0+git.commit.42b347cdd64e13193e46167a03593944ae2b3d20
+

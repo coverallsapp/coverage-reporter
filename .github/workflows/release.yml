@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: git fetch --force --tags
+
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: 1.7.2
+
+      - name: Install dependencies
+        run: shards install --production
+
+      - name: Build (Linux)
+        run: make release_linux
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls
+          path: dist/coveralls
+          if-no-files-found: error
+
+      - name: Upload tar.gz
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-linux.tar.gz
+          path: dist/coveralls-linux.tar.gz
+          if-no-files-found: error
+
+      - name: Create Github release
+        env:
+          TAG: ${{ github.ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create ${TAG}
+          'dist/coveralls#coveralls-linux'
+          'dist/coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          --generate-notes
