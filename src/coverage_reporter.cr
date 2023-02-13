@@ -9,19 +9,20 @@ module CoverageReporter
   # and sends the report to Coveralls API.
   def report(
     coverage_file : String?,
+    base_path : String?,
     repo_token : String?,
     config_path : String,
-    job_flag : String?,
+    job_flag_name : String?,
     parallel : Bool,
     dry_run : Bool
   )
     config = Config.new(
       repo_token: repo_token,
-      job_flag: job_flag,
+      flag_name: job_flag_name,
       path: config_path,
     )
-    source_files = Parser.new(coverage_file).parse
-    api = Api::Jobs.new(config, parallel, source_files, Git.info)
+    source_files = Parser.new(coverage_file, base_path).parse
+    api = Api::Jobs.new(config, parallel, source_files, Git.info(config))
 
     api.send_request(dry_run)
   end

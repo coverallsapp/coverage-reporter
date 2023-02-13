@@ -22,7 +22,7 @@ Spectator.describe CoverageReporter do
 
       it "posts coverage" do
         expect {
-          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
+          CoverageReporter.report filename, nil, repo_token, config_path, job_flag, parallel, false
         }.not_to raise_error
       end
 
@@ -42,7 +42,7 @@ Spectator.describe CoverageReporter do
 
       it "posts coverage" do
         expect {
-          CoverageReporter.report filename, repo_token, config_path, job_flag, parallel, false
+          CoverageReporter.report filename, nil, repo_token, config_path, job_flag, parallel, false
         }.not_to raise_error
       end
 

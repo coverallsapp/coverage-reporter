@@ -4,8 +4,10 @@ require "./ci/*"
 
 module CoverageReporter
   class Config
+    getter repo_token : String?
+    getter flag_name : String?
+
     @options : Hash(Symbol, String)?
-    @repo_token : String?
 
     class MissingTokenException < BaseException
       def message
@@ -17,6 +19,7 @@ module CoverageReporter
       CI::CircleCI,
       CI::Github,
       CI::Gitlab,
+      CI::Travis,
       CI::Semaphore,
       CI::Jenkins,
       CI::Appveyor,
@@ -34,7 +37,7 @@ module CoverageReporter
     def initialize(
       repo_token : String?,
       path : String = "",
-      @job_flag : String? = nil
+      @flag_name : String? = nil
     )
       @yaml = YamlConfig.new(path)
 
@@ -51,33 +54,30 @@ module CoverageReporter
     delegate :[]?, to: to_h
 
     def to_h
-      @options ||=
-        begin
-          options = {
-            :repo_token   => @repo_token,
-            :job_flat     => @job_flag,
-            :flag_name    => ENV["COVERALLS_FLAG_NAME"]?,
-            :service_name => ENV["COVERALLS_SERVICE_NAME"]?,
-          }.compact
-
-          options.merge!(ci_options)
-
-          CI::Generic.options.merge(options)
-        end
+      @options ||= CI::Generic.options.merge(ci_options).merge(custom_options).merge({
+        :repo_token => repo_token,
+        :flag_name  => flag_name,
+      }.compact)
     end
 
     private def ci_options : Hash(Symbol, String)
-      # FIXME: Does CI::Travis really need a *service_name* argument?
-      #   Why other CIs don't need it?
-      travis = CI::Travis.options(@yaml["service_name"]?.try(&.to_s))
-      return travis if travis
-
       CI_OPTIONS.each do |ci|
         res = ci.options
         return res if res
       end
 
       {} of Symbol => String
+    end
+
+    private def custom_options : Hash(Symbol, String)
+      CI::Options.new(
+        service_name: ENV["COVERALLS_SERVICE_NAME"]? || @yaml["service_name"]?.try(&.to_s),
+        service_number: ENV["COVERALLS_SERVICE_NUMBER"]?.presence,
+        service_job_id: ENV["COVERALLS_SERVICE_JOB_ID"]?.presence,
+        service_job_number: ENV["COVERALLS_SERVICE_JOB_NUMBER"]?.presence,
+        service_branch: ENV["COVERALLS_GIT_BRANCH"]?.presence,
+        commit_sha: ENV["COVERALLS_GIT_COMMIT"]?.presence,
+      ).to_h
     end
   end
 end

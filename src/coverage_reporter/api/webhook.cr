@@ -7,7 +7,7 @@ module CoverageReporter
     @build_num : String | Nil
 
     def initialize(config : Config)
-      @token = config[:repo_token]?
+      @token = config.repo_token
       @build_num = config[:service_number]?
     end
 

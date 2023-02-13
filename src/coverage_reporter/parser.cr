@@ -7,16 +7,18 @@ module CoverageReporter
   #
   # New parsers can be easily added. See `BaseParser` for details.
   class Parser
-    getter file : String | Nil
+    getter file : String?
+    getter parsers : Array(BaseParser)
 
     # A list of available parsers.
     # See `CoverageReporter::BaseParser` for details.
     PARSERS = {
-      LcovParser.new,
-      SimplecovParser.new,
+      LcovParser,
+      SimplecovParser,
     }
 
-    def initialize(@file : String?)
+    def initialize(@file : String?, base_path : String?)
+      @parsers = PARSERS.map(&.new(base_path)).to_a
     end
 
     # Returns coverage report files that can be parsed by utility.
@@ -32,7 +34,7 @@ module CoverageReporter
       end
 
       files = [] of String
-      Dir[PARSERS.flat_map(&.globs)].each do |filename|
+      Dir[parsers.flat_map(&.globs)].each do |filename|
         unless filename =~ /node_modules|vendor/
           files.push(filename)
           Log.info "🔍 Detected coverage file: #{filename}"
@@ -49,7 +51,7 @@ module CoverageReporter
     end
 
     private def parse_file(filename : String)
-      PARSERS.each do |parser|
+      parsers.each do |parser|
         next unless parser.matches?(filename)
 
         return parser.parse(filename)

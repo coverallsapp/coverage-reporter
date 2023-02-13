@@ -31,9 +31,10 @@ module CoverageReporter::Cli
     else
       CoverageReporter.report(
         coverage_file: opts.filename,
+        base_path: opts.base_path,
         repo_token: opts.repo_token,
         config_path: opts.config_path,
-        job_flag: opts.job_flag,
+        job_flag_name: opts.job_flag_name,
         parallel: opts.parallel?,
         dry_run: opts.dry_run?,
       )
@@ -66,11 +67,12 @@ module CoverageReporter::Cli
 
   private class Opts
     property filename : String?
-    property job_flag : String?
     property repo_token : String?
+    property base_path : String?
+    property job_flag_name = ENV["COVERALLS_FLAG_NAME"]?
     property config_path = CoverageReporter::YamlConfig::DEFAULT_LOCATION
     property? no_logo = false
-    property? parallel = !!(ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false") || false
+    property? parallel = !!(ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
     property? parallel_done = false
     property? dry_run = false
   end
@@ -96,12 +98,20 @@ module CoverageReporter::Cli
         opts.config_path = path
       end
 
+      parser.on(
+        "-bPATH",
+        "--base-path=PATH",
+        "Path to the root folder of the project the coverage was collected in"
+      ) do |path|
+        opts.base_path = path
+      end
+
       parser.on("-fFILENAME", "--file=FILENAME", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
         opts.filename = name.presence
       end
 
       parser.on("-jFLAG", "--job-flag=FLAG", "Coverage job flag name, e.g. Unit Tests") do |flag|
-        opts.job_flag = flag.presence
+        opts.job_flag_name = flag.presence
       end
 
       parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done).") do

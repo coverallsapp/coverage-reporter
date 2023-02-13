@@ -29,12 +29,19 @@ module CoverageReporter
   # ```
   # PARSERS = {
   #   # ...
-  #   MycovParser.new,
+  #   MycovParser,
   # }
   # ```
   #
   # Existing parsers can be used as a reference.
   abstract class BaseParser
+    # Initializes the parser.
+    #
+    # *base_path* can be used to join with all paths in coverage report in order
+    # to properly reference a file.
+    def initialize(base_path : String? = nil)
+    end
+
     # Returns an array of globs that will be used to look for coverage reports.
     abstract def globs : Array(String)
 

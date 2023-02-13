@@ -8,6 +8,10 @@ module CoverageReporter
       coverage : LineInfo,
       branches : Hash(Int32, BranchInfo)
 
+    # Use *base_path* to join with paths found in reports.
+    def initialize(@base_path : String?)
+    end
+
     def globs : Array(String)
       [
         "*.lcov",
@@ -39,11 +43,12 @@ module CoverageReporter
         )
       end
 
+      base_path = @base_path
       source_file = nil : String?
       File.each_line(filename, chomp: true) do |line|
         case line
         when /\ASF:(.+)/
-          source_file = $1
+          source_file = base_path ? File.join(base_path, $1) : $1
         when /\ADA:(\d+),(\d+)/
           line_no = $1.to_i
           count = $2.to_i

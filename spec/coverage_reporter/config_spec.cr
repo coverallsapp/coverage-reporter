@@ -1,14 +1,14 @@
 require "../spec_helper"
 
 Spectator.describe CoverageReporter::Config do
-  subject { described_class.new(repo_token: repo_token, path: path, job_flag: job_flag) }
+  subject { described_class.new(repo_token: repo_token, path: path, flag_name: job_flag_name) }
 
   after_each { ENV.clear }
 
   describe ".new" do
     let(repo_token) { nil }
     let(path) { "" }
-    let(job_flag) { nil }
+    let(job_flag_name) { nil }
 
     context "without repo_token" do
       it "raises an exception" do

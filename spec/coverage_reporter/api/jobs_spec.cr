@@ -25,7 +25,14 @@ Spectator.describe CoverageReporter::Api::Jobs do
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
 
-  after_each { WebMock.reset }
+  before_each do
+    ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)
+  end
+
+  after_each do
+    WebMock.reset
+    ENV.clear
+  end
 
   it "calls the /jobs endpoint" do
     WebMock.stub(:post, endpoint).with(
@@ -44,6 +51,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
           ],
           :parallel => parallel,
           :git      => git_info,
+          :run_at   => ENV["COVERALLS_RUN_AT"],
         }).to_json.to_s,
       }.to_json,
     ).to_return(status: 200, body: {:result => "ok"}.to_json)
