@@ -78,7 +78,7 @@ module CoverageReporter::Cli
   end
 
   private def parse_args(args, opts = Opts.new)
-    OptionParser.parse do |parser|
+    OptionParser.parse(args) do |parser|
       parser.banner = "Usage coveralls [arguments]"
       parser.on(
         "-rTOKEN",

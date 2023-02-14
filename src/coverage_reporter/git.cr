@@ -14,7 +14,7 @@ module CoverageReporter
         :head   => {
           :id              => config[:commit_sha]? || head.commit,
           :committer_email => head.committer_email,
-          :committer_name  => head.committer_email,
+          :committer_name  => head.committer_name,
           :author_email    => head.author_email,
           :author_name     => head.author_name,
           :message         => head.message,

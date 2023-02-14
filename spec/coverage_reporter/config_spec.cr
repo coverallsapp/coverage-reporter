@@ -281,6 +281,28 @@ Spectator.describe CoverageReporter::Config do
           :service_pull_request => "travis-pr",
         })
       end
+
+      context "for custom ENVs" do
+        before_each do
+          ENV["COVERALLS_SERVICE_NAME"] = "custom-ci"
+          ENV["COVERALLS_SERVICE_NUMBER"] = "custom-build-number"
+          ENV["COVERALLS_SERVICE_JOB_ID"] = "custom-job-id"
+          ENV["COVERALLS_GIT_BRANCH"] = "custom-git-branch"
+          ENV["COVERALLS_GIT_COMMIT"] = "custom-sha"
+        end
+
+        it "provides custom options" do
+          expect(subject).to eq({
+            :repo_token           => "repo_token",
+            :service_name         => "custom-ci",
+            :service_number       => "custom-build-number",
+            :service_branch       => "custom-git-branch",
+            :service_job_id       => "custom-job-id",
+            :service_pull_request => "travis-pr",
+            :commit_sha           => "custom-sha",
+          })
+        end
+      end
     end
 
     context "for Azure" do
