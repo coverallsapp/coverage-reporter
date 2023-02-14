@@ -5,9 +5,9 @@ module CoverageReporter
   #
   # See: [https://github.com/simplecov-ruby/simplecov](https://github.com/simplecov-ruby/simplecov)
   class SimplecovParser < BaseParser
-    alias Coverage = Array(Int32?)
-    alias Stats = Hash(String, Array(Int32?))
-    alias Timestamp = Int32
+    alias Coverage = Array(Int64?)
+    alias Stats = Hash(String, Array(Int64?))
+    alias Timestamp = Int64
     alias FileStats = Hash(String, Coverage | Stats)
     alias SimplecovFormat = Hash(String, Hash(String, FileStats | Timestamp))
 
@@ -29,7 +29,7 @@ module CoverageReporter
 
       data.each do |_service, output|
         output["coverage"].as(FileStats).each do |name, info|
-          coverage = [] of Int32?
+          coverage = [] of Int64?
 
           case info
           when Coverage

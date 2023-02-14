@@ -6,7 +6,7 @@ require "json"
 
 module CoverageReporter
   class Api::Jobs
-    @source : Array(Hash(Symbol, String | Array(Int32?)))
+    @source : Array(Hash(Symbol, String | Array(Int64?)))
 
     def initialize(
       @config : Config,

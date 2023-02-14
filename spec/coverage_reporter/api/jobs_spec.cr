@@ -10,11 +10,11 @@ Spectator.describe CoverageReporter::Api::Jobs do
     [
       CoverageReporter::FileReport.new(
         name: "app/main.cr",
-        coverage: [1, 2, nil],
+        coverage: [1, 2, nil] of Int64?,
       ),
       CoverageReporter::FileReport.new(
         name: "app/helper.cr",
-        coverage: [5, nil, 43],
+        coverage: [5, nil, 43] of Int64?,
       ),
     ]
   end
