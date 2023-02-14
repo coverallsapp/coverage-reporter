@@ -19,7 +19,7 @@ release_mac:
 release: | release_linux release_mac
 
 test:
-	crystal spec
+	crystal spec --order random --error-on-warnings
 
 lint:
 	bin/ameba
