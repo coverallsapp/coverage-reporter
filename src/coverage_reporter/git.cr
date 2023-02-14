@@ -26,7 +26,7 @@ module CoverageReporter
       @info : Array(String)?
 
       def commit
-        ENV["GIT_ID"]? || info[0].presence
+        ENV["GIT_ID"]? || info[0]?.presence
       end
 
       def author_name
