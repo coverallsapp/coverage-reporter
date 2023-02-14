@@ -141,6 +141,11 @@ module CoverageReporter::Cli
         opts.dry_run = true
       end
 
+      parser.on("-v", "--version", "Show version") do
+        puts VERSION
+        exit 0
+      end
+
       parser.on("-h", "--help", "Show this help") do
         # TODO: add environment variable notes
         puts "Coveralls Coverage Reporter v#{CoverageReporter::VERSION}"
