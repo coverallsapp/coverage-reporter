@@ -13,12 +13,12 @@ Spectator.describe CoverageReporter do
     let(parallel) { true }
 
     context "on coveralls.io" do
-      before_all do
+      before_each do
         WebMock.stub(:post, "https://coveralls.io/api/v1/jobs")
         WebMock.stub(:post, "https://coveralls.io/webhook")
       end
 
-      after_all { WebMock.reset }
+      after_each { WebMock.reset }
 
       it "posts coverage" do
         expect {
