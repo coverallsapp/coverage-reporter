@@ -13,15 +13,30 @@ Spectator.describe CoverageReporter::SimplecovParser do
   end
 
   describe "#parse" do
-    let(filename) { "spec/fixtures/.resultset.json" }
+    let(filename) { "spec/fixtures/simplecov/.resultset.json" }
 
     it "parses correctly" do
       reports = subject.parse(filename)
       expect(reports.size).to eq 5
       expect(reports[0].to_h).to eq({
         :name     => "/Users/nickmerwin/www/coveralls-ruby/lib/coveralls.rb",
+        :branches => [] of Int64?,
         :coverage => [1, 1, 1, 1, 1, nil, 1, 1, nil, 1, 1, nil, nil, nil, 1, nil, 1, 3, 3, nil, nil, 1, 1, 1, 1, 1, nil, nil, 1, 1, 1, 1, nil, nil, 1, nil, 4, 4, 3, nil, 1, 1, 1, nil, nil, nil, nil, nil, 4, 3, 3, nil, 1, nil, nil, nil, nil, 1, 4, 4, nil, 4, 2, 2, 1, nil, 1, nil, 2, 1, 1, nil, 1, 1, nil, nil, nil, nil, 1, nil, 4, 2, 2, nil, nil, 2, 2, nil, nil, 2, nil, nil, 1, 6, 6, nil, nil, 1, 1, nil, nil],
       })
+    end
+
+    context "with branches" do
+      let(filename) { "spec/fixtures/simplecov/with-branches.resultset.json" }
+
+      it "parses correctly" do
+        reports = subject.parse(filename)
+        expect(reports.size).to eq 1
+        expect(reports[0].to_h).to eq({
+          :name     => "/home/user/app/models/user.rb",
+          :branches => [12, 0, 1, 1, 12, 0, 2, 0],
+          :coverage => [nil, 1, 1, 0, nil, nil, 1, 0, nil, nil, 1, 0, 0, nil, nil, nil],
+        })
+      end
     end
   end
 end
