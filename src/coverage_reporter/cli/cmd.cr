@@ -48,6 +48,9 @@ module CoverageReporter::Cli
     Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
     ERROR
     exit 1
+  rescue ex : Crest::InternalServerError
+    Log.error "⚠️ Internal server error. Please contact Coveralls team."
+    exit 1
   rescue ex : Crest::UnprocessableEntity
     Log.error <<-ERROR
     ---
@@ -78,8 +81,8 @@ module CoverageReporter::Cli
   end
 
   private def parse_args(args, opts = Opts.new)
-    OptionParser.parse(args) do |parser|
-      parser.banner = "Usage coveralls [arguments]"
+    option_parser = OptionParser.new do |parser|
+      parser.banner = "Usage: coveralls [options]"
       parser.on(
         "-rTOKEN",
         "--repo-token=TOKEN",
@@ -146,6 +149,13 @@ module CoverageReporter::Cli
       end
     end
 
+    option_parser.parse(args)
+
     opts
+  rescue ex : OptionParser::InvalidOption
+    puts "⚠️ #{ex.message}"
+    puts
+    puts option_parser
+    exit 1
   end
 end
