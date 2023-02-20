@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: shards install
     - name: Run tests
-      run: crystal spec --verbose --order random
+      run: crystal spec --verbose --order random --error-on-warnings
 
   lint:
     runs-on: ubuntu-latest
