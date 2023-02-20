@@ -6,8 +6,7 @@ require "json"
 
 module CoverageReporter
   class Api::Jobs
-    @source : Array(Hash(Symbol, String | Array(Int32?)))
-    @job_flag : String?
+    @source : Array(Hash(Symbol, String | Array(Int64?)))
 
     def initialize(
       @config : Config,
@@ -21,14 +20,13 @@ module CoverageReporter
       end
 
       @source = source_files.map &.to_h
-      @job_flag = @config[:job_flag]?
     end
 
     def send_request(dry_run : Bool = false)
       data = build_request
       api_url = Api.uri("api/#{API_VERSION}/jobs")
 
-      Log.info "  ·job_flag: #{@job_flag}" if @job_flag
+      Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
       Log.info "🚀 Posting coverage data to #{api_url}"
 
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
@@ -51,6 +49,7 @@ module CoverageReporter
           :source_files => @source,
           :parallel     => @parallel,
           :git          => @git_info,
+          :run_at       => ENV.fetch("COVERALLS_RUN_AT", Time::Format::RFC_3339.format(Time.local)),
         }
       )
     end

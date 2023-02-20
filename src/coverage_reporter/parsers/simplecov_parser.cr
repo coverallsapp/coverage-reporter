@@ -4,11 +4,12 @@ module CoverageReporter
   # Simplecov coverage format parser.
   #
   # See: [https://github.com/simplecov-ruby/simplecov](https://github.com/simplecov-ruby/simplecov)
-  class SimplecovParser
-    alias Coverage = Array(Int32?)
-    alias Stats = Hash(String, Array(Int32?))
-    alias Timestamp = Int32
-    alias FileStats = Hash(String, Coverage | Stats)
+  class SimplecovParser < BaseParser
+    alias Coverage = Array(Int64?)
+    alias Branches = Hash(String, Hash(String, Int64?))
+    alias LinesAndBranches = Hash(String, Array(Int64?) | Branches)
+    alias Timestamp = Int64
+    alias FileStats = Hash(String, Coverage | LinesAndBranches)
     alias SimplecovFormat = Hash(String, Hash(String, FileStats | Timestamp))
 
     def globs : Array(String)
@@ -29,20 +30,29 @@ module CoverageReporter
 
       data.each do |_service, output|
         output["coverage"].as(FileStats).each do |name, info|
-          coverage = [] of Int32?
+          coverage = [] of Int64?
+          branches = [] of Int64?
 
           case info
           when Coverage
             coverage = info
-          when Stats
-            coverage = info["lines"]
-            # TODO: Handle branches
+          when LinesAndBranches
+            coverage = info["lines"].as(Coverage)
+            info["branches"].as(Branches).each do |branch, branch_info|
+              branch_number = 0
+              line_number = branch.split(", ")[2].to_i64
+              branch_info.each_value do |hits|
+                branch_number += 1
+                branches.push(line_number, 0, branch_number, hits)
+              end
+            end
           end
 
           reports.push(
             FileReport.new(
               name: name.sub(Dir.current, ""),
               coverage: coverage,
+              branches: branches,
             )
           )
         end

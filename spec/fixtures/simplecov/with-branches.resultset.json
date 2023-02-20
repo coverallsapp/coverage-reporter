@@ -1,0 +1,32 @@
+{
+  "Rspec": {
+    "coverage": {
+      "/home/user/app/models/user.rb": {
+        "lines": [
+          null,
+          1,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 12, 4, 14, 7]": {
+            "[:then, 1, 13, 6, 13, 11]": 1,
+            "[:else, 2, 12, 4, 14, 7]": 0
+          }
+        }
+      }
+    }
+  }
+}

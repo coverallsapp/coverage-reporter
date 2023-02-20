@@ -20,7 +20,7 @@ Checklist to add support for a new coverage report format:
 Checklist to add new CI options:
 
 - Add a module at [src/coverage_reporter/ci/](../src/coverage_reporter/ci/) and implement `.options` method.
-- Note: `.options` method should return `nil` if utility is ran not in CI.
-- Provide as many options as you can (see [`Options`](../src/coverage_reporter/ci/options.cr) for the full list).
+- Note: `.options` method should return `nil` if environment doesn't match the CI.
+- Provide as many options as you can (see [`CI::Options`](../src/coverage_reporter/ci/options.cr) for the full list).
 - Add your module to `CI_OPTIONS` tuple.
 - Write the specs for your CI options.
