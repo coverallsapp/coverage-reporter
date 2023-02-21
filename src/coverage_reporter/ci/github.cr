@@ -14,6 +14,7 @@ module CoverageReporter
 
         Options.new(
           service_name: "github",
+          repo_name: ENV["GITHUB_REPOSITORY"]?,
           service_number: ENV["GITHUB_RUN_ID"]?,
           service_job_id: ENV["GITHUB_JOB"]?,
           service_branch: ENV["GITHUB_REF_NAME"]?,
