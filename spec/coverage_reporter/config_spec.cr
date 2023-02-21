@@ -143,7 +143,7 @@ Spectator.describe CoverageReporter::Config do
       end
     end
 
-    context "for Githab Actions" do
+    context "for Github Actions" do
       before_each do
         ENV["GITHUB_ACTIONS"] = "true"
         ENV["GITHUB_SERVER_URL"] = "https://github.com"
@@ -156,13 +156,13 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token         => "repo_token",
-          :service_name       => "github",
-          :service_job_number => "12345",
-          :service_job_id     => "test",
-          :service_branch     => "fix/bug",
-          :service_build_url  => "https://github.com/owner/repo/actions/runs/12345",
-          :commit_sha         => "github-commit-sha",
+          :repo_token        => "repo_token",
+          :service_name      => "github",
+          :service_number    => "12345",
+          :service_job_id    => "test",
+          :service_branch    => "fix/bug",
+          :service_build_url => "https://github.com/owner/repo/actions/runs/12345",
+          :commit_sha        => "github-commit-sha",
         })
       end
     end

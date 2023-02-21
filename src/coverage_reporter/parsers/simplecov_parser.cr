@@ -38,12 +38,14 @@ module CoverageReporter
             coverage = info
           when LinesAndBranches
             coverage = info["lines"].as(Coverage)
-            info["branches"].as(Branches).each do |branch, branch_info|
-              branch_number = 0
-              line_number = branch.split(", ")[2].to_i64
-              branch_info.each_value do |hits|
-                branch_number += 1
-                branches.push(line_number, 0, branch_number, hits)
+            if info["branches"]?
+              info["branches"].as(Branches).each do |branch, branch_info|
+                branch_number = 0
+                line_number = branch.split(", ")[2].to_i64
+                branch_info.each_value do |hits|
+                  branch_number += 1
+                  branches.push(line_number, 0, branch_number, hits)
+                end
               end
             end
           end
