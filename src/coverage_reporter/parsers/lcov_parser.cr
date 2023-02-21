@@ -26,13 +26,9 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      reports = [] of FileReport
-
-      lcov_info(filename).each do |name, info|
-        reports << report(name, info)
+      lcov_info(filename).map do |name, info|
+        report(name, info)
       end
-
-      reports
     end
 
     private def lcov_info(filename : String) : Hash(String, Info)
@@ -78,7 +74,7 @@ module CoverageReporter
       exit(1)
     end
 
-    private def report(filename, info)
+    private def report(filename, info) : FileReport
       lines = 0
       File.each_line(filename) { lines += 1 }
 
