@@ -157,6 +157,7 @@ Spectator.describe CoverageReporter::Config do
       it "gets info from ENV" do
         expect(subject).to eq({
           :repo_token        => "repo_token",
+          :repo_name         => "owner/repo",
           :service_name      => "github",
           :service_number    => "12345",
           :service_job_id    => "test",

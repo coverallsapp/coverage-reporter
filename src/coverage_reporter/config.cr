@@ -77,6 +77,7 @@ module CoverageReporter
         service_job_number: ENV["COVERALLS_SERVICE_JOB_NUMBER"]?.presence,
         service_branch: ENV["COVERALLS_GIT_BRANCH"]?.presence,
         commit_sha: ENV["COVERALLS_GIT_COMMIT"]?.presence,
+        repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml["repo_name"]?.try(&.to_s),
       ).to_h
     end
   end
