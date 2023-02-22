@@ -3,11 +3,9 @@ require "json"
 
 module CoverageReporter
   class Api::Webhook
-    @token : String | Nil
     @build_num : String | Nil
 
-    def initialize(config : Config)
-      @token = config.repo_token
+    def initialize(@config : Config)
       @build_num = config[:service_number]?
     end
 
@@ -16,13 +14,12 @@ module CoverageReporter
 
       Log.info "⭐️ Calling parallel done webhook: #{webhook_url}"
 
-      data = {
-        :repo_token => @token,
-        :payload    => {
+      data = @config.to_h.merge({
+        :payload => {
           :build_num => @build_num,
           :status    => "done",
         },
-      }
+      })
 
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
