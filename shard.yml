@@ -1,5 +1,5 @@
 name: coverage-reporter
-version: 0.2.1
+version: 0.2.2
 
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
@@ -18,6 +18,6 @@ development_dependencies:
   ameba:
     github: crystal-ameba/ameba
 
-crystal: 1.7.2
+crystal: ">= 1.7.2"
 
 license: MIT
