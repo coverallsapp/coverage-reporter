@@ -7,8 +7,9 @@ module CoverageReporter
       coverage : Hash(Int64, Int64),
       branches : Hash(Int64, Array(Int64))
 
-    def initialize(base_path : String?)
-      @base_path = base_path.presence || "src/main/scala"
+    # NOTE: Provide the base path for the sources. You can check "filename" in
+    #       coverage report and see what part is missing to get a valid source path.
+    def initialize(@base_path : String?)
     end
 
     def globs : Array(String)
@@ -40,10 +41,10 @@ module CoverageReporter
           if line_node.attributes["branch"].content == "true"
             branches[line_node.attributes["number"].content.to_i64] <<
               line_node.attributes["hits"].content.to_i64
-          else
-            coverage[line_node.attributes["number"].content.to_i64] =
-              line_node.attributes["hits"].content.to_i64
           end
+
+          coverage[line_node.attributes["number"].content.to_i64] =
+            line_node.attributes["hits"].content.to_i64
         end
 
         files[name].coverage.merge!(coverage)
@@ -52,10 +53,9 @@ module CoverageReporter
 
       files.map do |name, info|
         branch_number : Int64 = 0
-        name = File.join(@base_path, name)
 
         FileReport.new(
-          name: name,
+          name: File.join(@base_path.to_s, name),
           coverage: (1..info.coverage.keys.max).map { |n| info.coverage[n]? },
           branches: info.branches.keys.sort!.flat_map do |line|
             branch = -1.to_i64
