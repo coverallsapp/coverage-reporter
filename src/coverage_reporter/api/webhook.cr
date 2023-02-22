@@ -3,10 +3,7 @@ require "json"
 
 module CoverageReporter
   class Api::Webhook
-    @build_num : String | Nil
-
     def initialize(@config : Config)
-      @build_num = config[:service_number]?
     end
 
     def send_request(dry_run : Bool = false)
@@ -16,7 +13,7 @@ module CoverageReporter
 
       data = @config.to_h.merge({
         :payload => {
-          :build_num => @build_num,
+          :build_num => @config[:service_number]?,
           :status    => "done",
         },
       })
