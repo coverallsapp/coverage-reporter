@@ -72,10 +72,10 @@ module CoverageReporter::Cli
     property filename : String?
     property repo_token : String?
     property base_path : String?
-    property job_flag_name = ENV["COVERALLS_FLAG_NAME"]?
+    property job_flag_name = ENV["COVERALLS_FLAG_NAME"]?.presence
     property config_path = CoverageReporter::YamlConfig::DEFAULT_LOCATION
     property? no_logo = false
-    property? parallel = !!(ENV["COVERALLS_PARALLEL"]? && ENV["COVERALLS_PARALLEL"] != "false")
+    property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && ENV["COVERALLS_PARALLEL"] != "false")
     property? parallel_done = false
     property? dry_run = false
   end
