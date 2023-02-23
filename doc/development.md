@@ -2,14 +2,47 @@
 
 > Notes for developers and maintainers
 
-## Support new coverage report format
+## Add coverage format support
 
-Checklist to add support for a new coverage report format:
+Checklist to add a parser for a coverage report format:
 
-- Add a new implementation of `CoverageReporter::BaseParser` class.
-- Add your class to `CoverageReporter::Parser::PARSERS` tuple.
-- Write the specs for your parser.
-- Test it locally.
+1. Create a parser class which inherits `CoverageReporter::BaseParser`
+
+```crystal
+# Template parser.
+#
+# src/coverage_reporter/parsers/my_parser.cr
+
+require "./base_parser"
+
+module CoverageReporter
+  class MyParser < BaseParser
+    # Use *base_path* to append to file names retrieved from the coverage report.
+    def initialize(@base_path : String)
+    end
+
+    # Returns array of globs for automatic coverage report detection.
+    def globs : Array(String)
+      ["**/*/*.mycov", "*.mycov"]
+    end
+
+    # Checks whether the *filename* can be parsed with this parser.
+    def matches?(filename : String) : Bool
+      filename.ends_with?(".mycov")
+    end
+
+    def parse(filename : String) : Array(FileReport)
+      # ... format-specific parsing
+    end
+  end
+end
+```
+
+2. Add your class to `CoverageReporter::Parser::PARSERS`
+
+3. Add specs
+
+4. Test it
 
 ### Parser design
 

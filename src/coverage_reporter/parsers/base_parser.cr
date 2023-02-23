@@ -11,15 +11,15 @@ module CoverageReporter
   #
   # module CoverageReporter
   #   class MycovParser < BaseParser
-  #     def globs
+  #     def globs : Array(String)
   #       ["**/*/*.mycov"]
   #     end
   #
-  #     def matches?(filename)
+  #     def matches?(filename : String) : Bool
   #       filename.ends_with?(".mycov")
   #     end
   #
-  #     def parse(filename)
+  #     def parse(filename : String) : Array(FileReport)
   #       # ... mycov format specific parsing
   #     end
   #   end
