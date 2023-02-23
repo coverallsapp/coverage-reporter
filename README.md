@@ -29,11 +29,13 @@ brew install coveralls
 
 ## Usage:
 
+> See [environment variables list](./doc/configuration.md#env-variables) that control the utility behavior.
+
 ```bash
 # Automatic lookup for supported reports and sending them to https://coveralls.io
 coveralls
 
-# Explicit repo token
+# Provide explicit repo token
 coveralls --repo-token=rg8ZznwNq05g3HDfknodmueeRciuiiPDE
 
 # Use concrete report file
