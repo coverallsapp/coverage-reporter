@@ -23,7 +23,9 @@ These variables are always used if provided.
 
 ## YAML config
 
-This config is optional. Its values are used in favor of CI-specific options but can be overwritten with [COVERALLS_* ENVs](#env-variables).
+This config is optional.
+
+Its values are used in favor of CI-specific options but can be overwritten with [COVERALLS_* ENVs](#env-variables).
 
 ```yml
 # .coveralls.yml

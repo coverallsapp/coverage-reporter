@@ -99,7 +99,7 @@ Usage: coveralls [options]
 - [ ] Pytest-Cov
 - [ ] Gcov
 
-You can add a report parser using following [simple instructions](./doc/development.md#add-coverage-format-support).
+You can add a report parser using [following instructions](./doc/development.md#add-coverage-format-support).
 
 ## Auto-Configuration Supported CIs:
 
