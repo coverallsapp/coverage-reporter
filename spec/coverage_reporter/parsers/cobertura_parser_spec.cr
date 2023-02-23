@@ -22,7 +22,9 @@ Spectator.describe CoverageReporter::CoberturaParser do
 
       expect(reports.size).to eq 16
       expect(reports[0].name).to match /^org\/scoverage\//
-      with_branches = reports.find! { |report| report.name == "org/scoverage/samples/SimpleObject2.scala" }
+      with_branches = reports.find! do |report|
+        report.name == "org/scoverage/samples/SimpleObject2.scala"
+      end
 
       expect(with_branches.coverage).to eq [
         nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil,
@@ -38,6 +40,17 @@ Spectator.describe CoverageReporter::CoberturaParser do
         31, 7, 0, 0,
         32, 8, 0, 1,
         33, 9, 0, 1,
+      ] of Int64?
+
+      with_branches_on_one_line = reports.find! do |report|
+        report.name == "org/scoverage/samples/InstrumentLoader.scala"
+      end
+      expect(with_branches_on_one_line.coverage).to eq [
+        nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil, 1, nil, 1,
+      ] of Int64?
+      expect(with_branches_on_one_line.branches).to eq [
+        12, 1, 0, 1,
+        12, 2, 1, 0,
       ] of Int64?
     end
 
