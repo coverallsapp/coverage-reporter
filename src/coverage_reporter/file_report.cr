@@ -6,11 +6,11 @@ module CoverageReporter
     def initialize(
       @name : String,
       @coverage : Array(Int64?),
-      @branches : Array(Int64?) | Nil = nil
+      @branches : Array(Int64?) | Array(Int64) | Nil = nil
     )
     end
 
-    def to_h : Hash(Symbol, String | Array(Int64?))
+    def to_h : Hash(Symbol, String | Array(Int64?) | Array(Int64))
       {
         :name     => @name,
         :coverage => @coverage,

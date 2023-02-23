@@ -21,7 +21,13 @@ Spectator.describe CoverageReporter::SimplecovParser do
       expect(reports[0].to_h).to eq({
         :name     => "/Users/nickmerwin/www/coveralls-ruby/lib/coveralls.rb",
         :branches => [] of Int64?,
-        :coverage => [1, 1, 1, 1, 1, nil, 1, 1, nil, 1, 1, nil, nil, nil, 1, nil, 1, 3, 3, nil, nil, 1, 1, 1, 1, 1, nil, nil, 1, 1, 1, 1, nil, nil, 1, nil, 4, 4, 3, nil, 1, 1, 1, nil, nil, nil, nil, nil, 4, 3, 3, nil, 1, nil, nil, nil, nil, 1, 4, 4, nil, 4, 2, 2, 1, nil, 1, nil, 2, 1, 1, nil, 1, 1, nil, nil, nil, nil, 1, nil, 4, 2, 2, nil, nil, 2, 2, nil, nil, 2, nil, nil, 1, 6, 6, nil, nil, 1, 1, nil, nil],
+        :coverage => [
+          1, 1, 1, 1, 1, nil, 1, 1, nil, 1, 1, nil, nil, nil, 1, nil, 1, 3, 3, nil, nil,
+          1, 1, 1, 1, 1, nil, nil, 1, 1, 1, 1, nil, nil, 1, nil, 4, 4, 3, nil, 1, 1, 1,
+          nil, nil, nil, nil, nil, 4, 3, 3, nil, 1, nil, nil, nil, nil, 1, 4, 4, nil, 4,
+          2, 2, 1, nil, 1, nil, 2, 1, 1, nil, 1, 1, nil, nil, nil, nil, 1, nil, 4, 2, 2,
+          nil, nil, 2, 2, nil, nil, 2, nil, nil, 1, 6, 6, nil, nil, 1, 1, nil, nil,
+        ],
       })
     end
 
