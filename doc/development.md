@@ -40,9 +40,47 @@ end
 
 2. Add your class to `CoverageReporter::Parser::PARSERS`
 
+```crystal
+# src/coverage_reporter/parser.cr
+
+module CoverageReporter
+  class Parser
+    PARSERS = {
+      # ...
+      MyParser,
+    }
+
+    # ...
+  end
+end
+```
+
 3. Add specs
 
+```crystal
+# spec/coverage_reporter/parsers/my_parser_spec.cr
+
+require "../../spec_helper"
+
+Spectator.describe CoverageReporter::MyParser do
+  subject { described_class.new }
+
+  describe "#matches?" do
+    # ...
+  end
+
+  describe "#parse" do
+    # ...
+  end
+end
+```
+
 4. Test it
+
+```bash
+make
+dist/coveralls --repo-token=<...> --file coverage/coverage.mycov
+```
 
 ### Parser design
 

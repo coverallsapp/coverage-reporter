@@ -19,7 +19,7 @@ module CoverageReporter
                  "You must call the webhook after all jobs finish: `coveralls --done`"
       end
 
-      @source = source_files.map &.to_h
+      @source = source_files.map(&.to_h)
     end
 
     def send_request(dry_run : Bool = false)
