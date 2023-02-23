@@ -5,6 +5,8 @@
 
 ## ENV variables
 
+These variables are always used if provided.
+
 | Name                           | Description |
 | ------------------------------ | ----------- |
 | `COVERALLS_REPO_TOKEN`         | Repository token |
@@ -21,11 +23,18 @@
 
 ## YAML config
 
-Filename: `.coveralls.yml`
+This config is optional.
+
+Its values are used in favor of CI-specific options but can be overwritten with [COVERALLS_* ENVs](#env-variables).
 
 ```yml
+# .coveralls.yml
+
 # Repository token
 repo_token: abcde12345
+
+# Repository name
+repo_name: myorg/myrepo
 
 # The name of your build system
 service_name: my-ci
