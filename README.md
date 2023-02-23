@@ -27,7 +27,7 @@ brew tap coverallsapp/coveralls
 brew install coveralls
 ```
 
-## Usage:
+## Usage
 
 > See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
 
@@ -75,7 +75,7 @@ Usage: coveralls [options]
     -h, --help                       Show this help
 ```
 
-## CI Usage Examples:
+## CI Usage Examples
 
 * CircleCI workflow.yml:
 
@@ -91,7 +91,7 @@ Usage: coveralls [options]
     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## Supported Coverage File Types:
+## Supported Coverage File Types
 
 - [x] Lcov
 - [x] SimpleCov
@@ -101,7 +101,7 @@ Usage: coveralls [options]
 
 You can add a report parser using [following instructions](./doc/development.md#add-coverage-format-support).
 
-## Auto-Configuration Supported CIs:
+## Auto-Configuration Supported CIs
 
 - CircleCI
 - Github Actions
