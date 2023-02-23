@@ -150,7 +150,8 @@ Spectator.describe CoverageReporter::Config do
         ENV["GITHUB_REPOSITORY"] = "owner/repo"
         ENV["GITHUB_RUN_ID"] = "12345"
         ENV["GITHUB_JOB"] = "test"
-        ENV["GITHUB_REF_NAME"] = "fix/bug"
+        ENV["GITHUB_REF_NAME"] = "main"
+        ENV["GITHUB_HEAD_REF"] = "fix/bug"
         ENV["GITHUB_SHA"] = "github-commit-sha"
       end
 
