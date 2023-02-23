@@ -29,7 +29,7 @@ brew install coveralls
 
 ## Usage:
 
-> See [environment variables list](./doc/configuration.md#env-variables) that control the utility behavior.
+> See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
 
 ```bash
 # Automatic lookup for supported reports and sending them to https://coveralls.io

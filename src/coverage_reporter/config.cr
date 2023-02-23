@@ -71,13 +71,13 @@ module CoverageReporter
 
     private def custom_options : Hash(Symbol, String)
       CI::Options.new(
-        service_name: ENV["COVERALLS_SERVICE_NAME"]? || @yaml["service_name"]?.try(&.to_s),
+        service_name: ENV["COVERALLS_SERVICE_NAME"]?.presence || @yaml["service_name"]?.try(&.to_s).presence,
         service_number: ENV["COVERALLS_SERVICE_NUMBER"]?.presence,
         service_job_id: ENV["COVERALLS_SERVICE_JOB_ID"]?.presence,
         service_job_number: ENV["COVERALLS_SERVICE_JOB_NUMBER"]?.presence,
         service_branch: ENV["COVERALLS_GIT_BRANCH"]?.presence,
         commit_sha: ENV["COVERALLS_GIT_COMMIT"]?.presence,
-        repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml["repo_name"]?.try(&.to_s),
+        repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml["repo_name"]?.try(&.to_s).presence,
       ).to_h
     end
   end
