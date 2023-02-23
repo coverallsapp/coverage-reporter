@@ -13,14 +13,14 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 
 ## Install
 
-**Linux**
+#### Linux
 
 ```bash
 # You can omit '-C /usr/local/bin' argument to keep it in current directory
 curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 ```
 
-**MacOS**
+#### MacOS
 
 ```bash
 brew tap coverallsapp/coveralls
@@ -153,8 +153,8 @@ make release # both
 
 # Release
 
-1. Bump version in `coverage_reporter.cr` and `shards.yml`
-2. Commit with a message `git commit --message "X.X.X: <major changes>"`
+1. Bump version in [`src/coverage_reporter.cr`](./src/coverage_reporter.cr) and [`shard.yml`](./shard.yml)
+2. Commit with a message `git commit --message "X.X.X: <short changes description>"`
 3. Create a tag `git tag --sign --annotate vX.X.X` with the same annotation as commit message
 4. Push with a tag `git push origin master --follow-tags`
 
