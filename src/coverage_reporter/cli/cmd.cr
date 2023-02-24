@@ -123,7 +123,7 @@ module CoverageReporter::Cli
         opts.parallel = true
       end
 
-      parser.on("-cf", "--carryforward", "Pass carryforward flags") do |flags|
+      parser.on("-cf", "--carryforward", "Comma-separated list of parallel job flags") do |flags|
         opts.carryforward = flags
       end
 

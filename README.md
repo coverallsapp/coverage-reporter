@@ -68,7 +68,7 @@ Usage: coveralls [options]
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
     -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done).
-    -cf, --carryforward              Pass carryforward flags
+    -cf, --carryforward              Comma-separated list of parallel job flags
     -d, --done                       Call webhook after all parallel jobs (-p) done.
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
