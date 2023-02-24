@@ -27,7 +27,7 @@ Spectator.describe CoverageReporter do
       end
 
       it "handles webhook" do
-        expect { CoverageReporter.parallel_done repo_token, "", false }.not_to raise_error
+        expect { CoverageReporter.parallel_done repo_token, "", nil, false }.not_to raise_error
       end
     end
 
@@ -51,7 +51,7 @@ Spectator.describe CoverageReporter do
 
       it "handles webhook" do
         expect {
-          CoverageReporter.parallel_done repo_token, "", false
+          CoverageReporter.parallel_done repo_token, "", nil, false
         }.not_to raise_error
       end
     end

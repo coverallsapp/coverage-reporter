@@ -47,8 +47,10 @@ coveralls --file project2/coverage/lcov.info --parallel
 # ...
 coveralls --done
 
-# Provide a job flag
-coveralls --job-flag "Unit tests"
+# Provide a job flag and use carry-forwarding
+coveralls --job-flag "unit-tests" --parallel
+coveralls --job-flag "integration-tests" --parallel
+coveralls --done --carryforward "unit-tests,integration-tests"
 
 # Testing options: no real reporting, print payload
 coveralls --debug --dry-run

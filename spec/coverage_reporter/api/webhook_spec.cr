@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe CoverageReporter::Api::Webhook do
-  subject { described_class.new(config) }
+  subject { described_class.new(config, "flag1,flag2") }
 
   let(config) { CoverageReporter::Config.new("token") }
   let(endpoint) { "#{CoverageReporter::Api::DEFAULT_DOMAIN}/webhook" }
@@ -16,8 +16,9 @@ Spectator.describe CoverageReporter::Api::Webhook do
     WebMock.stub(:post, endpoint).with(
       headers: {"Content-Type" => "application/json"},
       body: {
-        :repo_token => "token",
-        :payload    => {
+        :repo_token   => "token",
+        :carryforward => "flag1,flag2",
+        :payload      => {
           :build_num => nil,
           :status    => "done",
         },
