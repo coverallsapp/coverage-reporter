@@ -101,7 +101,7 @@ Usage: coveralls [options]
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
-**Bounty**: One or more months of free service at Coveralls.io. <a target="_blank" href="support@coveralls.io?subject=Please tell me more about contributing to the Universal Coverage Reporter">Contact us</a> to learn more.
+**Bounty**: One or more months of free service at Coveralls.io. <a target="_blank" href="mailto:support@coveralls.io?subject=Please tell me more about contributing to the Universal Coverage Reporter">Contact us</a> to learn more.
 
 ## Auto-Configuration Supported CIs
 
