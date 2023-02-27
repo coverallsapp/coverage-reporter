@@ -47,8 +47,10 @@ coveralls --file project2/coverage/lcov.info --parallel
 # ...
 coveralls --done
 
-# Provide a job flag
-coveralls --job-flag "Unit tests"
+# Provide a job flag and use carry-forwarding
+coveralls --job-flag "unit-tests" --parallel
+coveralls --job-flag "integration-tests" --parallel
+coveralls --done --carryforward "unit-tests,integration-tests"
 
 # Testing options: no real reporting, print payload
 coveralls --debug --dry-run
@@ -66,6 +68,7 @@ Usage: coveralls [options]
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
     -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done).
+    -cf, --carryforward              Comma-separated list of parallel job flags
     -d, --done                       Call webhook after all parallel jobs (-p) done.
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output

@@ -26,6 +26,7 @@ module CoverageReporter::Cli
       CoverageReporter.parallel_done(
         repo_token: opts.repo_token,
         config_path: opts.config_path,
+        carryforward: opts.carryforward,
         dry_run: opts.dry_run?,
       )
     else
@@ -72,7 +73,8 @@ module CoverageReporter::Cli
     property filename : String?
     property repo_token : String?
     property base_path : String?
-    property job_flag_name = ENV["COVERALLS_FLAG_NAME"]?.presence
+    property carryforward : String? = ENV["COVERALLS_CARRYFORWARD_FLAGS"]?.presence
+    property job_flag_name : String? = ENV["COVERALLS_FLAG_NAME"]?.presence
     property config_path = CoverageReporter::YamlConfig::DEFAULT_LOCATION
     property? no_logo = false
     property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && ENV["COVERALLS_PARALLEL"] != "false")
@@ -119,6 +121,10 @@ module CoverageReporter::Cli
 
       parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done).") do
         opts.parallel = true
+      end
+
+      parser.on("-cf", "--carryforward", "Comma-separated list of parallel job flags") do |flags|
+        opts.carryforward = flags
       end
 
       parser.on("-d", "--done", "Call webhook after all parallel jobs (-p) done.") do

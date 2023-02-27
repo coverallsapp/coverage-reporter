@@ -36,9 +36,14 @@ module CoverageReporter
   # Refers to a build via `service_number` parameter which is either taken
   # from a CI-specific ENV, or can be set explicitly via `COVERALLS_SERVICE_NUMBER`
   # environment variable.
-  def parallel_done(repo_token : String?, config_path : String, dry_run : Bool)
+  def parallel_done(
+    repo_token : String?,
+    config_path : String,
+    carryforward : String?,
+    dry_run : Bool
+  )
     config = Config.new(repo_token: repo_token, path: config_path)
-    api = Api::Webhook.new(config)
+    api = Api::Webhook.new(config, carryforward)
 
     api.send_request(dry_run)
   end
