@@ -95,28 +95,18 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: coveralls-linux.tar.gz
+          path: dist/
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: coveralls-linux
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: coveralls-windows.zip
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: coveralls-windows.exe
       - run: ls -R
+
       - name: Create Github release
         env:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
         run: >
           gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
-          'coveralls-windows.exe#coveralls-windows.exe'
-          'coveralls-windows.zip#coveralls-windows.zip'
+          'dist/coveralls-linux/coveralls#coveralls-linux'
+          'dist/coveralls-linux.tar.gz/coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'dist/coveralls-windows.exe/coveralls.exe#coveralls-windows.exe'
+          'dist/coveralls-windows.zip/coveralls-windows.zip#coveralls-windows.zip'
           --generate-notes
