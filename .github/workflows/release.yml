@@ -97,8 +97,6 @@ jobs:
         with:
           path: dist/
 
-      - run: ls -R
-
       - name: Create Github release
         env:
           TAG: ${{ github.ref }}
