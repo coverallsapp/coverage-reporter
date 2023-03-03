@@ -95,16 +95,27 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          path: dist/
+          path: artifacts/
+
+      - name: Prepare files for release
+        run: |
+          mkdir release/
+          find artifacts/ -type f -exec cp \{} release/ \;
+          cd release/
+          mv coveralls coveralls-linux
+          mv coveralls.exe coveralls-windows.exe
+          sha256sum * > coveralls-checksums.txt
 
       - name: Create Github release
         env:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
         run: >
+          cd release/
           gh release create ${TAG}
-          'dist/coveralls-linux/coveralls#coveralls-linux'
-          'dist/coveralls-linux.tar.gz/coveralls-linux.tar.gz#coveralls-linux.tar.gz'
-          'dist/coveralls-windows.exe/coveralls.exe#coveralls-windows.exe'
-          'dist/coveralls-windows.zip/coveralls-windows.zip#coveralls-windows.zip'
+          'coveralls-linux#coveralls-linux'
+          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-windows.exe#coveralls-windows.exe'
+          'coveralls-windows.zip#coveralls-windows.zip'
+          'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
