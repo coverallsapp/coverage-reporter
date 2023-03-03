@@ -111,7 +111,7 @@ jobs:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
         run: >
-          cd release/
+          cd release/;
           gh release create ${TAG}
           'coveralls-linux#coveralls-linux'
           'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
