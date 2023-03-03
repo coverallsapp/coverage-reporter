@@ -99,8 +99,9 @@ Usage: coveralls [options]
 - [x] Lcov
 - [x] SimpleCov
 - [x] Cobertura
+- [x] Gcov
 - [ ] Pytest-Cov
-- [ ] Gcov
+- [ ] Golang coverage format
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 

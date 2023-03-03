@@ -1,0 +1,24 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    1:#include <stdio.h>
+        -:    2:
+        2:    3:void numbers(int num)
+        -:    4:{
+        2:    5:    if (num == 1) {
+        1:    6:        printf("Number is 1\n");
+        1:    7:    } else if (num == 2){
+        1:    8:        printf("Number is 2\n");
+        -:    9:    } else {
+    #####:   10:        printf("Number is %d\n", num);
+        -:   11:    }
+        2:   12:}
+        -:   13:
+        -:   14:
+        1:   15:int main(void)
+        -:   16:{
+        1:   17:    numbers(1);
+        1:   18:    numbers(2);
+        1:   19:    return 0;
+        -:   20:}

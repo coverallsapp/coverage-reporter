@@ -1,4 +1,5 @@
 require "../file_report"
+require "digest"
 
 module CoverageReporter
   # Coverage report parser interface.
@@ -35,6 +36,13 @@ module CoverageReporter
   #
   # Existing parsers can be used as a reference.
   abstract class BaseParser
+    # Returns MD5 hashsum of a file.
+    def self.file_digest(filename : String) : String | Nil
+      return unless File.exists?(filename)
+
+      Digest::MD5.hexdigest(File.read(filename))
+    end
+
     # Initializes the parser.
     #
     # *base_path* can be used to join with all paths in coverage report in order
