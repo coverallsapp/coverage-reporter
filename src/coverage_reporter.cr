@@ -5,6 +5,12 @@ module CoverageReporter
 
   VERSION = "0.2.7"
 
+  class NoSourceFiles < BaseException
+    def message
+      "🚨 Nothing to report"
+    end
+  end
+
   # Parses the coverage reports in the current directory or the given *coverage_file*
   # and sends the report to Coveralls API.
   #
@@ -25,6 +31,8 @@ module CoverageReporter
       path: config_path,
     )
     source_files = Parser.new(coverage_file, base_path).parse
+    raise NoSourceFiles.new unless source_files.size > 0
+
     api = Api::Jobs.new(config, parallel, source_files, Git.info(config))
 
     api.send_request(dry_run)
