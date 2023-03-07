@@ -16,6 +16,7 @@ module CoverageReporter
       LcovParser,
       SimplecovParser,
       CoberturaParser,
+      JacocoParser,
       GcovParser,
     }
 

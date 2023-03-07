@@ -113,6 +113,7 @@ Usage: coveralls [options]
 - [x] Lcov
 - [x] SimpleCov
 - [x] Cobertura
+- [x] Jacoco
 - [x] Gcov
 - [ ] Pytest-Cov
 - [ ] Golang coverage format

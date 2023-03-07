@@ -18,7 +18,7 @@ Spectator.describe CoverageReporter::Parser do
       it "returns reports for all files" do
         reports = subject.parse
 
-        expect(reports.size).to eq 7
+        expect(reports.size).to eq 8
       end
     end
   end
