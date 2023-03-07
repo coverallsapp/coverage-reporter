@@ -12,8 +12,10 @@ module CoverageReporter
       return false unless File.exists?(filename)
 
       File.open(filename, "r") do |f|
-        return true if f.gets.to_s.chomp == "mode: set"
-        return true if COVERAGE_RE.matches?(f.gets.to_s)
+        # 1st line can be "mode: set"
+        2.times do
+          return true if COVERAGE_RE.matches?(f.gets.to_s)
+        end
       end
 
       false
