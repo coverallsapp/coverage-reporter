@@ -3,7 +3,7 @@ require "./coverage_reporter/*"
 module CoverageReporter
   extend self
 
-  VERSION = "0.2.7"
+  VERSION = "0.2.8"
 
   class NoSourceFiles < BaseException
     def message
