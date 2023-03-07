@@ -18,6 +18,7 @@ module CoverageReporter
       CoberturaParser,
       JacocoParser,
       GcovParser,
+      GolangParser,
     }
 
     def initialize(@file : String?, base_path : String?)
@@ -60,7 +61,7 @@ module CoverageReporter
         return parser.parse(filename)
       end
 
-      puts "ERROR, coverage reporter does not yet know how to process this file: #{filename}"
+      puts "⚠️ Coverage reporter does not yet know how to process this file: #{filename}"
       [] of FileReport
     end
   end

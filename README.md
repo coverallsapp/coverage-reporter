@@ -115,8 +115,8 @@ Usage: coveralls [options]
 - [x] Cobertura
 - [x] Jacoco
 - [x] Gcov
+- [x] Golang coverage format
 - [ ] Pytest-Cov
-- [ ] Golang coverage format
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
