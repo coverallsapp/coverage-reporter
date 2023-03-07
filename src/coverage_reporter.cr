@@ -3,7 +3,7 @@ require "./coverage_reporter/*"
 module CoverageReporter
   extend self
 
-  VERSION = "0.2.6"
+  VERSION = "0.2.7"
 
   # Parses the coverage reports in the current directory or the given *coverage_file*
   # and sends the report to Coveralls API.
