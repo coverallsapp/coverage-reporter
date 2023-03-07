@@ -27,6 +27,20 @@ brew tap coverallsapp/coveralls
 brew install coveralls
 ```
 
+#### Windows
+
+Bash:
+
+```bash
+curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.exe -o coveralls.exe
+```
+
+PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.exe" -OutFile "coveralls.exe"
+```
+
 ## Usage
 
 > See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
