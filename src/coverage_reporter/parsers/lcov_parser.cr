@@ -26,7 +26,9 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      lcov_info(filename).map do |name, info|
+      lcov_info(filename).compact_map do |name, info|
+        next unless File.exists?(name)
+
         report(name, info)
       end
     end
