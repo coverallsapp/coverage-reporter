@@ -35,12 +35,18 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
-    container:
-      image: crystallang/crystal
     steps:
     - uses: actions/checkout@v3
+    - name: Install Crystal
+      uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: 1.7.2
     - name: Install dependencies
       run: shards install
+    - name: Install kcov
+      run: |
+        sudo apt-get update
+        sudo apt-get install kcov
     - name: Cover
       run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/
     - name: Build binary
