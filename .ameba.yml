@@ -11,5 +11,6 @@ Metrics/CyclomaticComplexity:
   Excluded:
   - src/coverage_reporter/parsers/lcov_parser.cr
   - src/coverage_reporter/parsers/gcov_parser.cr
+  - src/coverage_reporter/parsers/coveragepy_parser.cr
   Enabled: true
   Severity: Warning
