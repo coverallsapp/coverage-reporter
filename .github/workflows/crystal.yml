@@ -14,7 +14,7 @@ jobs:
       image: crystallang/crystal
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: shards install
     - name: Run tests
@@ -32,3 +32,18 @@ jobs:
       run: shards install
     - name: Run linter
       run: bin/ameba
+
+  coverage:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: shards install
+    - name: Cover
+      run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/
+    - name: Build binary
+      run: make
+    - name: Report coverage
+      run: dist/coveralls --dry-run --debug
