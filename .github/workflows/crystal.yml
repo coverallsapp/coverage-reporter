@@ -52,6 +52,8 @@ jobs:
     - name: Build binary
       run: make
     - name: Report coverage
+      env:
+        COVERALLS_REPO_TOKEN: ${{ github.token }}
       run: |
         cd coverage
-        ../dist/coveralls --dry-run --debug --repo-token test-token
+        ../dist/coveralls --base-path src/coverage_reporter/ --debug
