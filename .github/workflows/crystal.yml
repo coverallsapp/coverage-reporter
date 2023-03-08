@@ -52,4 +52,6 @@ jobs:
     - name: Build binary
       run: make
     - name: Report coverage
-      run: dist/coveralls --dry-run --debug
+      run: |
+        cd coverage
+        ../dist/coveralls --dry-run --debug --repo-token test-token
