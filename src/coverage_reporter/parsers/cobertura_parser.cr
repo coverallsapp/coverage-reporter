@@ -13,7 +13,7 @@ module CoverageReporter
     end
 
     def globs : Array(String)
-      ["**/*/coverage-report/cobertura.xml"]
+      ["**/*/cobertura.xml"]
     end
 
     def matches?(filename) : Bool
@@ -38,7 +38,7 @@ module CoverageReporter
         branches = Hash(Int64, Array(Int64)).new { |hh, kk| hh[kk] = [] of Int64 }
 
         node.xpath_nodes("lines/line").each do |line_node|
-          if line_node.attributes["branch"].content == "true"
+          if line_node.attributes["branch"]?.try(&.content) == "true"
             branches[line_node.attributes["number"].content.to_i64] <<
               line_node.attributes["hits"].content.to_i64
           end
