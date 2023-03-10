@@ -1,6 +1,9 @@
-name: Release
+name: Build
 
 on:
+  pull_request:
+    branches:
+      - master
   push:
     tags:
       - 'v*'
@@ -84,6 +87,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

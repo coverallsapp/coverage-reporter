@@ -17,6 +17,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install dependencies
       run: shards install
+    - run: apk add sqlite-dev
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 
@@ -46,7 +47,7 @@ jobs:
     - name: Install kcov
       run: |
         sudo apt-get update
-        sudo apt-get install kcov
+        sudo apt-get install kcov libsqlite3-dev
     - name: Generate coverage
       run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/
     - name: Report coverage
