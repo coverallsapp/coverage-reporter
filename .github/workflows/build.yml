@@ -13,8 +13,15 @@ permissions:
 
 jobs:
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
+      - run: |
+          choco install sqlite -y
+          cd C:\ProgramData\chocolatey\lib\SQLite\tools
+          ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
+          & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.35.32215\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
+          echo "C:\ProgramData\chocolatey\lib\SQLite\tools" >> $GITHUB_PATH
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -31,7 +38,6 @@ jobs:
       - name: Install dependencies
         run: shards install --production
 
-      - run: vcpkg install sqlite3
 
       - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
       - run: |
