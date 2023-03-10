@@ -15,29 +15,28 @@ jobs:
   build-windows:
     runs-on: windows-2022
     steps:
-      - run: |
+      # If this step breaks, try inspecting MSVC directory and consider changing appropriate paths.
+      #
+      #   ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
+      #
+      # Since windows runner can be updated the version can change in future releases.
+      - name: Install SQLite3 + generate sqlite3.lib
+        run: |
           choco install sqlite -y
           cd C:\ProgramData\chocolatey\lib\SQLite\tools
           ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
           & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.35.32215\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
-          echo "C:\ProgramData\chocolatey\lib\SQLite\tools" >> $GITHUB_PATH
+          cp sqlite3.lib 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.35.32215\lib\x64'
 
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Fetch tags
-        run: git fetch --force --tags
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
           crystal: 1.7.2
 
-      - name: Install dependencies
-        run: shards install --production
-
+      - run: shards install --production
 
       - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
       - run: |
@@ -57,16 +56,12 @@ jobs:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
           if-no-files-found: error
+
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Fetch tags
-        run: git fetch --force --tags
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -92,6 +87,7 @@ jobs:
           name: coveralls-linux.tar.gz
           path: dist/coveralls-linux.tar.gz
           if-no-files-found: error
+
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
