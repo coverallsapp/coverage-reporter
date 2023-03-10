@@ -126,6 +126,13 @@ You can add a report parser to this project by following [these instructions](./
 
 Since `.coverage` stores only covered lines coverage-reporter needs to parse Python code to get uncovered lines. Parsing is done in a pretty naive way, so the results might be different from actual especially for complicated and non-trivial code.
 
+If coverage results are incorrect consider exporting `.coverage` to XML:
+
+```bash
+coverage xml # creates coverage.xml
+coveralls -f coverage.xml
+```
+
 ## Auto-Configuration Supported CIs
 
 - CircleCI
