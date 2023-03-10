@@ -5,6 +5,15 @@ Spectator.describe CoverageReporter::GcovParser do
 
   let(base_path) { nil }
 
+  describe "#matches?" do
+    it "matches only .gcov files" do
+      expect(subject.matches?(".gcov")).to eq true
+      expect(subject.matches?("main.c.gcov")).to eq true
+      expect(subject.matches?("some-path/file.gcov")).to eq true
+      expect(subject.matches?("main.c.lcov")).to eq false
+    end
+  end
+
   describe "#parse" do
     let(filename) { "spec/fixtures/gcov/main.c.gcov" }
 

@@ -131,6 +131,10 @@ module CoverageReporter
       end
 
       coverage.keys.sort!.map { |k| coverage[k] }
+    rescue File::NotFoundError
+      Log.error("Couldn't open file #{name}")
+
+      [] of Int64?
     end
   end
 end

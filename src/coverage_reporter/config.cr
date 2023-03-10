@@ -8,6 +8,7 @@ module CoverageReporter
     getter flag_name : String?
 
     @options : Hash(Symbol, String)?
+    @yaml : YamlConfig
 
     class MissingTokenException < BaseException
       def message
@@ -39,13 +40,13 @@ module CoverageReporter
       path : String = "",
       @flag_name : String? = nil
     )
-      @yaml = YamlConfig.new(path)
+      @yaml = YamlConfig.read(path)
 
       @repo_token =
         repo_token.presence ||
           ENV["COVERALLS_REPO_TOKEN"]?.presence ||
-          @yaml["repo_token"]?.try(&.to_s).presence ||
-          @yaml["repo_secret_token"]?.try(&.to_s).presence
+          @yaml.repo_token.presence ||
+          @yaml.repo_secret_token.presence
 
       raise MissingTokenException.new if !@repo_token
     end
@@ -71,13 +72,13 @@ module CoverageReporter
 
     private def custom_options : Hash(Symbol, String)
       CI::Options.new(
-        service_name: ENV["COVERALLS_SERVICE_NAME"]?.presence || @yaml["service_name"]?.try(&.to_s).presence,
+        service_name: ENV["COVERALLS_SERVICE_NAME"]?.presence || @yaml.service_name.presence,
         service_number: ENV["COVERALLS_SERVICE_NUMBER"]?.presence,
         service_job_id: ENV["COVERALLS_SERVICE_JOB_ID"]?.presence,
         service_job_number: ENV["COVERALLS_SERVICE_JOB_NUMBER"]?.presence,
         service_branch: ENV["COVERALLS_GIT_BRANCH"]?.presence,
         commit_sha: ENV["COVERALLS_GIT_COMMIT"]?.presence,
-        repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml["repo_name"]?.try(&.to_s).presence,
+        repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml.repo_name.presence,
       ).to_h
     end
   end
