@@ -17,7 +17,19 @@ module CoverageReporter
     end
 
     def matches?(filename) : Bool
-      filename.ends_with?(".xml")
+      File.each_line(filename) do |line|
+        next if /\s*<\?xml\s+version=/.matches?(line)
+        next if /\s*<!--/.matches?(line)
+
+        return true if /<!DOCTYPE.*jacoco/i.matches?(line)
+        return true if /<report/.matches?(line)
+
+        return false
+      end
+
+      false
+    rescue Exception
+      false
     end
 
     def parse(filename) : Array(FileReport)

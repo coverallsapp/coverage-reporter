@@ -7,10 +7,9 @@ Spectator.describe CoverageReporter::JacocoParser do
 
   describe "#matches?" do
     it "matches correct filenames" do
-      expect(subject.matches?("jacovo.xml")).to eq true
-      expect(subject.matches?("path/jacoco-report/jacoco.xml")).to eq true
-
-      expect(subject.matches?("jacoco.json")).to eq false
+      expect(subject.matches?("spec/fixtures/jacoco/jacoco-report.xml")).to eq true
+      expect(subject.matches?("spec/fixtures/cobertura/cobertura.xml")).to eq false
+      expect(subject.matches?("non-existing.xml")).to eq false
     end
   end
 

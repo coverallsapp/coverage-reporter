@@ -13,11 +13,28 @@ module CoverageReporter
     end
 
     def globs : Array(String)
-      ["**/*/cobertura.xml"]
+      [
+        "**/*/cobertura.xml",
+        "cobertura.xml",
+        "**/*/coverage.xml",
+        "coverage.xml",
+      ]
     end
 
     def matches?(filename) : Bool
-      filename.ends_with?("cobertura.xml")
+      File.each_line(filename) do |line|
+        next if /\s*<\?xml\s+version=/.matches?(line)
+        next if /\s*<!--/.matches?(line)
+
+        return true if /<!DOCTYPE\s+coverage.*cobertura/.matches?(line)
+        return true if /<coverage/.matches?(line)
+
+        return false
+      end
+
+      false
+    rescue Exception
+      false
     end
 
     def parse(filename) : Array(FileReport)
