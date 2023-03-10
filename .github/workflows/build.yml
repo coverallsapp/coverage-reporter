@@ -31,6 +31,8 @@ jobs:
       - name: Install dependencies
         run: shards install --production
 
+      - run: vcpkg install sqlite3
+
       - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
       - run: |
           cd dist
