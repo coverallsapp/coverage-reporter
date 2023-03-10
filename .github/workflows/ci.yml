@@ -10,11 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    container:
-      image: crystallang/crystal
-
     steps:
     - uses: actions/checkout@v3
+    - name: Install Crystal
+      uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: 1.7.2
     - name: Install dependencies
       run: shards install
     - name: Run tests
@@ -23,11 +24,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
-    container:
-      image: crystallang/crystal
-
     steps:
     - uses: actions/checkout@v2
+    - name: Install Crystal
+      uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: 1.7.2
     - name: Install dependencies
       run: shards install
     - name: Run linter

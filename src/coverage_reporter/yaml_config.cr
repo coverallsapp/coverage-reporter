@@ -3,18 +3,21 @@ require "yaml"
 module CoverageReporter
   # `.coveralls.yml` config representation.
   class YamlConfig
+    include YAML::Serializable
+
+    property service_name : String?
+    property repo_token : String?
+    property repo_secret_token : String?
+    property repo_name : String?
+
     DEFAULT_LOCATION = ".coveralls.yml"
 
-    def initialize(path)
-      @config =
-        if File.exists?(path)
-          YAML.parse(File.read(path))
-        else
-          {} of String => String
-        end
+    def self.read(path)
+      if File.exists?(path)
+        self.from_yaml(File.read(path))
+      else
+        self.from_yaml("---\n")
+      end
     end
-
-    delegate :[], to: @config
-    delegate :[]?, to: @config
   end
 end

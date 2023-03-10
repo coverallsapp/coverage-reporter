@@ -19,7 +19,7 @@ Spectator.describe CoverageReporter::SimplecovParser do
       reports = subject.parse(filename)
       expect(reports.size).to eq 5
       expect(reports[0].to_h).to eq({
-        :name     => "/Users/nickmerwin/www/coveralls-ruby/lib/coveralls.rb",
+        :name     => "Users/nickmerwin/www/coveralls-ruby/lib/coveralls.rb",
         :branches => [] of Int64?,
         :coverage => [
           1, 1, 1, 1, 1, nil, 1, 1, nil, 1, 1, nil, nil, nil, 1, nil, 1, 3, 3, nil, nil,
@@ -38,7 +38,7 @@ Spectator.describe CoverageReporter::SimplecovParser do
         reports = subject.parse(filename)
         expect(reports.size).to eq 1
         expect(reports[0].to_h).to eq({
-          :name     => "/home/user/app/models/user.rb",
+          :name     => "home/user/app/models/user.rb",
           :branches => [12, 0, 1, 1, 12, 0, 2, 0],
           :coverage => [nil, 1, 1, 0, nil, nil, 1, 0, nil, nil, 1, 0, 0, nil, nil, nil],
         })

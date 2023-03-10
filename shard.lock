@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.4.0
+    version: 1.4.2
 
   crest:
     git: https://github.com/mamantoha/crest.git
@@ -11,6 +11,10 @@ shards:
   crystal-kcov:
     git: https://github.com/vici37/crystal-kcov.git
     version: 0.2.3+git.commit.7e49fe22d7d47040c9de77eb77a6daa76ce0655d
+
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.11.0
 
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
@@ -23,6 +27,10 @@ shards:
   spectator:
     git: https://gitlab.com/arctic-fox/spectator.git
     version: 0.11.6
+
+  sqlite3:
+    git: https://github.com/crystal-lang/crystal-sqlite3.git
+    version: 0.19.0
 
   webmock:
     git: https://github.com/manastech/webmock.cr.git

@@ -19,6 +19,7 @@ module CoverageReporter
       JacocoParser,
       GcovParser,
       GolangParser,
+      CoveragepyParser,
     }
 
     def initialize(@file : String?, base_path : String?)

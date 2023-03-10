@@ -1,0 +1,526 @@
+---
+- name: spec/fixtures/python/conftest.py
+  coverage:
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  - 1
+  - 1
+  -
+  source_digest: b495247237e404918faf3b9b6f4fff45
+- name: spec/fixtures/python/tests/__init__.py
+  coverage:
+  - 1
+  source_digest: dfc6c30bc1d49f27cafb5a99808189c7
+- name: spec/fixtures/python/tests/00_empty_test.py
+  coverage:
+  - 1
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  -
+  - 0
+  source_digest: 56c0d54db79148fce1d7ac64a9280426
+- name: spec/fixtures/python/tests/01_basic_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 1
+  - 1
+  source_digest: f6acb1ce108b884c46874cf850df2c67
+- name: spec/fixtures/python/other_code/__init__.py
+  coverage:
+  - 1
+  source_digest: dfc6c30bc1d49f27cafb5a99808189c7
+- name: spec/fixtures/python/other_code/services.py
+  coverage:
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 0
+  -
+  - 0
+  -
+  - 0
+  -
+  - 0
+  - 0
+  -
+  -
+  - 1
+  - 1
+  -
+  - 1
+  -
+  - 1
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  -
+  source_digest: 5d790b16f5d4bdebf8c17b6c95204095
+- name: spec/fixtures/python/tests/02_special_assertions_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  source_digest: 01e00c9b8dd77cddb06846de87f1a444
+- name: spec/fixtures/python/tests/03_simple_fixture_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 1
+  source_digest: c90370431ed68b82228436f0befbec61
+- name: spec/fixtures/python/tests/04_fixture_returns_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  source_digest: 81db404179c6cec7994af12047991760
+- name: spec/fixtures/python/tests/05_yield_fixture_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  - 1
+  - 1
+  source_digest: 1fe397b84c343175fe19bc2d98610db3
+- name: spec/fixtures/python/tests/06_request_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  source_digest: 40c853cd4433aee28b2e5bb42adaca7a
+- name: spec/fixtures/python/tests/07_request_finalizer_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  source_digest: c3c04f0a7ce3ce59ab3872df0481490a
+- name: spec/fixtures/python/tests/08_params_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  - 1
+  source_digest: 0a2f136c649309a1ab7bf24693b15ade
+- name: spec/fixtures/python/tests/09_params-ception_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  - 1
+  source_digest: '08fcbfc6f3fe95931875f9adfc16db11'
+- name: spec/fixtures/python/tests/10_advanced_params-ception_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  source_digest: 7f68fc4cf0936d2af5c06c6c22b97b51
+- name: spec/fixtures/python/tests/11_mark_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 0
+  - 0
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  source_digest: 7af52bb924bafde2a4fd30d206c94f6c
+- name: spec/fixtures/python/tests/14_class_based_test.py
+  coverage:
+  - 1
+  -
+  -
+  -
+  -
+  -
+  - 1
+  - 1
+  -
+  - 1
+  - 0
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  source_digest: b3448ac6917f9d05ad2dcd6b4d6ed5ea
+- name: spec/fixtures/python/tests/15_advanced_class_test.py
+  coverage:
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  -
+  - 1
+  - 1
+  - 1
+  -
+  - 1
+  - 1
+  - 1
+  source_digest: ddcac19f774bb0306cb73e084f0e5abb
+- name: spec/fixtures/python/tests/16_scoped_and_meta_fixtures_test.py
+  coverage:
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  source_digest: 2a3592da214eb09d98e00ab80e0d18c4
+- name: spec/fixtures/python/tests/19_re_usable_mock_test.py
+  coverage:
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  -
+  -
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  - 1
+  - 1
+  -
+  -
+  - 1
+  - 1
+  -
+  - 1
+  - 1
+  source_digest: 700b6685d08b9438c8717bfd2c1efc29

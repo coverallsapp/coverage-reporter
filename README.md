@@ -116,11 +116,15 @@ Usage: coveralls [options]
 - [x] Jacoco
 - [x] Gcov
 - [x] Golang coverage format
-- [ ] Pytest-Cov
+- [x] Pytest-Cov ([:test_tube: beta](#pytest-cov-test_tube-beta))
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
 **Bounty**: One or more months of free service at Coveralls.io. <a target="_blank" href="mailto:support@coveralls.io?subject=Please tell me more about contributing to the Universal Coverage Reporter">Contact us</a> to learn more.
+
+#### Pytest-Cov (:test_tube: beta)
+
+Since `.coverage` stores only covered lines coverage-reporter needs to parse Python code to get uncovered lines. Parsing is done in a pretty naive way, so the results might be different from actual especially for complicated and non-trivial code.
 
 ## Auto-Configuration Supported CIs
 

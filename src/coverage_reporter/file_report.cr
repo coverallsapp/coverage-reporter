@@ -13,7 +13,7 @@ module CoverageReporter
 
     def to_h : Hash(Symbol, String | Array(Int64?) | Array(Int64))
       {
-        :name          => @name,
+        :name          => @name.lstrip(File::SEPARATOR),
         :coverage      => @coverage,
         :branches      => @branches,
         :source_digest => @source_digest,

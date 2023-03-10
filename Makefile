@@ -6,9 +6,10 @@ compile:
 	crystal build src/cli.cr -o dist/coveralls --progress
 
 release_linux:
+	docker build . --tag coverage-reporter:1.0
 	docker run --rm -t -v $(shell pwd):/app \
 		-w /app --user $(UUID):$(GUID) \
-		crystallang/crystal:$(CRYSTAL_VERSION)-alpine \
+		coverage-reporter:1.0 \
 		crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress
 	cd dist && strip coveralls && tar -cvzf coveralls-linux.tar.gz coveralls
 
