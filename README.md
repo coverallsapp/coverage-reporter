@@ -70,7 +70,8 @@ coveralls --done --carryforward "unit-tests,integration-tests"
 coveralls --debug --dry-run
 ```
 
-For more options see `coveralls -h/--help`
+<details>
+<summary>For more options see <code>coveralls -h/--help</code></summary>
 
 ```
 $ coveralls -h
@@ -91,6 +92,8 @@ Usage: coveralls [options]
     -v, --version                    Show version
     -h, --help                       Show this help
 ```
+
+</details>
 
 ## CI Usage Examples
 
