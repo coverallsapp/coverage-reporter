@@ -10,6 +10,25 @@ Spectator.describe CoverageReporter::Parser do
 
         expect(reports.size).to eq 1
       end
+
+      context "for non-existing file" do
+        subject { described_class.new("spec/fixtures/oops/coverage", nil) }
+
+        it "raises error" do
+          expect { subject.parse }
+            .to raise_error(CoverageReporter::Parser::NotFound)
+        end
+      end
+
+      context "for an unknown file format" do
+        subject { described_class.new("spec/fixtures/lcov/test.js", nil) }
+
+        it "returns reports for one file" do
+          reports = subject.parse
+
+          expect(reports.size).to eq 0
+        end
+      end
     end
 
     context "for all files" do

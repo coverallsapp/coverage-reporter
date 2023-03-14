@@ -50,6 +50,20 @@ Spectator.describe CoverageReporter::Reporter do
       end
     end
 
+    context "local development" do
+      let(endpoint) { "http://localhost:3000" }
+
+      before_each do
+        ENV["COVERALLS_DEVELOPMENT"] = "1"
+      end
+
+      after_each { ENV.clear }
+
+      it "doesn't raise an error" do
+        expect { subject.report }.not_to raise_error
+      end
+    end
+
     context "when report is empty" do
       let(coverage_file) { "spec/fixtures/lcov/empty.lcov" }
 

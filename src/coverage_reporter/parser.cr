@@ -22,6 +22,15 @@ module CoverageReporter
       CoveragepyParser,
     }
 
+    class NotFound < BaseException
+      def initialize(@filename : String)
+      end
+
+      def message
+        "🚨 ERROR: Couldn't find specified file: #{@filename}"
+      end
+    end
+
     def initialize(@file : String?, base_path : String?)
       @parsers = PARSERS.map(&.new(base_path)).to_a
     end
@@ -30,8 +39,7 @@ module CoverageReporter
     def files : Array(String)
       if custom_file = file
         if !File.exists?(custom_file)
-          puts "🚨 ERROR: Couldn't find specified file: #{custom_file}"
-          exit 1
+          raise NotFound.new(custom_file)
         end
 
         Log.info "📄 Using coverage file: #{custom_file}"
@@ -62,7 +70,7 @@ module CoverageReporter
         return parser.parse(filename)
       end
 
-      puts "⚠️ Coverage reporter does not yet know how to process this file: #{filename}"
+      Log.info "⚠️ Coverage reporter does not yet know how to process this file: #{filename}"
       [] of FileReport
     end
   end

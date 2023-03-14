@@ -12,7 +12,7 @@ Spectator.describe CoverageReporter::Cli do
 
   describe ".run" do
     it "parses overrides" do
-      reporter = subject.run %w(--service-name overriden --dry-run)
+      reporter = subject.run %w(--service-name overriden --dry-run --no-logo)
 
       expect(reporter.dry_run).to eq true
       expect(reporter.overrides.try(&.to_h)).to eq({
@@ -27,6 +27,7 @@ Spectator.describe CoverageReporter::Cli do
         --service-build-url=
         --service-branch=
         --service-pull-request=
+        --done
         --dry-run
       )
 
