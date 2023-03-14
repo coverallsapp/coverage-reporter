@@ -45,6 +45,8 @@ Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releas
 
 > See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
 
+### Examples
+
 ```bash
 # Automatic lookup for supported reports and sending them to https://coveralls.io
 coveralls
@@ -95,23 +97,17 @@ Usage: coveralls [options]
 
 </details>
 
-## CI Usage Examples
+### CI Examples
 
-* CircleCI workflow.yml:
+- [Github Actions](./doc/examples/github-actions.yml)
+- [Github Actions (using `coverallsapp/github-action`)](./doc/examples/github-actions-default.yml)
+- [Circle CI](./doc/examples/circleci.yml)
+- [Circle CI (orb)](./doc/examples/circleci-orb.yml)
 
-```yaml
-- run: wget -cq https://coveralls.io/coveralls-linux.tar.gz -O - | tar -xz && ./coveralls
-```
 
-* Github Actions workflow.yml:
+## Built-In Support
 
-```yaml
-- run: curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
-  env:
-    COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-## Supported Coverage File Types
+### Supported Coverage Report Formats
 
 - [x] Lcov
 - [x] SimpleCov
@@ -136,7 +132,7 @@ coverage xml # creates coverage.xml
 coveralls -f coverage.xml
 ```
 
-## Auto-Configuration Supported CIs
+### Supported CI Services
 
 - CircleCI
 - Github Actions
@@ -150,6 +146,30 @@ coveralls -f coverage.xml
 - Buildkite
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/supported-ci-services#insert-your-ci-here)
+
+## Extending Support
+
+### New CI Services
+
+#### Supporting your CI service
+
+> How to use the Reporter with an officially-unsupported CI service.
+
+See [instructions](./doc/configuration.md#a-generic-ci-env-variables).
+
+#### Adding Support for a New CI Service
+
+See [instructions](./doc/development.md#support-new-ci-options).
+
+### New Coverage Report Formats
+
+#### Supporting Your Coverage Report Format
+
+> Options for converting to supported coverage report formats
+
+#### Adding Support for New Coverage Report Formats
+
+See [instructions](./doc/development.md#add-coverage-report-support).
 
 ## Coveralls Enterprise
 
@@ -180,19 +200,25 @@ Run specs:
 make test
 ```
 
-Self-contained binary compiling:
+# Deployment
+
+Cutting new releases.
+
+#### Auto (prefered)
 
 ```bash
-make release_mac # dist/coverals-mac.tar.gz will be created
-make release_linux # (Docker must be running) dist/coverals-linux.tar.gz will be created
-make release # both
+$ make new_release
+New version: 1.2.3
+Brief description: new coverage report support
+
+$ git push origin master --follow-tags
 ```
 
-# Release
+#### Manual
 
 1. Bump version in [`src/coverage_reporter.cr`](./src/coverage_reporter.cr) and [`shard.yml`](./shard.yml)
 2. Commit with a message `git commit --message "X.X.X: <short changes description>"`
-3. Create a tag `git tag --sign --annotate vX.X.X` with the same annotation as commit message
+3. Create a tag `git tag --annotate vX.X.X` with the same annotation as commit message
 4. Push with a tag `git push origin master --follow-tags`
 
 Github release will be created automatically.

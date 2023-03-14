@@ -1,0 +1,25 @@
+version: 2.1
+
+orbs:
+  coveralls: coveralls/coveralls@2.0.0
+  node: circleci/node@1.1.6
+
+jobs:
+  test:
+    executor:
+      name: node/default
+
+    steps:
+      - checkout
+
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: make test-coverage
+
+      - coveralls/upload
+
+workflows:
+  test:
+    jobs:
+      - test

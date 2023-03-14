@@ -1,11 +1,14 @@
 pre-commit:
-  piped: true
+  parallel: true
   commands:
-    1_format:
+    format:
       glob: "*.cr"
       run: crystal tool format {staged_files}
       stage_fixed: true
-    2_ameba:
+    ameba:
       glob: "*.cr"
       run: bin/ameba --fix {staged_files}
       stage_fixed: true
+    lychee:
+      run: lychee --exclude-path coverage/ --exclude-path lib/ --exclude-path docs/ .
+
