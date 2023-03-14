@@ -22,24 +22,25 @@ module CoverageReporter::Cli
       Log.info "  v#{CoverageReporter::VERSION}\n\n"
     end
 
+    reporter = CoverageReporter::Reporter.new(
+      base_path: opts.base_path,
+      carryforward: opts.carryforward,
+      config_path: opts.config_path,
+      coverage_file: opts.filename,
+      dry_run: opts.dry_run?,
+      job_flag_name: opts.job_flag_name,
+      parallel: opts.parallel?,
+      repo_token: opts.repo_token,
+      overrides: opts.overrides
+    )
+
     if opts.parallel_done?
-      CoverageReporter.parallel_done(
-        repo_token: opts.repo_token,
-        config_path: opts.config_path,
-        carryforward: opts.carryforward,
-        dry_run: opts.dry_run?,
-      )
+      reporter.parallel_done
     else
-      CoverageReporter.report(
-        coverage_file: opts.filename,
-        base_path: opts.base_path,
-        repo_token: opts.repo_token,
-        config_path: opts.config_path,
-        job_flag_name: opts.job_flag_name,
-        parallel: opts.parallel?,
-        dry_run: opts.dry_run?,
-      )
+      reporter.report
     end
+
+    reporter
   rescue ex : BaseException | Socket::Error
     Log.error ex.message
     exit 1
@@ -76,10 +77,29 @@ module CoverageReporter::Cli
     property carryforward : String? = ENV["COVERALLS_CARRYFORWARD_FLAGS"]?.presence
     property job_flag_name : String? = ENV["COVERALLS_FLAG_NAME"]?.presence
     property config_path = CoverageReporter::YamlConfig::DEFAULT_LOCATION
+
+    # Flags
     property? no_logo = false
     property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && ENV["COVERALLS_PARALLEL"] != "false")
     property? parallel_done = false
     property? dry_run = false
+
+    # CI options overrides
+    property service_name : String?
+    property service_job_id : String?
+    property service_build_url : String?
+    property service_branch : String?
+    property service_pull_request : String?
+
+    def overrides : CI::Options
+      CI::Options.new(
+        service_name: service_name,
+        service_job_id: service_job_id,
+        service_build_url: service_build_url,
+        service_branch: service_branch,
+        service_pull_request: service_pull_request,
+      )
+    end
   end
 
   private def parse_args(args, opts = Opts.new)
@@ -119,7 +139,7 @@ module CoverageReporter::Cli
         opts.job_flag_name = flag.presence
       end
 
-      parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done).") do
+      parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done)") do
         opts.parallel = true
       end
 
@@ -127,8 +147,28 @@ module CoverageReporter::Cli
         opts.carryforward = flags
       end
 
-      parser.on("-d", "--done", "Call webhook after all parallel jobs (-p) done.") do
+      parser.on("-d", "--done", "Call webhook after all parallel jobs (-p) done") do
         opts.parallel_done = true
+      end
+
+      parser.on("--service-name=NAME", "Build service name override") do |service_name|
+        opts.service_name = service_name.presence
+      end
+
+      parser.on("--service-job-id=ID", "Build job override") do |service_job_id|
+        opts.service_job_id = service_job_id.presence
+      end
+
+      parser.on("--service-build-url=URL", "Build URL override") do |service_build_url|
+        opts.service_build_url = service_build_url.presence
+      end
+
+      parser.on("--service-branch=NAME", "Branch name override") do |service_branch|
+        opts.service_branch = service_branch.presence
+      end
+
+      parser.on("--service-pull-request=NUMBER", "PR number override") do |service_pull_request|
+        opts.service_pull_request = service_pull_request.presence
       end
 
       parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
@@ -139,7 +179,7 @@ module CoverageReporter::Cli
         Log.set(Log::Level::Error)
       end
 
-      parser.on("--debug", "Debug mode. Data being sent to Coveralls will be outputted to console.") do
+      parser.on("--debug", "Debug mode: data being sent to Coveralls will be printed to console") do
         Log.set(Log::Level::Debug)
       end
 

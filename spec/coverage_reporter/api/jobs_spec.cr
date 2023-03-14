@@ -4,7 +4,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
   subject { described_class.new(config, parallel, source_files, git_info) }
 
   let(config) { CoverageReporter::Config.new("token") }
-  let(parallel) { false }
+  let(parallel) { true }
   let(git_info) { {:branch => "chore/add-tests", :head => {:message => "add tests"}} }
   let(source_files) do
     [
@@ -20,10 +20,6 @@ Spectator.describe CoverageReporter::Api::Jobs do
   end
 
   let(endpoint) { "#{CoverageReporter::Api::DEFAULT_DOMAIN}/api/#{CoverageReporter::Api::API_VERSION}/jobs" }
-
-  before_all do
-    CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
-  end
 
   before_each do
     ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)

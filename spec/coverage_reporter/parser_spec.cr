@@ -3,7 +3,7 @@ require "../spec_helper"
 Spectator.describe CoverageReporter::Parser do
   describe "#parse" do
     context "for exact file" do
-      subject { described_class.new("spec/fixtures/test.lcov", nil) }
+      subject { described_class.new("spec/fixtures/lcov/test.lcov", nil) }
 
       it "returns reports for one file" do
         reports = subject.parse

@@ -37,8 +37,9 @@ module CoverageReporter
 
     def initialize(
       repo_token : String?,
-      path : String = "",
-      @flag_name : String? = nil
+      path : String? = "",
+      @flag_name : String? = nil,
+      @overrides : CI::Options? = nil
     )
       @yaml = YamlConfig.read(path)
 
@@ -55,10 +56,15 @@ module CoverageReporter
     delegate :[]?, to: to_h
 
     def to_h
-      @options ||= CI::Generic.options.merge(ci_options).merge(custom_options).merge({
-        :repo_token => repo_token,
-        :flag_name  => flag_name,
-      }.compact)
+      @options ||=
+        CI::Generic.options
+          .merge(ci_options)
+          .merge(custom_options)
+          .merge(@overrides.try(&.to_h) || {} of Symbol => String)
+          .merge({
+            :repo_token => repo_token,
+            :flag_name  => flag_name,
+          }.compact)
     end
 
     private def ci_options : Hash(Symbol, String)
@@ -77,6 +83,8 @@ module CoverageReporter
         service_job_id: ENV["COVERALLS_SERVICE_JOB_ID"]?.presence,
         service_job_number: ENV["COVERALLS_SERVICE_JOB_NUMBER"]?.presence,
         service_branch: ENV["COVERALLS_GIT_BRANCH"]?.presence,
+        service_pull_request: ENV["COVERALLS_PULL_REQUEST"]?.presence,
+        service_event_type: ENV["COVERALLS_EVENT_TYPE"]?.presence,
         commit_sha: ENV["COVERALLS_GIT_COMMIT"]?.presence,
         repo_name: ENV["COVERALLS_REPO_NAME"]?.presence || @yaml.repo_name.presence,
       ).to_h
