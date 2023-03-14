@@ -153,23 +153,21 @@ coveralls -f coverage.xml
 
 #### Supporting your CI service
 
-> How to use the Reporter with an officially-unsupported CI service.
-
-See [instructions](./doc/configuration.md#a-generic-ci-env-variables).
+How to use the Reporter with an **officially-unsupported CI service**. See [instructions](./doc/configuration.md#a-generic-ci-env-variables).
 
 #### Adding Support for a New CI Service
 
-See [instructions](./doc/development.md#support-new-ci-options).
+See [development instructions](./doc/development.md#support-new-ci-options) to add support for a new CI service.
 
 ### New Coverage Report Formats
 
 #### Supporting Your Coverage Report Format
 
-> Options for converting to supported coverage report formats
+Options for converting to supported coverage report formats.
 
 #### Adding Support for New Coverage Report Formats
 
-See [instructions](./doc/development.md#add-coverage-report-support).
+See [development instructions](./doc/development.md#add-coverage-format-support) to add support for a new coverage report format.
 
 ## Coveralls Enterprise
 
