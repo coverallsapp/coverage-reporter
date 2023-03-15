@@ -6,6 +6,8 @@ module CoverageReporter
       base_path,
       repo_token,
       config_path,
+      compare_ref,
+      compare_sha,
       job_flag_name,
       carryforward,
       overrides,
@@ -23,6 +25,8 @@ module CoverageReporter
       @base_path : String?,
       @repo_token : String?,
       @config_path : String?,
+      @compare_ref : String?,
+      @compare_sha : String?,
       @job_flag_name : String?,
       @carryforward : String?,
       @overrides : CI::Options?,
@@ -61,6 +65,8 @@ module CoverageReporter
       @config ||= Config.new(
         repo_token: repo_token,
         flag_name: job_flag_name,
+        compare_ref: compare_ref,
+        compare_sha: compare_sha,
         path: config_path,
         overrides: overrides,
       )

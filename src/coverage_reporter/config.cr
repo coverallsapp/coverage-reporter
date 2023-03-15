@@ -39,7 +39,9 @@ module CoverageReporter
       repo_token : String?,
       path : String? = "",
       @flag_name : String? = nil,
-      @overrides : CI::Options? = nil
+      @overrides : CI::Options? = nil,
+      @compare_ref : String? = nil,
+      @compare_sha : String? = nil
     )
       @yaml = YamlConfig.read(path)
 
@@ -62,8 +64,10 @@ module CoverageReporter
           .merge(custom_options)
           .merge(@overrides.try(&.to_h) || {} of Symbol => String)
           .merge({
-            :repo_token => repo_token,
-            :flag_name  => flag_name,
+            :repo_token  => repo_token,
+            :flag_name   => flag_name,
+            :compare_ref => @compare_ref,
+            :compare_sha => @compare_sha,
           }.compact)
     end
 

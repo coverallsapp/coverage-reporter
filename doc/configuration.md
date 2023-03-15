@@ -21,6 +21,8 @@ These variables are always used if provided.
 | `COVERALLS_FLAG_NAME`          | Job flag name, e.g. "Unit", "Functional", or "Integration". Will be shown in the Coveralls UI. |
 | `COVERALLS_PARALLEL`           | set to true when running jobs in parallel, requires a completion webhook. More info here: https://docs.coveralls.io/parallel-build-webhook |
 | `COVERALLS_CARRYFORWARD_FLAGS` | Comma-separated list of parallel job flags to use carry-forwarding for. |
+| `COVERALLS_COMPARE_REF`        | Git branch name to compare current report results with. |
+| `COVERALLS_COMPARE_SHA`        | Git commit SHA to compare current report results with. |
 
 ## A generic CI ENV variables
 

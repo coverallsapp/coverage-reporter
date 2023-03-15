@@ -26,6 +26,8 @@ module CoverageReporter::Cli
       base_path: opts.base_path,
       carryforward: opts.carryforward,
       config_path: opts.config_path,
+      compare_ref: opts.compare_ref,
+      compare_sha: opts.compare_sha,
       coverage_file: opts.filename,
       dry_run: opts.dry_run?,
       job_flag_name: opts.job_flag_name,
@@ -77,6 +79,8 @@ module CoverageReporter::Cli
     property carryforward : String? = ENV["COVERALLS_CARRYFORWARD_FLAGS"]?.presence
     property job_flag_name : String? = ENV["COVERALLS_FLAG_NAME"]?.presence
     property config_path = CoverageReporter::YamlConfig::DEFAULT_LOCATION
+    property compare_ref : String? = ENV["COVERALLS_COMPARE_REF"]?.presence
+    property compare_sha : String? = ENV["COVERALLS_COMPARE_SHA"]?.presence
 
     # Flags
     property? no_logo = false
@@ -137,6 +141,14 @@ module CoverageReporter::Cli
 
       parser.on("-jFLAG", "--job-flag=FLAG", "Coverage job flag name, e.g. Unit Tests") do |flag|
         opts.job_flag_name = flag.presence
+      end
+
+      parser.on("-cr=REF", "--compare-ref=REF", "Git branch name to compare the coverage with") do |ref|
+        opts.compare_ref = ref.presence
+      end
+
+      parser.on("-cs=SHA", "--compare-sha=SHA", "Git commit SHA to compare the coverage with") do |sha|
+        opts.compare_sha = sha.presence
       end
 
       parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done)") do
