@@ -4,6 +4,8 @@ pre-commit:
     1_format:
       glob: "*.cr"
       run: crystal tool format {staged_files}
+      stage_fixed: true
     2_ameba:
       glob: "*.cr"
-      run: bin/ameba --fix {staged_files} && git add {staged_files}
+      run: bin/ameba --fix {staged_files}
+      stage_fixed: true

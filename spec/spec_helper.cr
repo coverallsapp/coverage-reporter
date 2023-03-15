@@ -6,7 +6,7 @@ require "spectator"
 Spectator.configure do |config|
   config.fail_blank
   config.randomize
-  # config.profile
+
   config.before_suite do
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
   end
