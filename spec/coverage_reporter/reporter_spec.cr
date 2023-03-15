@@ -8,6 +8,7 @@ Spectator.describe CoverageReporter::Reporter do
       repo_token: repo_token,
       config_path: config_path,
       compare_ref: compare_ref,
+      compare_sha: compare_sha,
       job_flag_name: job_flag_name,
       carryforward: carryforward,
       parallel: parallel,
@@ -21,6 +22,7 @@ Spectator.describe CoverageReporter::Reporter do
   let(repo_token) { "test-token" }
   let(config_path) { nil }
   let(compare_ref) { nil }
+  let(compare_sha) { nil }
   let(job_flag_name) { nil }
   let(carryforward) { nil }
   let(parallel) { false }

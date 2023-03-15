@@ -7,6 +7,7 @@ Spectator.describe CoverageReporter::Config do
       path: path,
       flag_name: job_flag_name,
       compare_ref: compare_ref,
+      compare_sha: compare_sha,
     )
   end
 
@@ -17,6 +18,7 @@ Spectator.describe CoverageReporter::Config do
   let(path) { "" }
   let(job_flag_name) { nil }
   let(compare_ref) { nil }
+  let(compare_sha) { nil }
 
   describe ".new" do
     context "without repo_token" do
@@ -83,6 +85,7 @@ Spectator.describe CoverageReporter::Config do
         path: path,
         flag_name: job_flag_name,
         compare_ref: compare_ref,
+        compare_sha: compare_sha,
       ).to_h
     end
 
@@ -90,11 +93,13 @@ Spectator.describe CoverageReporter::Config do
 
     context "with compare_ref" do
       let(compare_ref) { "some-branch" }
+      let(compare_sha) { "some-commit-sha" }
 
       it "adds compare_ref option" do
         expect(subject).to eq({
           :repo_token  => repo_token,
           :compare_ref => compare_ref,
+          :compare_sha => compare_sha,
         })
       end
     end
@@ -110,7 +115,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token        => "repo_token",
+          :repo_token        => repo_token,
           :service_name      => "appveyor",
           :service_number    => "123",
           :service_branch    => "appveyor-repo-branch",
@@ -131,7 +136,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "circleci",
           :service_number       => "9",
           :service_pull_request => "987",
@@ -155,7 +160,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "circleci",
           :service_number       => "circle-service-number",
           :service_pull_request => "123",
@@ -181,7 +186,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :repo_name            => "owner/repo",
           :service_name         => "github",
           :service_number       => "12345",
@@ -206,7 +211,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token         => "repo_token",
+          :repo_token         => repo_token,
           :service_name       => "gitlab-ci",
           :service_job_number => "gitlab-job-number",
           :service_job_id     => "gitlab-job-id",
@@ -227,7 +232,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "jenkins",
           :service_number       => "jenkins-number",
           :service_branch       => "jenkins-branch",
@@ -243,7 +248,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token         => "repo_token",
+          :repo_token         => repo_token,
           :service_name       => "coveralls-universal",
           :service_event_type => "manual",
         })
@@ -259,7 +264,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "semaphore",
           :service_job_id       => "semaphore-build-number",
           :service_pull_request => "semaphore-pr",
@@ -278,7 +283,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "tddium",
           :service_number       => "tddium-number",
           :service_job_id       => "tddium-job-id",
@@ -300,7 +305,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "travis-ci",
           :service_number       => "travis-build-number",
           :service_branch       => "travis-branch",
@@ -320,7 +325,7 @@ Spectator.describe CoverageReporter::Config do
 
         it "provides custom options" do
           expect(subject).to eq({
-            :repo_token           => "repo_token",
+            :repo_token           => repo_token,
             :service_name         => "custom-ci",
             :service_number       => "custom-build-number",
             :service_branch       => "custom-git-branch",
@@ -343,7 +348,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "Azure Pipelines",
           :service_branch       => "azure-branch",
           :service_job_id       => "azure-build-id",
@@ -365,7 +370,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "buildkite",
           :service_branch       => "bk-branch",
           :service_job_number   => "bk-job-number",
@@ -387,7 +392,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "Codefresh",
           :service_branch       => "cf-branch",
           :service_job_id       => "cf-job-id",
@@ -407,7 +412,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token     => "repo_token",
+          :repo_token     => repo_token,
           :service_name   => "codeship",
           :service_branch => "codeship-branch",
           :service_number => "codeship-job-id",
@@ -428,7 +433,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => "repo_token",
+          :repo_token           => repo_token,
           :service_name         => "drone",
           :service_branch       => "drone-branch",
           :service_job_id       => "drone-job-id",
@@ -446,7 +451,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token     => "repo_token",
+          :repo_token     => repo_token,
           :service_name   => "surf",
           :service_branch => "surf-branch",
           :commit_sha     => "surf-commit",
@@ -464,7 +469,7 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token     => "repo_token",
+          :repo_token     => repo_token,
           :service_name   => "wercker",
           :service_job_id => "w-job-id",
           :service_branch => "w-branch",

@@ -40,7 +40,8 @@ module CoverageReporter
       path : String? = "",
       @flag_name : String? = nil,
       @overrides : CI::Options? = nil,
-      @compare_ref : String? = nil
+      @compare_ref : String? = nil,
+      @compare_sha : String? = nil
     )
       @yaml = YamlConfig.read(path)
 
@@ -66,6 +67,7 @@ module CoverageReporter
             :repo_token  => repo_token,
             :flag_name   => flag_name,
             :compare_ref => @compare_ref,
+            :compare_sha => @compare_sha,
           }.compact)
     end
 
