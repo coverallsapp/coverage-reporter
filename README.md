@@ -45,6 +45,8 @@ Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releas
 
 > See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
 
+### Examples
+
 ```bash
 # Automatic lookup for supported reports and sending them to https://coveralls.io
 coveralls
@@ -70,45 +72,47 @@ coveralls --done --carryforward "unit-tests,integration-tests"
 coveralls --debug --dry-run
 ```
 
-For more options see `coveralls -h/--help`
+<details>
+<summary>For more options see <code>coveralls -h/--help</code></summary>
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter vX.Y.Z
+Coveralls Coverage Reporter v0.2.11
 Usage: coveralls [options]
     -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
     -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
     -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
-    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done).
+    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done)
     -cf, --carryforward              Comma-separated list of parallel job flags
-    -d, --done                       Call webhook after all parallel jobs (-p) done.
+    -d, --done                       Call webhook after all parallel jobs (-p) done
+    --service-name=NAME              Build service name override
+    --service-job-id=ID              Build job override
+    --service-build-url=URL          Build URL override
+    --service-branch=NAME            Branch name override
+    --service-pull-request=NUMBER    PR number override
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
-    --debug                          Debug mode. Data being sent to Coveralls will be outputted to console.
+    --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
     -v, --version                    Show version
     -h, --help                       Show this help
 ```
 
-## CI Usage Examples
+</details>
 
-* CircleCI workflow.yml:
+### CI Examples
 
-```yaml
-- run: wget -cq https://coveralls.io/coveralls-linux.tar.gz -O - | tar -xz && ./coveralls
-```
+- [Github Actions](./doc/examples/github-actions.yml)
+- [Github Actions (using `coverallsapp/github-action`)](./doc/examples/github-actions-default.yml)
+- [Circle CI](./doc/examples/circleci.yml)
+- [Circle CI (orb)](./doc/examples/circleci-orb.yml)
 
-* Github Actions workflow.yml:
 
-```yaml
-- run: curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
-  env:
-    COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
+## Built-In Support
 
-## Supported Coverage File Types
+### Supported Coverage Report Formats
 
 - [x] Lcov
 - [x] SimpleCov
@@ -133,7 +137,7 @@ coverage xml # creates coverage.xml
 coveralls -f coverage.xml
 ```
 
-## Auto-Configuration Supported CIs
+### Supported CI Services
 
 - CircleCI
 - Github Actions
@@ -147,6 +151,30 @@ coveralls -f coverage.xml
 - Buildkite
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/supported-ci-services#insert-your-ci-here)
+
+## Extending Support
+
+### New CI Services
+
+#### Supporting your CI service
+
+How to use the Reporter with an **officially-unsupported CI service**. See [instructions](./doc/configuration.md#a-generic-ci-env-variables).
+
+#### Adding Support for a New CI Service
+
+See [development instructions](./doc/development.md#support-new-ci-options) to add support for a new CI service.
+
+### New Coverage Report Formats
+
+#### Supporting Your Coverage Report Format
+
+If your coverage report format is not one of the ones above (in [Supported Coverage Report Formats](#supported-coverage-report-formats)), you could try finding a library to convert your format into one of the supported formats.
+
+Otherwise, if you want to use the Reporter, you could add support for your coverage report format.
+
+#### Adding Support for New Coverage Report Formats
+
+See [development instructions](./doc/development.md#add-coverage-format-support) to add support for a new coverage report format.
 
 ## Coveralls Enterprise
 
@@ -177,19 +205,25 @@ Run specs:
 make test
 ```
 
-Self-contained binary compiling:
+# Deployment
+
+Cutting new releases.
+
+#### Auto (prefered)
 
 ```bash
-make release_mac # dist/coverals-mac.tar.gz will be created
-make release_linux # (Docker must be running) dist/coverals-linux.tar.gz will be created
-make release # both
+$ make new_release
+New version: 1.2.3
+Brief description: new coverage report support
+
+$ git push origin master --follow-tags
 ```
 
-# Release
+#### Manual
 
 1. Bump version in [`src/coverage_reporter.cr`](./src/coverage_reporter.cr) and [`shard.yml`](./shard.yml)
 2. Commit with a message `git commit --message "X.X.X: <short changes description>"`
-3. Create a tag `git tag --sign --annotate vX.X.X` with the same annotation as commit message
+3. Create a tag `git tag --annotate vX.X.X` with the same annotation as commit message
 4. Push with a tag `git push origin master --follow-tags`
 
 Github release will be created automatically.
