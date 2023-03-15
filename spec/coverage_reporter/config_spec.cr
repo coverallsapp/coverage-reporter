@@ -197,7 +197,7 @@ Spectator.describe CoverageReporter::Config do
     context "for Jenkins CI" do
       before_each do
         ENV["JENKINS_HOME"] = "defined"
-        ENV["BUILD_NUMBER"] = "jenkins-number"
+        ENV["BUILD_ID"] = "jenkins-number"
         ENV["BRANCH_NAME"] = "jenkins-branch"
         ENV["ghprbPullId"] = "jenkins-pr"
       end
@@ -271,7 +271,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["TRAVIS"] = "1"
         ENV["TRAVIS_PULL_REQUEST"] = "travis-pr"
         ENV["TRAVIS_BRANCH"] = "travis-branch"
-        ENV["TRAVIS_JOB_ID"] = "travis-job-id"
+        ENV["TRAVIS_JOB_NUMBER"] = "travis-job-id"
         ENV["TRAVIS_BUILD_NUMBER"] = "travis-build-number"
       end
 

@@ -26,27 +26,27 @@ module CoverageReporter
       @info : Array(String)?
 
       def commit
-        ENV["GIT_ID"]? || info[0]?.presence
+        ENV["CI_COMMIT_ID"]? || ENV["GIT_ID"]? || info[0]?.presence
       end
 
       def author_name
-        ENV["GIT_AUTHOR_NAME"]? || info[1]?.presence
+        ENV["CI_AUTHOR_NAME"]? || ENV["GIT_AUTHOR_NAME"]? || info[1]?.presence
       end
 
       def author_email
-        ENV["GIT_AUTHOR_EMAIL"]? || info[2]?.presence
+        ENV["CI_AUTHOR_EMAIL"]? || ENV["GIT_AUTHOR_EMAIL"]? || info[2]?.presence
       end
 
       def committer_name
-        ENV["GIT_COMMITTER_NAME"]? || info[3]?.presence
+        ENV["CI_COMMITTER_NAME"]? || ENV["GIT_COMMITTER_NAME"]? || info[3]?.presence
       end
 
       def committer_email
-        ENV["GIT_COMMITTER_EMAIL"]? || info[4]?.presence
+        ENV["CI_COMMITTER_EMAIL"]? || ENV["GIT_COMMITTER_EMAIL"]? || info[4]?.presence
       end
 
       def message
-        ENV["GIT_MESSAGE"]? || info[5]?.presence
+        ENV["CI_COMMIT_MESSAGE"]? || ENV["GIT_MESSAGE"]? || info[5]?.presence
       end
 
       # Returns git-related info about the HEAD.

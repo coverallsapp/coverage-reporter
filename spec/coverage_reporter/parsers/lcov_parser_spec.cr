@@ -18,7 +18,7 @@ Spectator.describe CoverageReporter::LcovParser do
   end
 
   describe "#parse" do
-    let(filename) { "spec/fixtures/test.lcov" }
+    let(filename) { "spec/fixtures/lcov/test.lcov" }
     let(coverage) do
       [1, 1, 1, nil, 1, 66, 66, nil, nil, 1, 323, 63, 63, 63, 60, nil, 3, nil, 63, 32,
        nil, 63, 63, 63, 3, nil, 63, 60, nil, 3, nil, 63, 27, 27, 27, nil, nil, 323, nil,
@@ -36,22 +36,22 @@ Spectator.describe CoverageReporter::LcovParser do
 
       expect(reports.size).to eq 1
       expect(reports[0].to_h).to eq({
-        :name          => "spec/fixtures/test.js",
+        :name          => "spec/fixtures/lcov/test.js",
         :coverage      => coverage,
         :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
       })
     end
 
     context "with base path" do
-      let(filename) { "spec/fixtures/for-base-path-lcov" }
-      let(base_path) { "spec" }
+      let(filename) { "spec/fixtures/lcov/for-base-path-lcov" }
+      let(base_path) { "spec/fixtures/lcov" }
 
       it "parses correctly" do
         reports = subject.parse(filename)
 
         expect(reports.size).to eq 1
         expect(reports[0].to_h).to eq({
-          :name          => "spec/fixtures/test.js",
+          :name          => "spec/fixtures/lcov/test.js",
           :coverage      => coverage,
           :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
         })

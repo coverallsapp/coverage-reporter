@@ -14,7 +14,8 @@ module CoverageReporter
           service_name: "travis-ci",
           service_number: ENV["TRAVIS_BUILD_NUMBER"]?,
           service_branch: ENV["TRAVIS_BRANCH"]?,
-          service_job_id: ENV["TRAVIS_JOB_ID"]?,
+          service_job_id: ENV["TRAVIS_JOB_NUMBER"]?,
+          service_build_url: ENV["TRAVIS_BUILD_WEB_URL"]?,
           service_pull_request: pull_request == "false" ? nil : pull_request,
         ).to_h
       end

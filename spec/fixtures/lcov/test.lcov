@@ -7,7 +7,7 @@ LH:1
 BRF:0
 BRH:0
 end_of_record
-SF:spec/fixtures/test.js
+SF:spec/fixtures/lcov/test.js
 DA:1,1
 DA:2,1
 DA:3,1

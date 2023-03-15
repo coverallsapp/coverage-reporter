@@ -6,10 +6,6 @@ Spectator.describe CoverageReporter::Api::Webhook do
   let(config) { CoverageReporter::Config.new("token") }
   let(endpoint) { "#{CoverageReporter::Api::DEFAULT_DOMAIN}/webhook" }
 
-  before_all do
-    CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
-  end
-
   after_each { WebMock.reset }
 
   it "calls the /webhook endpoint" do
