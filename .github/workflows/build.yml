@@ -127,3 +127,16 @@ jobs:
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
+
+  homebrew:
+    runs-on: ubuntu-latest
+    needs: [release]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    steps:
+      - name: Update Homebrew formula
+        uses: dawidd6/action-homebrew-bump-formula@v3
+        with:
+          tap: coverallsapp/coveralls
+          formula: coveralls
+          token: ${{ secrets.HOMEBREW_TOKEN }}
+
