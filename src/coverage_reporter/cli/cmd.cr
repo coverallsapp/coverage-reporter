@@ -143,11 +143,11 @@ module CoverageReporter::Cli
         opts.job_flag_name = flag.presence
       end
 
-      parser.on("-cr=REF", "--compare-ref=REF", "Branch name to compare the report with") do |ref|
+      parser.on("-cr=REF", "--compare-ref=REF", "Git branch name to compare the coverage with") do |ref|
         opts.compare_ref = ref.presence
       end
 
-      parser.on("-cs=SHA", "--compare-sha=SHA", "Branch name to compare the report with") do |sha|
+      parser.on("-cs=SHA", "--compare-sha=SHA", "Git commit SHA to compare the coverage with") do |sha|
         opts.compare_sha = sha.presence
       end
 

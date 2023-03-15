@@ -84,6 +84,8 @@ Usage: coveralls [options]
     -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
+    -cr=REF, --compare-ref=REF       Git branch name to compare the coverage with
+    -cs=SHA, --compare-sha=SHA       Git commit SHA to compare the coverage with
     -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done)
     -cf, --carryforward              Comma-separated list of parallel job flags
     -d, --done                       Call webhook after all parallel jobs (-p) done
