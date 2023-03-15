@@ -163,7 +163,9 @@ See [development instructions](./doc/development.md#support-new-ci-options) to a
 
 #### Supporting Your Coverage Report Format
 
-Options for converting to supported coverage report formats.
+If your coverage report format is not one of the ones above (in [Supported Coverage Report Formats](#supported-coverage-report-formats)), you could try finding a library to convert your format into one of the supported formats.
+
+Otherwise, if you want to use the Reporter, you could add support for your coverage report format.
 
 #### Adding Support for New Coverage Report Formats
 
