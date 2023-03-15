@@ -26,14 +26,20 @@ These variables are always used if provided.
 
 If CI wasn't detected, these ENV variables are used as a fallback. You can set them in your CI to provide appropriate options.
 
-| Name              | Description |
-| ----------------- | ----------- |
-| `CI_NAME`         | The name of your build system |
-| `CI_BUILD_NUMBER` | A number that uniquely identifies the build. |
-| `CI_JOB_ID`       | An ID that uniquely identifies the build's job. |
-| `CI_BUILD_URL`    | URL of the CI build. |
-| `CI_BRANCH`       | Git branch name. |
-| `CI_PULL_REQUEST` | Pull request number. |
+| Name                 | Description |
+| -------------------- | ----------- |
+| `CI_NAME`            | The name of your build system |
+| `CI_BUILD_NUMBER`    | A number that uniquely identifies the build. |
+| `CI_JOB_ID`          | An ID that uniquely identifies the build's job. |
+| `CI_BUILD_URL`       | URL of the CI build. |
+| `CI_BRANCH`          | Git branch name. |
+| `CI_PULL_REQUEST`    | Pull request number. |
+| `CI_COMMIT_ID`       | Git commit SHA. |
+| `CI_AUTHOR_NAME`     | Git change author name. |
+| `CI_AUTHOR_EMAIL`    | Git change author email. |
+| `CI_COMMITTER_NAME`  | Git committer name. |
+| `CI_COMMITTER_EMAIL` | Git committer email. |
+| `CI_COMMIT_MESSAGE`  | Git commit message. |
 
 
 ## YAML config

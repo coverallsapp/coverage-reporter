@@ -77,19 +77,24 @@ coveralls --debug --dry-run
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter vX.Y.Z
+Coveralls Coverage Reporter v0.2.11
 Usage: coveralls [options]
     -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
     -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
     -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
-    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done).
+    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done)
     -cf, --carryforward              Comma-separated list of parallel job flags
-    -d, --done                       Call webhook after all parallel jobs (-p) done.
+    -d, --done                       Call webhook after all parallel jobs (-p) done
+    --service-name=NAME              Build service name override
+    --service-job-id=ID              Build job override
+    --service-build-url=URL          Build URL override
+    --service-branch=NAME            Branch name override
+    --service-pull-request=NUMBER    PR number override
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
-    --debug                          Debug mode. Data being sent to Coveralls will be outputted to console.
+    --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
     -v, --version                    Show version
     -h, --help                       Show this help
