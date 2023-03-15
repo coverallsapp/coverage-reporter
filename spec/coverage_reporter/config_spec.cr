@@ -1,16 +1,24 @@
 require "../spec_helper"
 
 Spectator.describe CoverageReporter::Config do
-  subject { described_class.new(repo_token: repo_token, path: path, flag_name: job_flag_name) }
+  subject do
+    described_class.new(
+      repo_token: repo_token,
+      path: path,
+      flag_name: job_flag_name,
+      compare_ref: compare_ref,
+    )
+  end
 
   before_each { ENV.clear }
   after_each { ENV.clear }
 
-  describe ".new" do
-    let(repo_token) { nil }
-    let(path) { "" }
-    let(job_flag_name) { nil }
+  let(repo_token) { nil }
+  let(path) { "" }
+  let(job_flag_name) { nil }
+  let(compare_ref) { nil }
 
+  describe ".new" do
     context "without repo_token" do
       it "raises an exception" do
         expect { subject }.to raise_error(CoverageReporter::Config::MissingTokenException)
@@ -71,9 +79,24 @@ Spectator.describe CoverageReporter::Config do
   describe "#to_h" do
     subject do
       described_class.new(
-        repo_token: "repo_token",
-        path: "",
+        repo_token: repo_token,
+        path: path,
+        flag_name: job_flag_name,
+        compare_ref: compare_ref,
       ).to_h
+    end
+
+    let(repo_token) { "repo_token" }
+
+    context "with compare_ref" do
+      let(compare_ref) { "some-branch" }
+
+      it "adds compare_ref option" do
+        expect(subject).to eq({
+          :repo_token  => repo_token,
+          :compare_ref => compare_ref,
+        })
+      end
     end
 
     context "for Appveyor CI" do
