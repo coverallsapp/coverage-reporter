@@ -221,6 +221,7 @@ Spectator.describe CoverageReporter::Config do
           :service_job_id     => "gitlab-job-id",
           :service_branch     => "gitlab-branch",
           :service_build_url  => "https://gitlab.com/job-url",
+          :service_job_url    => "https://gitlab.com/job-url",
           :commit_sha         => "gitlab-commit-sha",
         })
       end

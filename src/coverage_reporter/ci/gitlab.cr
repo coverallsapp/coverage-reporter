@@ -14,6 +14,7 @@ module CoverageReporter
           service_job_number: ENV["CI_JOB_ID"]?,
           service_branch: ENV["CI_COMMIT_REF_NAME"]?,
           service_build_url: ENV["CI_JOB_URL"]?,
+          service_job_url: ENV["CI_JOB_URL"]?,
           commit_sha: ENV["CI_COMMIT_SHA"]?,
         ).to_h
       end
