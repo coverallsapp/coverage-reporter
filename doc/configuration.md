@@ -34,6 +34,7 @@ If CI wasn't detected, these ENV variables are used as a fallback. You can set t
 | `CI_BUILD_NUMBER`    | A number that uniquely identifies the build. |
 | `CI_JOB_ID`          | An ID that uniquely identifies the build's job. |
 | `CI_BUILD_URL`       | URL of the CI build. |
+| `CI_JOB_URL`         | URL of the CI build job (actual for parallel jobs and monorepos). |
 | `CI_BRANCH`          | Git branch name. |
 | `CI_PULL_REQUEST`    | Pull request number. |
 | `CI_COMMIT_ID`       | Git commit SHA. |

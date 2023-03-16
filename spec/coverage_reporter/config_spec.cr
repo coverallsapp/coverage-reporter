@@ -132,6 +132,7 @@ Spectator.describe CoverageReporter::Config do
         ENV["CI_PULL_REQUEST"] = "PR 987"
         ENV["CIRCLE_BUILD_NUM"] = "8"
         ENV["CIRCLE_BRANCH"] = "circle-branch"
+        ENV["CIRCLE_BUILD_URL"] = "build-url"
       end
 
       it "gets info from ENV" do
@@ -139,8 +140,10 @@ Spectator.describe CoverageReporter::Config do
           :repo_token           => repo_token,
           :service_name         => "circleci",
           :service_number       => "9",
+          :service_build_url    => "build-url",
           :service_pull_request => "987",
           :service_job_number   => "8",
+          :service_job_url      => "build-url",
           :service_branch       => "circle-branch",
         })
       end
@@ -193,6 +196,7 @@ Spectator.describe CoverageReporter::Config do
           :service_job_id       => "test",
           :service_branch       => "fix/bug",
           :service_build_url    => "https://github.com/owner/repo/actions/runs/12345",
+          :service_job_url      => "https://github.com/owner/repo/actions/runs/12345",
           :service_pull_request => "123",
           :commit_sha           => "github-commit-sha",
         })
