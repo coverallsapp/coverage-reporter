@@ -3,29 +3,31 @@ require "../spec_helper"
 Spectator.describe CoverageReporter::Reporter do
   subject do
     described_class.new(
-      coverage_file: coverage_file,
       base_path: base_path,
-      repo_token: repo_token,
-      config_path: config_path,
+      carryforward: carryforward,
       compare_ref: compare_ref,
       compare_sha: compare_sha,
-      job_flag_name: job_flag_name,
-      carryforward: carryforward,
-      parallel: parallel,
+      config_path: config_path,
+      coverage_file: coverage_file,
+      coverage_format: coverage_format,
       dry_run: false,
+      job_flag_name: job_flag_name,
       overrides: nil,
+      parallel: parallel,
+      repo_token: repo_token,
     )
   end
 
-  let(coverage_file) { nil }
   let(base_path) { nil }
-  let(repo_token) { "test-token" }
-  let(config_path) { nil }
+  let(carryforward) { nil }
   let(compare_ref) { nil }
   let(compare_sha) { nil }
+  let(config_path) { nil }
+  let(coverage_file) { nil }
+  let(coverage_format) { nil }
   let(job_flag_name) { nil }
-  let(carryforward) { nil }
   let(parallel) { false }
+  let(repo_token) { "test-token" }
 
   describe "#report" do
     let(endpoint) { "https://coveralls.io" }

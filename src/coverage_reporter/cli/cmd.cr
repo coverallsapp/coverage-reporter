@@ -25,15 +25,16 @@ module CoverageReporter::Cli
     reporter = CoverageReporter::Reporter.new(
       base_path: opts.base_path,
       carryforward: opts.carryforward,
-      config_path: opts.config_path,
       compare_ref: opts.compare_ref,
       compare_sha: opts.compare_sha,
+      config_path: opts.config_path,
       coverage_file: opts.filename,
+      coverage_format: opts.format,
       dry_run: opts.dry_run?,
       job_flag_name: opts.job_flag_name,
+      overrides: opts.overrides,
       parallel: opts.parallel?,
       repo_token: opts.repo_token,
-      overrides: opts.overrides
     )
 
     if opts.parallel_done?
@@ -74,6 +75,7 @@ module CoverageReporter::Cli
 
   private class Opts
     property filename : String?
+    property format : String?
     property repo_token : String?
     property base_path : String?
     property carryforward : String? = ENV["COVERALLS_CARRYFORWARD_FLAGS"]?.presence
@@ -145,24 +147,36 @@ module CoverageReporter::Cli
         opts.job_flag_name = flag.presence
       end
 
-      parser.on("-cr=REF", "--compare-ref=REF", "Git branch name to compare the coverage with") do |ref|
-        opts.compare_ref = ref.presence
-      end
-
-      parser.on("-cs=SHA", "--compare-sha=SHA", "Git commit SHA to compare the coverage with") do |sha|
-        opts.compare_sha = sha.presence
-      end
-
       parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done)") do
         opts.parallel = true
       end
 
-      parser.on("-cf", "--carryforward", "Comma-separated list of parallel job flags") do |flags|
-        opts.carryforward = flags
-      end
-
       parser.on("-d", "--done", "Call webhook after all parallel jobs (-p) done") do
         opts.parallel_done = true
+      end
+
+      parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
+        opts.no_logo = true
+      end
+
+      parser.on("-q", "--quiet", "Suppress all output") do
+        Log.set(Log::Level::Error)
+      end
+
+      parser.on("--format=FORMAT", "Force coverage file format, supported formats: #{Parser::PARSERS.map(&.name).join(", ")}") do |format|
+        opts.format = format.presence
+      end
+
+      parser.on("--compare-ref=REF", "Git branch name to compare the coverage with") do |ref|
+        opts.compare_ref = ref.presence
+      end
+
+      parser.on("--compare-sha=SHA", "Git commit SHA to compare the coverage with") do |sha|
+        opts.compare_sha = sha.presence
+      end
+
+      parser.on("--carryforward=FLAGS", "Comma-separated list of parallel job flags") do |flags|
+        opts.carryforward = flags
       end
 
       parser.on("--service-name=NAME", "Build service name override") do |service_name|
@@ -187,14 +201,6 @@ module CoverageReporter::Cli
 
       parser.on("--service-pull-request=NUMBER", "PR number override") do |service_pull_request|
         opts.service_pull_request = service_pull_request.presence
-      end
-
-      parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
-        opts.no_logo = true
-      end
-
-      parser.on("-q", "--quiet", "Suppress all output") do
-        Log.set(Log::Level::Error)
       end
 
       parser.on("--debug", "Debug mode: data being sent to Coveralls will be printed to console") do

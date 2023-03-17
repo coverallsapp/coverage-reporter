@@ -7,7 +7,9 @@ module CoverageReporter
   #
   # New parsers can be easily added. See `BaseParser` for details.
   class Parser
-    getter file : String?
+    getter coverage_file : String?
+    getter coverage_format : String?
+    getter base_path : String?
     getter parsers : Array(BaseParser)
 
     # A list of available parsers.
@@ -31,13 +33,23 @@ module CoverageReporter
       end
     end
 
-    def initialize(@file : String?, base_path : String?)
-      @parsers = PARSERS.map(&.new(base_path)).to_a
+    class InvalidCoverageFormat < BaseException
+      def initialize(@format : String?)
+      end
+
+      def message
+        "🚨 Unsupported coverage format: #{@format}\n" \
+        "Supported formats:\n  #{PARSERS.map(&.name).join("\n  ")}"
+      end
+    end
+
+    def initialize(@coverage_file : String?, @coverage_format : String?, @base_path : String?)
+      @parsers = PARSERS.map(&.new(@base_path)).to_a
     end
 
     # Returns coverage report files that can be parsed by utility.
     def files : Array(String)
-      if custom_file = file
+      if custom_file = coverage_file
         if !File.exists?(custom_file)
           raise NotFound.new(custom_file)
         end
@@ -58,6 +70,17 @@ module CoverageReporter
     end
 
     def parse : Array(FileReport)
+      if coverage_format
+        Log.info("✏️  Forced coverage format: #{coverage_format}")
+        parser_class = PARSERS.find { |klass| klass.name == coverage_format }
+        if parser_class
+          parser = parser_class.new(base_path)
+          return files.flat_map { |filename| parser.parse(filename) }
+        else
+          raise InvalidCoverageFormat.new(coverage_format)
+        end
+      end
+
       files.flat_map do |filename|
         parse_file(filename)
       end
