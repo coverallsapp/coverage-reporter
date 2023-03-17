@@ -2,17 +2,18 @@ require "./*"
 
 module CoverageReporter
   class Reporter
-    getter coverage_file,
-      base_path,
-      repo_token,
-      config_path,
+    getter base_path,
+      carryforward,
       compare_ref,
       compare_sha,
+      config_path,
+      coverage_file,
+      coverage_format,
+      dry_run,
       job_flag_name,
-      carryforward,
       overrides,
       parallel,
-      dry_run
+      repo_token
 
     class NoSourceFiles < BaseException
       def message
@@ -21,17 +22,18 @@ module CoverageReporter
     end
 
     def initialize(
-      @coverage_file : String?,
       @base_path : String?,
-      @repo_token : String?,
-      @config_path : String?,
+      @carryforward : String?,
       @compare_ref : String?,
       @compare_sha : String?,
+      @config_path : String?,
+      @coverage_file : String?,
+      @coverage_format : String?,
+      @dry_run : Bool,
       @job_flag_name : String?,
-      @carryforward : String?,
       @overrides : CI::Options?,
       @parallel : Bool,
-      @dry_run : Bool
+      @repo_token : String?
     )
     end
 
@@ -41,7 +43,11 @@ module CoverageReporter
     # If *coverage_file* is provided only its content will be parsed. Otherwise
     # current directory will be searched for all supported report formats.
     def report
-      source_files = Parser.new(coverage_file, base_path).parse
+      source_files = Parser.new(
+        coverage_file: coverage_file,
+        coverage_format: coverage_format,
+        base_path: base_path,
+      ).parse
       raise NoSourceFiles.new unless source_files.size > 0
 
       api = Api::Jobs.new(config, parallel, source_files, Git.info(config))

@@ -36,6 +36,11 @@ module CoverageReporter
   #
   # Existing parsers can be used as a reference.
   abstract class BaseParser
+    # Returns parser name which can be used to force resolve the parser.
+    def self.name : String
+      {{ @type.stringify.gsub(/(.*::)(\w+)Parser/, "\\2").downcase }}
+    end
+
     # Returns MD5 hashsum of a file.
     def self.file_digest(filename : String) : String | Nil
       return unless File.exists?(filename)

@@ -3,6 +3,10 @@ require "sqlite3"
 
 module CoverageReporter
   class CoveragepyParser < BaseParser
+    def self.name
+      "python"
+    end
+
     QUERY = <<-SQL
     SELECT file.path, line_bits.numbits
       FROM line_bits
