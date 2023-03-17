@@ -116,13 +116,15 @@ Usage: coveralls [options]
 
 ### Supported Coverage Report Formats
 
-- [x] Lcov
-- [x] SimpleCov
-- [x] Cobertura
-- [x] Jacoco
-- [x] Gcov
-- [x] Golang coverage format
-- [x] Pytest-Cov ([:test_tube: beta](#pytest-cov-test_tube-beta))
+With values used for `--format` option:
+
+- [x] Lcov - `lcov`
+- [x] SimpleCov - `simplecov`
+- [x] Cobertura - `cobertura`
+- [x] Jacoco - `jacoco`
+- [x] Gcov - `gcov`
+- [x] Golang coverage format - `golang`
+- [x] Pytest-Cov ([:test_tube: beta](#pytest-cov-test_tube-beta)) - `python`
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
