@@ -25,6 +25,7 @@ Spectator.describe CoverageReporter::Cli do
         --service-name=
         --service-job-id=
         --service-build-url=
+        --service-job-url=
         --service-branch=
         --service-pull-request=
         --done

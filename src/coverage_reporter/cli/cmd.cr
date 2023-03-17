@@ -92,6 +92,7 @@ module CoverageReporter::Cli
     property service_name : String?
     property service_job_id : String?
     property service_build_url : String?
+    property service_job_url : String?
     property service_branch : String?
     property service_pull_request : String?
 
@@ -100,6 +101,7 @@ module CoverageReporter::Cli
         service_name: service_name,
         service_job_id: service_job_id,
         service_build_url: service_build_url,
+        service_job_url: service_job_url,
         service_branch: service_branch,
         service_pull_request: service_pull_request,
       )
@@ -173,6 +175,10 @@ module CoverageReporter::Cli
 
       parser.on("--service-build-url=URL", "Build URL override") do |service_build_url|
         opts.service_build_url = service_build_url.presence
+      end
+
+      parser.on("--service-job-url=URL", "Build job URL override") do |service_job_url|
+        opts.service_job_url = service_job_url.presence
       end
 
       parser.on("--service-branch=NAME", "Branch name override") do |service_branch|

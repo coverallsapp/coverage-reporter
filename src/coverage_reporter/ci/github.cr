@@ -24,6 +24,7 @@ module CoverageReporter
           service_job_id: ENV["GITHUB_JOB"]?,
           service_branch: ENV["GITHUB_HEAD_REF"]?.presence || ENV["GITHUB_REF_NAME"]?.presence,
           service_build_url: build_url,
+          service_job_url: build_url,
           service_pull_request: pull_request,
           commit_sha: ENV["GITHUB_SHA"]?.presence,
         ).to_h
