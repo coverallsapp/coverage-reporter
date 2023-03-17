@@ -139,16 +139,6 @@ coverage xml # creates coverage.xml
 coveralls -f coverage.xml
 ```
 
-* __Secure download__ - Use this command for checksum verification on download, where `platform={linux|mac}` (`linux` shown):
-
-```
-- run: |
-    platform=linux
-    wget -cq https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-$platform.tar.gz -O - | tar -xz
-    if [[ $(curl -H "Accept: application/vnd.github.3.raw" https://api.github.com/repos/coverallsapp/coverage-reporter/contents/checksums/$platform) == `openssl sha256 coveralls` ]];
-    then ./coveralls; else echo 'CHECKSUM ERROR'; exit 1; fi
-```
-
 ### Supported CI Services
 
 - CircleCI

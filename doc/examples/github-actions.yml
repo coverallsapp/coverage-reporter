@@ -19,8 +19,35 @@ jobs:
         npm install
         make test-coverage
 
-    - name: Report Coveralls
-      run: curl -sL https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
+    - name: Report Coveralls (Linux)
+      if: startsWith(runner.os, 'Linux')
+      # More compact variant without hashsum check
+      # run: curl -sL https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
+      run: |
+        curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz
+        curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-checksums.txt
+        cat coveralls-checksums.txt | grep coveralls-linux.tar.gz | sha256sum --check --ignore-missing
+        tar -xzf coveralls-linux.tar.gz
+        ./coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Report Coveralls (Windows)
+      if: startsWith(runner.os, 'Windows')
+      # More compact variant without hashsum check
+      # run: curl -sL https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.zip | zcat > ./coveralls.exe && ./coveralls.exe
+      run: |
+        curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.zip
+        curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-checksums.txt
+        cat coveralls-checksums.txt | grep coveralls-windows.zip | sha256sum --check
+        zcat coveralls-windows.zip > coveralls.exe
+        ./coveralls.exe
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Report Coveralls (macOS)
+      if: startsWith(runner.os, 'macOS')
+      run: |
+        brew tap coverallsapp/coveralls --quiet
+        brew install coveralls --quiet
+        coveralls
