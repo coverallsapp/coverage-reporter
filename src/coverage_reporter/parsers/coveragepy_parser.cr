@@ -57,7 +57,7 @@ module CoverageReporter
         FileReport.new(
           name: name.sub(Dir.current, ""),
           coverage: coverage,
-          source_digest: BaseParser.file_digest(name),
+          source_digest: BaseParser.source_digest(name),
         )
       end
     end
