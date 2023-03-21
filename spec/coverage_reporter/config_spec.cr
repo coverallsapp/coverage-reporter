@@ -230,7 +230,8 @@ Spectator.describe CoverageReporter::Config do
     context "for Jenkins CI" do
       before_each do
         ENV["JENKINS_HOME"] = "defined"
-        ENV["BUILD_ID"] = "jenkins-number"
+        ENV["BUILD_ID"] = "jenkins-id"
+        ENV["BUILD_NUMBER"] = "jenkins-number"
         ENV["BRANCH_NAME"] = "jenkins-branch"
         ENV["ghprbPullId"] = "jenkins-pr"
       end
@@ -240,6 +241,7 @@ Spectator.describe CoverageReporter::Config do
           :repo_token           => repo_token,
           :service_name         => "jenkins",
           :service_number       => "jenkins-number",
+          :service_job_id       => "jenkins-id",
           :service_branch       => "jenkins-branch",
           :service_pull_request => "jenkins-pr",
         })
