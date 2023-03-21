@@ -42,7 +42,7 @@ module CoverageReporter
     end
 
     # Returns MD5 hashsum of a file.
-    def self.file_digest(filename : String) : String | Nil
+    def self.source_digest(filename : String) : String | Nil
       return unless File.exists?(filename)
 
       Digest::MD5.hexdigest(File.read(filename))

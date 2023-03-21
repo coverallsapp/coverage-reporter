@@ -40,7 +40,7 @@ module CoverageReporter
           if key == "Source" && val
             val = base_path ? File.join(base_path, val) : val
             name = val.sub(Dir.current, "")
-            source_digest = BaseParser.file_digest(val)
+            source_digest = BaseParser.source_digest(val)
           end
         else
           coverage[number - 1] = case count.strip
