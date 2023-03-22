@@ -71,7 +71,7 @@ module CoverageReporter
 
     def parse : Array(FileReport)
       if coverage_format
-        Log.info("✏️  Forced coverage format: #{coverage_format}")
+        Log.info("✏️ Forced coverage format: #{coverage_format}")
         parser_class = PARSERS.find { |klass| klass.name == coverage_format }
         if parser_class
           parser = parser_class.new(base_path)
