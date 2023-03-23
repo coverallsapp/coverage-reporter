@@ -69,6 +69,8 @@ module CoverageReporter::Cli
     ERROR
     exit 1
   rescue ex
+    raise(ex) if opts.try(&.debug?)
+
     Log.error ex.inspect
     exit 1
   end
@@ -89,6 +91,7 @@ module CoverageReporter::Cli
     property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && ENV["COVERALLS_PARALLEL"] != "false")
     property? parallel_done = false
     property? dry_run = false
+    property? debug = false
 
     # CI options overrides
     property service_name : String?
@@ -204,6 +207,7 @@ module CoverageReporter::Cli
       end
 
       parser.on("--debug", "Debug mode: data being sent to Coveralls will be printed to console") do
+        opts.debug = true
         Log.set(Log::Level::Debug)
       end
 
