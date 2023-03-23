@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage 
+<coverage
 line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branches-covered="25" branch-rate="0.61" complexity="0" version="1.0" timestamp="1676980054491">
     <sources>
         <source>--source</source>
@@ -9,16 +9,16 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
     <packages>
         <package name="org.scoverage.samples" line-rate="0.72" branch-rate="0.61" complexity="0">
             <classes>
-                <class 
+                <class
                 name="org.scoverage.samples.EitherMappableFuture" filename="org/scoverage/samples/Futures.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/EitherMappableFuture/futureToEitherMappable" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="51" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/EitherMappableFuture/mapEither" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="42" hits="1" branch="false"/>
@@ -30,23 +30,23 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="42" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.ClientActor" filename="org/scoverage/samples/ClientActor.scala" line-rate="0.80" branch-rate="0.57" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/ClientActor/&lt;none&gt;" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="14" hits="1" branch="false"/>
                                 <line number="17" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/ClientActor/clientName" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="18" hits="0" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/ClientActor/clientName_=" signature="()V" line-rate="0.75" branch-rate="0.50" complexity="0">
                             <lines>
                                 <line number="21" hits="0" branch="false"/>
@@ -59,7 +59,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="20" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/ClientActor/preStart" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="43" hits="1" branch="false"/>
@@ -76,7 +76,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="43" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/ClientActor/receive" signature="()V" line-rate="0.73" branch-rate="0.60" complexity="0">
                             <lines>
                                 <line number="27" hits="1" branch="false"/>
@@ -152,10 +152,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="20" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.RandomQuoteGenerator" filename="org/scoverage/samples/QuoteGenerator.scala" line-rate="0.76" branch-rate="0.50" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/RandomQuoteGenerator/generate" signature="()V" line-rate="0.89" branch-rate="0.50" complexity="0">
                             <lines>
                                 <line number="23" hits="1" branch="false"/>
@@ -178,7 +178,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="22" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/RandomQuoteGenerator/&lt;init&gt;" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="13" hits="0" branch="false"/>
@@ -211,10 +211,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="22" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.CreditEngine" filename="org/scoverage/samples/CreditEngine.scala" line-rate="0.92" branch-rate="0.80" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/CreditEngine/receive" signature="()V" line-rate="0.91" branch-rate="0.80" complexity="0">
                             <lines>
                                 <line number="10" hits="1" branch="false"/>
@@ -242,7 +242,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="11" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/CreditEngine/&lt;none&gt;" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="6" hits="1" branch="false"/>
@@ -276,10 +276,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="11" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.DefaultArgumentsObject" filename="org/scoverage/samples/DefaultArgumentsObject.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/DefaultArgumentsObject/&lt;none&gt;" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="9" hits="1" branch="false"/>
@@ -290,10 +290,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="9" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.Platform" filename="org/scoverage/samples/Platform.scala" line-rate="0.00" branch-rate="0.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/Platform/&lt;none&gt;" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="10" hits="0" branch="false"/>
@@ -340,10 +340,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="10" hits="0" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.QuoteCache" filename="org/scoverage/samples/QuoteCache.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/QuoteCache/preStart" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="15" hits="1" branch="false"/>
@@ -352,7 +352,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="15" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/QuoteCache/&lt;none&gt;" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="11" hits="1" branch="false"/>
@@ -377,10 +377,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="11" hits="1" branch="true"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.SimpleObject2" filename="org/scoverage/samples/SimpleObject2.scala" line-rate="0.53" branch-rate="0.44" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/SimpleObject2/method2" signature="()V" line-rate="0.54" branch-rate="0.50" complexity="0">
                             <lines>
                                 <line number="30" hits="0" branch="false"/>
@@ -411,7 +411,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="32" hits="1" branch="true"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/SimpleObject2/method1" signature="()V" line-rate="0.50" branch-rate="0.40" complexity="0">
                             <lines>
                                 <line number="21" hits="1" branch="true"/>
@@ -466,10 +466,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="15" hits="0" branch="true"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.InstrumentLoader" filename="org/scoverage/samples/InstrumentLoader.scala" line-rate="0.75" branch-rate="0.50" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/InstrumentLoader/&lt;none&gt;" signature="()V" line-rate="0.67" branch-rate="0.50" complexity="0">
                             <lines>
                                 <line number="12" hits="1" branch="false"/>
@@ -480,7 +480,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="12" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/InstrumentLoader/randomInstrument" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="17" hits="1" branch="false"/>
@@ -499,10 +499,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="12" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.PriceEngine" filename="org/scoverage/samples/PriceEngine.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/PriceEngine/receive" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="18" hits="1" branch="false"/>
@@ -521,14 +521,14 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="22" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/PriceEngine/preStart" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="34" hits="1" branch="false"/>
                                 <line number="34" hits="1" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/PriceEngine/stop" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="29" hits="1" branch="false"/>
@@ -565,7 +565,7 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="22" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.Charmax" filename="org/scoverage/samples/Charmax.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
                         <method name="org.scoverage.samples/Charmax/foo" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
@@ -578,10 +578,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="4" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.Futures" filename="org/scoverage/samples/Futures.scala" line-rate="0.78" branch-rate="0.50" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/Futures/meaningful" signature="()V" line-rate="0.60" branch-rate="0.50" complexity="0">
                             <lines>
                                 <line number="26" hits="0" branch="false"/>
@@ -616,10 +616,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="22" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.OrderEngine" filename="org/scoverage/samples/OrderEngine.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/OrderEngine/receive" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="12" hits="1" branch="false"/>
@@ -678,10 +678,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="21" hits="1" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.TypeTreeObjects" filename="org/scoverage/samples/TypeTreeObjects.scala" line-rate="0.00" branch-rate="0.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/TypeTreeObjects/&lt;none&gt;" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="7" hits="0" branch="false"/>
@@ -696,10 +696,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                         <line number="7" hits="0" branch="false"/>
                     </lines>
 </class>
-                <class 
+                <class
                 name="org.scoverage.samples.SimpleObject" filename="org/scoverage/samples/SimpleObject.scala" line-rate="0.44" branch-rate="0.33" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples/SimpleObject/method" signature="()V" line-rate="0.44" branch-rate="0.33" complexity="0">
                             <lines>
                                 <line number="21" hits="0" branch="true"/>
@@ -720,13 +720,13 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
                                 <line number="20" hits="0" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/SimpleObject/getOtherSomething" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="10" hits="0" branch="false"/>
                             </lines>
 </method>
-                        <method 
+                        <method
                         name="org.scoverage.samples/SimpleObject/getSomething" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
                             <lines>
                                 <line number="8" hits="1" branch="false"/>
@@ -758,10 +758,10 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
         </package>
         <package name="org.scoverage.samples.ignored" line-rate="0.00" branch-rate="0.00" complexity="0">
             <classes>
-                <class 
+                <class
                 name="org.scoverage.samples.ignored.IgnoredObject" filename="org/scoverage/samples/ignored/IgnoredObject.scala" line-rate="0.00" branch-rate="0.00" complexity="0">
                     <methods>
-                        <method 
+                        <method
                         name="org.scoverage.samples.ignored/IgnoredObject/test" signature="()V" line-rate="0.00" branch-rate="0.00" complexity="0">
                             <lines>
                                 <line number="4" hits="0" branch="false"/>
@@ -776,18 +776,9 @@ line-rate="0.72" lines-valid="246" lines-covered="176" branches-valid="41" branc
         </package>
         <package name="subpackage2.validators" line-rate="1.00" branch-rate="1.00" complexity="0">
             <classes>
-                <class 
+                <class
                 name="subpackage2.validators.OrderValidator" filename="org/scoverage/samples/domain.scala" line-rate="1.00" branch-rate="1.00" complexity="0">
-                    <methods>
-                        <method 
-                        name="subpackage2.validators/OrderValidator/validate" signature="()V" line-rate="1.00" branch-rate="1.00" complexity="0">
-                            <lines>
-                                <line number="35" hits="1" branch="false"/>
-                            </lines>
-</method>
                     </methods>
-                    <lines>
-                        <line number="35" hits="1" branch="false"/>
                     </lines>
 </class>
             </classes>
