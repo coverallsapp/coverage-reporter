@@ -48,7 +48,7 @@ module CoverageReporter
         FileReport.new(
           name: name,
           source_digest: BaseParser.source_digest(name),
-          coverage: (1..lines.keys.max).map do |line_no|
+          coverage: (1..(lines.keys.max? || 0)).map do |line_no|
             lines[line_no]?
           end,
         )

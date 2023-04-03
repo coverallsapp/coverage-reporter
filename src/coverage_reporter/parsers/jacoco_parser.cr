@@ -79,7 +79,7 @@ module CoverageReporter
         FileReport.new(
           name: path,
           source_digest: BaseParser.source_digest(path),
-          coverage: (1..info.coverage.keys.max).map { |n| info.coverage[n]? },
+          coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
           branches: info.branches.keys.sort!.flat_map do |line|
             branch = -1.to_i64
             info.branches[line].flat_map do |hits|

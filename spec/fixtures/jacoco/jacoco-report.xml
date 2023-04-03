@@ -38,6 +38,8 @@
       <counter type="METHOD" missed="0" covered="2"/>
       <counter type="CLASS" missed="0" covered="1"/>
     </sourcefile>
+    <sourcefile name="Info.java">
+    </sourcefile>
     <counter type="INSTRUCTION" missed="5" covered="27"/>
     <counter type="BRANCH" missed="2" covered="2"/>
     <counter type="LINE" missed="1" covered="5"/>

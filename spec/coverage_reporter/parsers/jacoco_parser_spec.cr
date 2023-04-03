@@ -19,7 +19,7 @@ Spectator.describe CoverageReporter::JacocoParser do
     it "parses the data correctly" do
       reports = subject.parse(filename)
 
-      expect(reports.size).to eq 1
+      expect(reports.size).to eq 2
       expect(reports[0].name).to match /^com\/jacocodemo\//
       with_branches = reports.find! do |report|
         report.name == "com/jacocodemo/examples/MessageBuilder.java"
