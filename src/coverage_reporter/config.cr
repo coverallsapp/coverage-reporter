@@ -35,6 +35,9 @@ module CoverageReporter
       CI::Local,
     }
 
+    DEFAULT_ENDPOINT = "https://coveralls.io"
+    LOCAL_ENDPOINT   = "http://localhost:3000"
+
     def initialize(
       repo_token : String?,
       path : String? = "",
@@ -69,6 +72,18 @@ module CoverageReporter
             :compare_ref => @compare_ref,
             :compare_sha => @compare_sha,
           }.compact)
+    end
+
+    def endpoint
+      if ENV["COVERALLS_ENDPOINT"]?.presence
+        return ENV["COVERALLS_ENDPOINT"]
+      end
+
+      if ENV["COVERALLS_DEVELOPMENT"]?.presence
+        return LOCAL_ENDPOINT
+      end
+
+      @yaml.endpoint.presence || DEFAULT_ENDPOINT
     end
 
     private def ci_options : Hash(Symbol, String)
