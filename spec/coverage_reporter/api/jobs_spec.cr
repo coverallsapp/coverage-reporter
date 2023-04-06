@@ -19,7 +19,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
     ]
   end
 
-  let(endpoint) { "#{CoverageReporter::Api::DEFAULT_DOMAIN}/api/#{CoverageReporter::Api::API_VERSION}/jobs" }
+  let(endpoint) { "#{CoverageReporter::Config::DEFAULT_ENDPOINT}/api/#{CoverageReporter::Api::Jobs::API_VERSION}/jobs" }
 
   before_each do
     ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)

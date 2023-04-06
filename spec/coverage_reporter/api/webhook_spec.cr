@@ -4,7 +4,7 @@ Spectator.describe CoverageReporter::Api::Webhook do
   subject { described_class.new(config, "flag1,flag2") }
 
   let(config) { CoverageReporter::Config.new("token") }
-  let(endpoint) { "#{CoverageReporter::Api::DEFAULT_DOMAIN}/webhook" }
+  let(endpoint) { "#{CoverageReporter::Config::DEFAULT_ENDPOINT}/webhook" }
 
   after_each { WebMock.reset }
 

@@ -7,7 +7,7 @@ module CoverageReporter
     end
 
     def send_request(dry_run : Bool = false)
-      webhook_url = Api.uri("webhook")
+      webhook_url = "#{@config.endpoint}/webhook"
 
       Log.info "⭐️ Calling parallel done webhook: #{webhook_url}"
 

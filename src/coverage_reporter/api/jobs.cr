@@ -8,6 +8,8 @@ module CoverageReporter
   class Api::Jobs
     @source : Array(Hash(Symbol, String | Array(Int64?) | Array(Int64)))
 
+    API_VERSION = "v1"
+
     def initialize(
       @config : Config,
       @parallel : Bool,
@@ -24,7 +26,7 @@ module CoverageReporter
 
     def send_request(dry_run : Bool = false)
       data = build_request
-      api_url = Api.uri("api/#{API_VERSION}/jobs")
+      api_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
 
       Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
       Log.info "🚀 Posting coverage data to #{api_url}"
