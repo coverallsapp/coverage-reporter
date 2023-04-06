@@ -2,7 +2,7 @@ require "./base_parser"
 
 module CoverageReporter
   class GolangParser < BaseParser
-    COVERAGE_RE = /^[\w.]+\/[\w.]+\/[\w.]+\/(?:v\d+\/)?(.*\.go):(\d+)\.\d+,(\d+)\.\d+\s+\d+\s+(\d+)/
+    COVERAGE_RE = /^[\w.-]+\/[\w.-]+\/[\w.-]+\/(?:v\d+\/)?(.*\.go):(\d+)\.\d+,(\d+)\.\d+\s+\d+\s+(\d+)/
 
     def globs : Array(String)
       [] of String
@@ -12,7 +12,7 @@ module CoverageReporter
       return false unless File.exists?(filename)
 
       File.open(filename, "r") do |f|
-        # 1st line can be "mode: set"
+        # 1st line can contain "mode:"
         2.times do
           return true if COVERAGE_RE.matches?(f.gets.to_s)
         end
