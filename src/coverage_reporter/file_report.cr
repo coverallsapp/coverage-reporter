@@ -3,6 +3,13 @@ module CoverageReporter
   class FileReport
     getter name, coverage, branches
 
+    # Platform-dependant separator.
+    # / - for POSIX
+    # \ - for Windows
+    #
+    # See `Path::SEPARATORS`
+    SEPARATOR = Path::SEPARATORS.first
+
     def initialize(
       @name : String,
       @coverage : Array(Int64?),
@@ -13,11 +20,15 @@ module CoverageReporter
 
     def to_h : Hash(Symbol, String | Array(Int64?) | Array(Int64))
       {
-        :name          => Path.new(@name.lstrip(File::SEPARATOR)).normalize.to_s,
+        :name          => path,
         :coverage      => @coverage,
         :branches      => @branches,
         :source_digest => @source_digest,
       }.compact
+    end
+
+    private def path : String
+      Path.posix(@name.sub(Dir.current, "").split(SEPARATOR).join('/')).normalize.to_s.lstrip('/')
     end
   end
 end
