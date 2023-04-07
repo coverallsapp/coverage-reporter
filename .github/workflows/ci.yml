@@ -57,4 +57,4 @@ jobs:
         COVERALLS_ENDPOINT: "https://staging.coveralls.io"
       run: |
         cd coverage
-        ../dist/coveralls --base-path src/coverage_reporter/
+        ../dist/coveralls --debug --base-path src/coverage_reporter/
