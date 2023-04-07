@@ -88,7 +88,7 @@ module CoverageReporter::Cli
 
     # Flags
     property? no_logo = false
-    property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && ENV["COVERALLS_PARALLEL"] != "false")
+    property? parallel = !!(ENV["COVERALLS_PARALLEL"]?.presence && !ENV["COVERALLS_PARALLEL"].in?(["false", "0"]))
     property? parallel_done = false
     property? dry_run = false
     property? debug = false
