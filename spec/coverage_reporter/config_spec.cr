@@ -207,22 +207,25 @@ Spectator.describe CoverageReporter::Config do
       before_each do
         ENV["GITLAB_CI"] = "1"
         ENV["CI_JOB_NAME"] = "gitlab-job-id"
-        ENV["CI_JOB_ID"] = "gitlab-job-number"
+        ENV["CI_PIPELINE_IID"] = "123"
         ENV["CI_COMMIT_REF_NAME"] = "gitlab-branch"
         ENV["CI_COMMIT_SHA"] = "gitlab-commit-sha"
         ENV["CI_JOB_URL"] = "https://gitlab.com/job-url"
+        ENV["CI_PIPELINE_URL"] = "https://gitlab.com/pipeline-url"
+        ENV["CI_MERGE_REQUEST_IID"] = "3"
       end
 
       it "gets info from ENV" do
         expect(subject).to eq({
-          :repo_token         => repo_token,
-          :service_name       => "gitlab-ci",
-          :service_job_number => "gitlab-job-number",
-          :service_job_id     => "gitlab-job-id",
-          :service_branch     => "gitlab-branch",
-          :service_build_url  => "https://gitlab.com/job-url",
-          :service_job_url    => "https://gitlab.com/job-url",
-          :commit_sha         => "gitlab-commit-sha",
+          :repo_token           => repo_token,
+          :service_name         => "gitlab-ci",
+          :service_number       => "123",
+          :service_build_url    => "https://gitlab.com/pipeline-url",
+          :service_job_id       => "gitlab-job-id",
+          :service_job_url      => "https://gitlab.com/job-url",
+          :service_pull_request => "3",
+          :service_branch       => "gitlab-branch",
+          :commit_sha           => "gitlab-commit-sha",
         })
       end
     end
