@@ -8,9 +8,14 @@
 Metrics/CyclomaticComplexity:
   Description: Disallows methods with a cyclomatic complexity higher than `MaxComplexity`
   MaxComplexity: 10
-  Excluded:
-  - src/coverage_reporter/parsers/lcov_parser.cr
-  - src/coverage_reporter/parsers/gcov_parser.cr
-  - src/coverage_reporter/parsers/coveragepy_parser.cr
   Enabled: true
   Severity: Warning
+  Excluded:
+    - src/coverage_reporter/parsers/lcov_parser.cr
+    - src/coverage_reporter/parsers/gcov_parser.cr
+    - src/coverage_reporter/parsers/coveragepy_parser.cr
+
+Lint/PercentArrays:
+  Enabled: true
+  Excluded:
+    - spec/coverage_reporter/cli/cmd_spec.cr

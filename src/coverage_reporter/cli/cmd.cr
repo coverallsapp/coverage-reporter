@@ -7,20 +7,7 @@ module CoverageReporter::Cli
 
   def run(args = ARGV)
     opts = parse_args(args)
-    red = Colorize::Color256.new(196)
-    if opts.no_logo?
-      Log.info "⭐️ Coveralls.io Coverage Reporter v#{CoverageReporter::VERSION}"
-    else
-      Log.info " "
-      Log.info "⠀⠀⠀⠀⠀⠀#{"⣿".colorize(red)}"
-      Log.info "⠀⠀⠀⠀⠀#{"⣼⣿⣧".colorize(red)}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
-      Log.info "#{"⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶".colorize(red)}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
-      Log.info "⠀⠀#{"⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁".colorize(red)}⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
-      Log.info "⠀⠀#{"⢠⣿⣿⣿⠿⣿⣿⣿⡄".colorize(red)}⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
-      Log.info "⠀#{"⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀".colorize(red)}⠀⠀"
-      Log.info " "
-      Log.info "  v#{CoverageReporter::VERSION}\n\n"
-    end
+    greet(opts.no_logo?)
 
     reporter = CoverageReporter::Reporter.new(
       base_path: opts.base_path,
@@ -31,6 +18,7 @@ module CoverageReporter::Cli
       coverage_file: opts.filename,
       coverage_format: opts.format,
       dry_run: opts.dry_run?,
+      fail_empty: !opts.allow_empty?,
       job_flag_name: opts.job_flag_name,
       overrides: opts.overrides,
       parallel: opts.parallel?,
@@ -44,7 +32,10 @@ module CoverageReporter::Cli
     end
 
     reporter
-  rescue ex : BaseException | Socket::Error
+  rescue ex : BaseException
+    Log.error ex.message
+    exit(ex.fail? ? 1 : 0)
+  rescue ex : Socket::Error
     Log.error ex.message
     exit 1
   rescue ex : ArgumentError
@@ -92,6 +83,7 @@ module CoverageReporter::Cli
     property? parallel_done = false
     property? dry_run = false
     property? debug = false
+    property? allow_empty = false
 
     # CI options overrides
     property service_name : String?
@@ -170,6 +162,10 @@ module CoverageReporter::Cli
         opts.format = format.presence
       end
 
+      parser.on("--allow-empty", "Allow empty coverage results and exit 0") do
+        opts.allow_empty = true
+      end
+
       parser.on("--compare-ref=REF", "Git branch name to compare the coverage with") do |ref|
         opts.compare_ref = ref.presence
       end
@@ -236,5 +232,22 @@ module CoverageReporter::Cli
     puts
     puts option_parser
     exit 1
+  end
+
+  private def greet(no_logo : Bool)
+    red = Colorize::Color256.new(196)
+    if no_logo
+      Log.info "⭐️ Coveralls.io Coverage Reporter v#{CoverageReporter::VERSION}"
+    else
+      Log.info " "
+      Log.info "⠀⠀⠀⠀⠀⠀#{"⣿".colorize(red)}"
+      Log.info "⠀⠀⠀⠀⠀#{"⣼⣿⣧".colorize(red)}⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷"
+      Log.info "#{"⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶".colorize(red)}  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄"
+      Log.info "⠀⠀#{"⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁".colorize(red)}⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆"
+      Log.info "⠀⠀#{"⢠⣿⣿⣿⠿⣿⣿⣿⡄".colorize(red)}⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀"
+      Log.info "⠀#{"⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀".colorize(red)}⠀⠀"
+      Log.info " "
+      Log.info "  v#{CoverageReporter::VERSION}\n\n"
+    end
   end
 end

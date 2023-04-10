@@ -10,6 +10,7 @@ module CoverageReporter
       coverage_file,
       coverage_format,
       dry_run,
+      fail_empty,
       job_flag_name,
       overrides,
       parallel,
@@ -30,6 +31,7 @@ module CoverageReporter
       @coverage_file : String?,
       @coverage_format : String?,
       @dry_run : Bool,
+      @fail_empty : Bool,
       @job_flag_name : String?,
       @overrides : CI::Options?,
       @parallel : Bool,
@@ -48,7 +50,7 @@ module CoverageReporter
         coverage_format: coverage_format,
         base_path: base_path,
       ).parse
-      raise NoSourceFiles.new unless source_files.size > 0
+      raise NoSourceFiles.new(fail_empty) unless source_files.size > 0
 
       api = Api::Jobs.new(config, parallel, source_files, Git.info(config))
 
