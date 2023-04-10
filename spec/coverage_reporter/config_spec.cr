@@ -268,16 +268,25 @@ Spectator.describe CoverageReporter::Config do
     context "for Semaphore CI" do
       before_each do
         ENV["SEMAPHORE"] = "1"
-        ENV["SEMAPHORE_BUILD_NUMBER"] = "semaphore-build-number"
-        ENV["PULL_REQUEST_NUMBER"] = "semaphore-pr"
+        ENV["SEMAPHORE_WORKFLOW_ID"] = "semaphore-workflow-id"
+        ENV["SEMAPHORE_GIT_WORKING_BRANCH"] = "semaphore-branch"
+        ENV["SEMAPHORE_GIT_PR_NUMBER"] = "semaphore-pr"
+        ENV["SEMAPHORE_GIT_SHA"] = "semaphore-commit-sha"
+        ENV["SEMAPHORE_ORGANIZATION_URL"] = "https://myorg.semaphoreci.com"
+        ENV["SEMAPHORE_JOB_ID"] = "semaphore-job-id"
       end
 
       it "provides custom options" do
         expect(subject).to eq({
           :repo_token           => repo_token,
           :service_name         => "semaphore",
-          :service_job_id       => "semaphore-build-number",
+          :service_number       => "semaphore-workflow-id",
+          :service_job_id       => "semaphore-job-id",
           :service_pull_request => "semaphore-pr",
+          :service_branch       => "semaphore-branch",
+          :commit_sha           => "semaphore-commit-sha",
+          :service_build_url    => "https://myorg.semaphoreci.com/workflows/semaphore-workflow-id",
+          :service_job_url      => "https://myorg.semaphoreci.com/jobs/semaphore-job-id",
         })
       end
     end

@@ -10,8 +10,13 @@ module CoverageReporter
 
         Options.new(
           service_name: "semaphore",
-          service_job_id: ENV["SEMAPHORE_BUILD_NUMBER"]?,
-          service_pull_request: ENV["PULL_REQUEST_NUMBER"]?,
+          service_number: ENV["SEMAPHORE_WORKFLOW_ID"]?,
+          service_job_id: ENV["SEMAPHORE_JOB_ID"]?,
+          service_branch: ENV["SEMAPHORE_GIT_WORKING_BRANCH"]?,
+          service_pull_request: ENV["SEMAPHORE_GIT_PR_NUMBER"]?,
+          commit_sha: ENV["SEMAPHORE_GIT_SHA"]?,
+          service_build_url: "#{ENV["SEMAPHORE_ORGANIZATION_URL"]?}/workflows/#{ENV["SEMAPHORE_WORKFLOW_ID"]?}",
+          service_job_url: "#{ENV["SEMAPHORE_ORGANIZATION_URL"]?}/jobs/#{ENV["SEMAPHORE_JOB_ID"]?}"
         ).to_h
       end
     end
