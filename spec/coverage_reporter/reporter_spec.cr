@@ -11,6 +11,7 @@ Spectator.describe CoverageReporter::Reporter do
       coverage_file: coverage_file,
       coverage_format: coverage_format,
       dry_run: false,
+      fail_empty: fail_empty,
       job_flag_name: job_flag_name,
       overrides: nil,
       parallel: parallel,
@@ -25,6 +26,7 @@ Spectator.describe CoverageReporter::Reporter do
   let(config_path) { nil }
   let(coverage_file) { nil }
   let(coverage_format) { nil }
+  let(fail_empty) { true }
   let(job_flag_name) { nil }
   let(parallel) { false }
   let(repo_token) { "test-token" }
@@ -76,6 +78,22 @@ Spectator.describe CoverageReporter::Reporter do
       it "raises NoSourceFiles" do
         expect { subject.report }
           .to raise_error(CoverageReporter::Reporter::NoSourceFiles)
+      end
+
+      it "makes it fail" do
+        subject.report
+      rescue ex : CoverageReporter::Reporter::NoSourceFiles
+        expect(ex.fail?).to eq true
+      end
+
+      context "when fail_empty is false" do
+        let(fail_empty) { false }
+
+        it "doesn't fail" do
+          subject.report
+        rescue ex : CoverageReporter::Reporter::NoSourceFiles
+          expect(ex.fail?).to eq false
+        end
       end
     end
   end

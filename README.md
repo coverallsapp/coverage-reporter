@@ -77,25 +77,28 @@ coveralls --debug --dry-run
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter v0.2.11
+Coveralls Coverage Reporter v0.3.3
 Usage: coveralls [options]
     -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
     -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
     -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
     -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
-    -cr=REF, --compare-ref=REF       Git branch name to compare the coverage with
-    -cs=SHA, --compare-sha=SHA       Git commit SHA to compare the coverage with
     -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done)
-    -cf, --carryforward              Comma-separated list of parallel job flags
     -d, --done                       Call webhook after all parallel jobs (-p) done
+    -n, --no-logo                    Do not show Coveralls logo in logs
+    -q, --quiet                      Suppress all output
+    --format=FORMAT                  Force coverage file format, supported formats: lcov, simplecov, cobertura, jacoco, gcov, golang, python
+    --allow-empty                    Allow empty coverage results and exit 0
+    --compare-ref=REF                Git branch name to compare the coverage with
+    --compare-sha=SHA                Git commit SHA to compare the coverage with
+    --carryforward=FLAGS             Comma-separated list of parallel job flags
     --service-name=NAME              Build service name override
     --service-job-id=ID              Build job override
     --service-build-url=URL          Build URL override
+    --service-job-url=URL            Build job URL override
     --service-branch=NAME            Branch name override
     --service-pull-request=NUMBER    PR number override
-    -n, --no-logo                    Do not show Coveralls logo in logs
-    -q, --quiet                      Suppress all output
     --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
     -v, --version                    Show version
@@ -154,7 +157,7 @@ coveralls -f coverage.xml
 - Drone
 - Buildkite
 
-[Docs on environment variables for other CI support.](https://docs.coveralls.io/supported-ci-services#insert-your-ci-here)
+[Docs on environment variables for other CI support.](https://docs.coveralls.io/ci-services#option-1-use-common-environment-variables)
 
 ## Extending Support
 

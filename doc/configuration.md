@@ -19,7 +19,7 @@ These variables are always used if provided.
 | `COVERALLS_ENDPOINT`           | Coveralls API endpoint. Default: `https://coveralls.io` |
 | `COVERALLS_RUN_AT`             | A date string for the time that the job ran in RFC 3339 format. Default: current timestamp. |
 | `COVERALLS_FLAG_NAME`          | Job flag name, e.g. "Unit", "Functional", or "Integration". Will be shown in the Coveralls UI. |
-| `COVERALLS_PARALLEL`           | set to true when running jobs in parallel, requires a completion webhook. More info here: https://docs.coveralls.io/parallel-build-webhook |
+| `COVERALLS_PARALLEL`           | set to true when running jobs in parallel, requires a completion webhook. More info here: https://docs.coveralls.io/api-parallel-build-webhook |
 | `COVERALLS_CARRYFORWARD_FLAGS` | Comma-separated list of parallel job flags to use carry-forwarding for. |
 | `COVERALLS_COMPARE_REF`        | Git branch name to compare current report results with. |
 | `COVERALLS_COMPARE_SHA`        | Git commit SHA to compare current report results with. |
@@ -62,4 +62,7 @@ repo_name: myorg/myrepo
 
 # The name of your build system
 service_name: my-ci
+
+# Coveralls endpoint
+endpoint: https://coveralls.io
 ```

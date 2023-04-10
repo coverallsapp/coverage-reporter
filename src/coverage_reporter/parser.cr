@@ -26,6 +26,7 @@ module CoverageReporter
 
     class NotFound < BaseException
       def initialize(@filename : String)
+        super()
       end
 
       def message
@@ -35,6 +36,7 @@ module CoverageReporter
 
     class InvalidCoverageFormat < BaseException
       def initialize(@format : String?)
+        super()
       end
 
       def message
