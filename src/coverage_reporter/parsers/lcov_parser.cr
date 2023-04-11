@@ -29,8 +29,10 @@ module CoverageReporter
       lcov_info(filename).compact_map do |name, info|
         next report(name, info) if File.exists?(name)
 
-        lcov_related = Path[filename].parent / name
-        next report(lcov_related.to_s, info) if File.exists?(lcov_related)
+        Path[filename].parents.each do |parent|
+          lcov_related = parent / name
+          break report(lcov_related.to_s, info) if File.exists?(lcov_related)
+        end
       end
     end
 
