@@ -57,5 +57,35 @@ Spectator.describe CoverageReporter::LcovParser do
         })
       end
     end
+
+    context "when referenced files from the same folder" do
+      let(filename) { "spec/fixtures/lcov/test-current-folder.lcov" }
+
+      it "parses correctly" do
+        reports = subject.parse(filename)
+
+        expect(reports.size).to eq 1
+        expect(reports[0].to_h).to eq({
+          :name          => "spec/fixtures/lcov/test.js",
+          :coverage      => coverage,
+          :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+        })
+      end
+    end
+
+    context "when referenced files from the parent folder" do
+      let(filename) { "spec/fixtures/lcov/coverage/test.lcov" }
+
+      it "parses correctly" do
+        reports = subject.parse(filename)
+
+        expect(reports.size).to eq 1
+        expect(reports[0].to_h).to eq({
+          :name          => "spec/fixtures/lcov/test.js",
+          :coverage      => coverage,
+          :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+        })
+      end
+    end
   end
 end
