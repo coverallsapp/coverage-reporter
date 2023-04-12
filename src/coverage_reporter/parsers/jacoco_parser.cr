@@ -88,6 +88,7 @@ module CoverageReporter
               [line, branch_number, branch, hits]
             end
           end,
+          format: self.class.name,
         )
       end
     end

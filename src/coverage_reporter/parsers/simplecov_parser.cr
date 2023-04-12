@@ -56,6 +56,7 @@ module CoverageReporter
               coverage: coverage,
               branches: branches,
               source_digest: BaseParser.source_digest(name),
+              format: self.class.name,
             )
           )
         end

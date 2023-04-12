@@ -1,7 +1,7 @@
 module CoverageReporter
   # File coverage report entity for Coveralls API.
   class FileReport
-    getter name, coverage, branches
+    getter name, coverage, branches, format
 
     # Platform-dependant separator.
     # / - for POSIX
@@ -14,7 +14,8 @@ module CoverageReporter
       @name : String,
       @coverage : Array(Int64?),
       @branches : Array(Int64?) | Array(Int64) | Nil = nil,
-      @source_digest : String | Nil = nil
+      @source_digest : String | Nil = nil,
+      @format : String? = nil
     )
     end
 

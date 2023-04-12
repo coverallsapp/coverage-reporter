@@ -6,22 +6,18 @@ require "json"
 
 module CoverageReporter
   class Api::Jobs
-    @source : Array(Hash(Symbol, String | Array(Int64?) | Array(Int64)))
-
     API_VERSION = "v1"
 
     def initialize(
       @config : Config,
       @parallel : Bool,
-      source_files : Array(FileReport),
+      @source_files : Array(FileReport),
       @git_info : Hash(Symbol, Hash(Symbol, String) | String)
     )
       if @parallel
         Log.info "⭐️ Running in parallel mode. " \
                  "You must call the webhook after all jobs finish: `coveralls --done`"
       end
-
-      @source = source_files.map(&.to_h)
     end
 
     def send_request(dry_run : Bool = false)
@@ -37,7 +33,14 @@ module CoverageReporter
 
       res = Crest.post(
         api_url,
-        headers: {"Content-Type" => "application/json"},
+        headers: {
+          "Content-Type"                 => "application/json",
+          "X-Coveralls-Reporter"         => "coverage-reporter",
+          "X-Coveralls-Reporter-Version" => VERSION,
+          "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
+          "X-Coveralls-CI"               => @config[:service_name]?,
+          "X-Coveralls-Source"           => ENV["COVERALLS_SOURCE_HEADER"]?.presence || "cli",
+        }.compact,
         form: {:json => data.to_json.to_s}.to_json,
         tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
       )
@@ -48,7 +51,7 @@ module CoverageReporter
     private def build_request
       @config.to_h.merge(
         {
-          :source_files => @source,
+          :source_files => @source_files.map(&.to_h),
           :parallel     => @parallel,
           :git          => @git_info,
           :run_at       => ENV.fetch("COVERALLS_RUN_AT", Time::Format::RFC_3339.format(Time.local)),
