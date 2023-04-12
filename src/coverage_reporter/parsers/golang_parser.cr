@@ -51,6 +51,7 @@ module CoverageReporter
           coverage: (1..(lines.keys.max? || 0)).map do |line_no|
             lines[line_no]?
           end,
+          format: self.class.name,
         )
       end
     end

@@ -65,6 +65,7 @@ module CoverageReporter
           name: name,
           coverage: coverage.keys.sort!.map { |i| coverage[i]? },
           source_digest: source_digest,
+          format: self.class.name,
         ),
       ]
     end

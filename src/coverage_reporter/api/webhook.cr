@@ -25,7 +25,10 @@ module CoverageReporter
 
       res = Crest.post(
         webhook_url,
-        headers: {"Content-Type" => "application/json"},
+        headers: DEFAULT_HEADERS.merge({
+          "Content-Type"   => "application/json",
+          "X-Coveralls-CI" => @config[:service_name]?,
+        }.compact),
         form: data.to_json,
         tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
       )

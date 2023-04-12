@@ -1,4 +1,5 @@
 require "./parsers/*"
+require "./source_files"
 
 module CoverageReporter
   # General parser that can do the following:
@@ -71,21 +72,29 @@ module CoverageReporter
       files
     end
 
-    def parse : Array(FileReport)
+    def parse : SourceFiles
       if coverage_format
         Log.info("✏️ Forced coverage format: #{coverage_format}")
         parser_class = PARSERS.find { |klass| klass.name == coverage_format }
         if parser_class
           parser = parser_class.new(base_path)
-          return files.flat_map { |filename| parser.parse(filename) }
+          source_files = SourceFiles.new
+          files.each do |filename|
+            source_files.add(parser.parse(filename), filename)
+          end
+
+          return source_files
         else
           raise InvalidCoverageFormat.new(coverage_format)
         end
       end
 
-      files.flat_map do |filename|
-        parse_file(filename)
+      source_files = SourceFiles.new
+      files.each do |filename|
+        source_files.add(parse_file(filename), filename)
       end
+
+      source_files
     end
 
     private def parse_file(filename : String)
