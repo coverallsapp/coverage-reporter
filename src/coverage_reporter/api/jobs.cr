@@ -1,4 +1,4 @@
-require "../file_report"
+require "../source_files"
 require "../git"
 require "../config"
 require "crest"
@@ -11,7 +11,7 @@ module CoverageReporter
     def initialize(
       @config : Config,
       @parallel : Bool,
-      @source_files : Array(FileReport),
+      @source_files : SourceFiles,
       @git_info : Hash(Symbol, Hash(Symbol, String) | String)
     )
       if @parallel
@@ -33,14 +33,12 @@ module CoverageReporter
 
       res = Crest.post(
         api_url,
-        headers: {
+        headers: DEFAULT_HEADERS.merge({
           "Content-Type"                 => "application/json",
-          "X-Coveralls-Reporter"         => "coverage-reporter",
-          "X-Coveralls-Reporter-Version" => VERSION,
           "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
+          "X-Coveralls-Files"            => @source_files.filenames.join(","),
           "X-Coveralls-CI"               => @config[:service_name]?,
-          "X-Coveralls-Source"           => ENV["COVERALLS_SOURCE_HEADER"]?.presence || "cli",
-        }.compact,
+        }.compact),
         form: {:json => data.to_json.to_s}.to_json,
         tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
       )

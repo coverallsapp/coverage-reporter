@@ -10,7 +10,12 @@ Spectator.describe CoverageReporter::Api::Webhook do
 
   it "calls the /webhook endpoint" do
     WebMock.stub(:post, endpoint).with(
-      headers: {"Content-Type" => "application/json"},
+      headers: {
+        "Content-Type"                 => "application/json",
+        "X-Coveralls-Reporter"         => "coverage-reporter",
+        "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
+        "X-Coveralls-Source"           => "cli",
+      },
       body: {
         :repo_token   => "token",
         :carryforward => "flag1,flag2",

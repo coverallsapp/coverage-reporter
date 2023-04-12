@@ -7,16 +7,21 @@ Spectator.describe CoverageReporter::Api::Jobs do
   let(parallel) { true }
   let(git_info) { {:branch => "chore/add-tests", :head => {:message => "add tests"}} }
   let(source_files) do
-    [
-      CoverageReporter::FileReport.new(
-        name: "app/main.cr",
-        coverage: [1, 2, nil] of Int64?,
-      ),
-      CoverageReporter::FileReport.new(
-        name: "app/helper.cr",
-        coverage: [5, nil, 43] of Int64?,
-      ),
-    ]
+    CoverageReporter::SourceFiles.new(
+      [
+        CoverageReporter::FileReport.new(
+          name: "app/main.cr",
+          coverage: [1, 2, nil] of Int64?,
+          format: "cobertura",
+        ),
+        CoverageReporter::FileReport.new(
+          name: "app/helper.cr",
+          coverage: [5, nil, 43] of Int64?,
+          format: "cobertura",
+        ),
+      ],
+      "cobertura.xml",
+    )
   end
 
   let(endpoint) { "#{CoverageReporter::Config::DEFAULT_ENDPOINT}/api/#{CoverageReporter::Api::Jobs::API_VERSION}/jobs" }
@@ -32,7 +37,14 @@ Spectator.describe CoverageReporter::Api::Jobs do
 
   it "calls the /jobs endpoint" do
     WebMock.stub(:post, endpoint).with(
-      headers: {"Content-Type" => "application/json"},
+      headers: {
+        "Content-Type"                 => "application/json",
+        "X-Coveralls-Reporter"         => "coverage-reporter",
+        "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
+        "X-Coveralls-Coverage-Formats" => "cobertura",
+        "X-Coveralls-Files"            => "cobertura.xml",
+        "X-Coveralls-Source"           => "cli",
+      },
       body: {
         :json => config.to_h.merge({
           :source_files => [
