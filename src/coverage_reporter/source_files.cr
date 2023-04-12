@@ -7,7 +7,6 @@ module CoverageReporter
     getter filenames
 
     delegate :each, to: @source_files
-    delegate :push, to: @source_files
 
     def initialize(@source_files = [] of FileReport, filename : String? = nil)
       @filenames = [] of String
