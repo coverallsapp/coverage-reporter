@@ -1,0 +1,29 @@
+version: v1.0
+name: Initial Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: Tests
+    task:
+      prologue:
+        commands:
+          - sem-version ruby 3.2 -f
+      jobs:
+        - name: RSpec
+          commands:
+            - checkout
+            - bundle install --jobs 4 --retry 3 --no-cache
+            - bundle exec rspec
+            - curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz
+            - curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-checksums.txt
+            - cat coveralls-checksums.txt | grep coveralls-linux.tar.gz | sha256sum --check
+            - tar -xzf coveralls-linux.tar.gz
+            - ./coveralls
+            # More compact variant without hashsum check
+            # - curl -sL https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
+
+
+      secrets:
+        - name: coveralls

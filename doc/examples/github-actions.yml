@@ -19,8 +19,21 @@ jobs:
         npm install
         make test-coverage
 
-    - name: Report Coveralls
+    - name: Report Coveralls (Linux)
+      if: startsWith(runner.os, 'Linux')
       run: curl -sL https://coveralls.io/coveralls-linux.tar.gz | tar -xz && ./coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Report Coveralls (Windows)
+      if: startsWith(runner.os, 'Windows')
+      run: curl -sL https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.zip | zcat > ./coveralls.exe && ./coveralls.exe
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Report Coveralls (macOS)
+      if: startsWith(runner.os, 'macOS')
+      run: |
+        brew tap coverallsapp/coveralls --quiet
+        brew install coveralls --quiet
+        coveralls
