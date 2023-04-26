@@ -29,7 +29,12 @@ module CoverageReporter
     end
 
     private def path : String
-      Path.posix(@name.sub(Regex.new("^#{Dir.current}"), "").split(SEPARATOR).join('/')).normalize.to_s.lstrip('/')
+      name = @name
+      name = name.sub(Dir.current, "") if name.starts_with?(Dir.current)
+      backslash_pwd = Dir.current.split(SEPARATOR).join('/')
+      name = name.sub(backslash_pwd, "") if name.starts_with?(backslash_pwd)
+
+      Path.posix(name.split(SEPARATOR).join('/')).normalize.to_s.lstrip('/')
     end
   end
 end
