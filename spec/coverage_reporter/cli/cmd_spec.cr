@@ -4,12 +4,6 @@ require "../../../src/coverage_reporter/cli/cmd"
 Spectator.describe CoverageReporter::Cli do
   subject { described_class }
 
-  before_each do
-    ENV["COVERALLS_REPO_TOKEN"] = "test-token"
-  end
-
-  after_each { ENV.clear }
-
   describe ".run" do
     it "applies defaults" do
       reporter = subject.run %w(--dry-run)
