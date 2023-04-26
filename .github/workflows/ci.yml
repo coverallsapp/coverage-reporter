@@ -15,7 +15,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.7.2
+        crystal: 1.8.1
     - name: Install dependencies
       run: shards install
     - name: Run tests
@@ -29,7 +29,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.7.2
+        crystal: 1.8.1
     - name: Install dependencies
       run: shards install
     - name: Run linter
@@ -42,7 +42,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.7.2
+        crystal: 1.8.1
     - run: shards install
     - run: make
     - name: Install kcov
