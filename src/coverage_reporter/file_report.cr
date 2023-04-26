@@ -29,7 +29,7 @@ module CoverageReporter
     end
 
     private def path : String
-      Path.posix(@name.sub(Dir.current, "").split(SEPARATOR).join('/')).normalize.to_s.lstrip('/')
+      Path.posix(@name.sub(Regex.new("^#{Dir.current}"), "").split(SEPARATOR).join('/')).normalize.to_s.lstrip('/')
     end
   end
 end

@@ -52,7 +52,7 @@ module CoverageReporter
 
           reports.push(
             FileReport.new(
-              name: name.sub(Dir.current, ""),
+              name: name,
               coverage: coverage,
               branches: branches,
               source_digest: BaseParser.source_digest(name),

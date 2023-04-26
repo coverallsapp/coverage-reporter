@@ -55,7 +55,7 @@ module CoverageReporter
         coverage = get_coverage(name, hits)
 
         FileReport.new(
-          name: name.sub(Dir.current, ""),
+          name: name,
           coverage: coverage,
           source_digest: BaseParser.source_digest(name),
           format: self.class.name,
