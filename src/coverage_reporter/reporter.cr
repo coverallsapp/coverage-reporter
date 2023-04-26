@@ -71,7 +71,7 @@ module CoverageReporter
 
     private def config
       @config ||= Config.new(
-        repo_token: repo_token,
+        repo_token: dry_run ? "dry-run" : repo_token,
         flag_name: job_flag_name,
         compare_ref: compare_ref,
         compare_sha: compare_sha,
