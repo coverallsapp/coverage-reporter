@@ -101,7 +101,7 @@ module CoverageReporter
       end
 
       FileReport.new(
-        name: filename.sub(Dir.current, ""),
+        name: filename,
         coverage: coverage,
         branches: branches,
         source_digest: BaseParser.source_digest(filename),
