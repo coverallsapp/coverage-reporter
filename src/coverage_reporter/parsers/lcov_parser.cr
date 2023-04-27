@@ -48,14 +48,14 @@ module CoverageReporter
       source_file = nil : String?
       File.each_line(filename, chomp: true) do |line|
         case line
-        when /\ASF:(.+)/
+        when re("\\ASF:(.+)")
           source_file = base_path ? File.join(base_path, $1) : $1
-        when /\ADA:(\d+),(\d+)/
+        when re("\\ADA:(\\d+),(\\d+)")
           line_no = $1.to_i64
           count = $2.to_i64
           coverage = info[source_file].coverage
           coverage[line_no] = (coverage[line_no]? || 0.to_i64) + count
-        when /\ABRDA:(\d+),(\d+),(\d+),(\d+|-)/
+        when re("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)")
           line_no = $1.to_i64
           block_no = $2.to_i64
           branch_no = $3.to_i64
@@ -67,7 +67,7 @@ module CoverageReporter
           branches_block = branches_line[block_no] =
             branches_line[block_no]? || {} of Int64 => Int64
           branches_block[branch_no] = (branches_block[branch_no]? || 0.to_i64) + hits
-        when /\Aend_of_record/
+        when re("\\Aend_of_record")
           source_file = nil
         end
       end
@@ -107,6 +107,12 @@ module CoverageReporter
         source_digest: BaseParser.source_digest(filename),
         format: self.class.name,
       )
+    end
+
+    # Returns a regular expression that doesn't raise an error when string
+    # contains non-UTF characters.
+    private def re(regex : String) : Regex
+      Regex.new(regex, Regex::CompileOptions::MATCH_INVALID_UTF)
     end
   end
 end
