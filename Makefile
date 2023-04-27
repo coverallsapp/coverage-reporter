@@ -1,6 +1,6 @@
 UUID := $(shell id -u)
 GUID := $(shell id -g)
-CRYSTAL_VERSION := 1.8.1
+CRYSTAL_VERSION := 1.7.3
 
 compile:
 	crystal build src/cli.cr -o dist/coveralls --progress

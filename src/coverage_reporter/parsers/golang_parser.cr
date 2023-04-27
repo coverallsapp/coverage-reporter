@@ -19,6 +19,8 @@ module CoverageReporter
       end
 
       false
+    rescue Exception
+      false
     end
 
     def parse(filename : String) : Array(FileReport)

@@ -59,7 +59,6 @@ Spectator.describe CoverageReporter::Cli do
     it "accepts --format option" do
       reporter = subject.run %w(
         --format lcov
-        --file spec/fixtures/lcov/test.lcov
         --dry-run
       )
 
