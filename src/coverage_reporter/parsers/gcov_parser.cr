@@ -3,6 +3,11 @@ require "digest"
 
 module CoverageReporter
   class GcovParser < BaseParser
+    COVERAGE_RE = Regex.new(
+      "^\\s*([0-9]+|-|#####):\\s*([0-9]+):(.*)",
+      Regex::CompileOptions::MATCH_INVALID_UTF # don't raise error against non-UTF chars
+    )
+
     # Use *base_path* to join with paths found in reports.
     def initialize(@base_path : String?)
     end
@@ -24,7 +29,7 @@ module CoverageReporter
       name : String? = nil
       source_digest : String? = nil
       File.each_line(filename, chomp: true) do |line|
-        match = /^\s*([0-9]+|-|#####):\s*([0-9]+):(.*)/.match(line).try(&.to_a)
+        match = COVERAGE_RE.match(line).try(&.to_a)
         next if !match || !match.try(&.size) == 4
 
         count, number, text = match[1..3]

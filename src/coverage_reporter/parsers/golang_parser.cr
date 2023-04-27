@@ -2,7 +2,10 @@ require "./base_parser"
 
 module CoverageReporter
   class GolangParser < BaseParser
-    COVERAGE_RE = /^[\w.-]+\/[\w.-]+\/[\w.-]+\/(?:v\d+\/)?(.*\.go):(\d+)\.\d+,(\d+)\.\d+\s+\d+\s+(\d+)/
+    COVERAGE_RE = Regex.new(
+      "^[\\w.-]+\\/[\\w.-]+\\/[\\w.-]+\\/(?:v\\d+\\/)?(.*\\.go):(\\d+)\\.\\d+,(\\d+)\\.\\d+\\s+\\d+\\s+(\\d+)",
+      Regex::CompileOptions::MATCH_INVALID_UTF # don't raise error agains non-UTF chars
+    )
 
     def globs : Array(String)
       [] of String
