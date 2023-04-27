@@ -1,12 +1,12 @@
 UUID := $(shell id -u)
 GUID := $(shell id -g)
-CRYSTAL_VERSION := 1.7.3
+CRYSTAL_VERSION := 1.8.1
 
 compile:
 	crystal build src/cli.cr -o dist/coveralls --progress
 
 release_linux:
-	docker build . --tag coverage-reporter:1.0
+	docker build . --build-arg CRYSTAL_VERSION=$(CRYSTAL_VERSION) --tag coverage-reporter:1.0
 	docker run --rm -t -v $(shell pwd):/app \
 		-w /app --user $(UUID):$(GUID) \
 		coverage-reporter:1.0 \
