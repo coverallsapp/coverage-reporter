@@ -1,29 +1,25 @@
 UUID := $(shell id -u)
 GUID := $(shell id -g)
-CRYSTAL_VERSION := 1.8.1
+CRYSTAL_VERSION := 1.8
 
-compile:
-	crystal build src/cli.cr -o dist/coveralls --progress
-
-release_linux:
-	docker build . --build-arg CRYSTAL_VERSION=$(CRYSTAL_VERSION) --tag coverage-reporter:1.0
-	docker run --rm -t -v $(shell pwd):/app \
-		-w /app --user $(UUID):$(GUID) \
-		coverage-reporter:1.0 \
-		crystal build src/cli.cr -o dist/coveralls --release --static --no-debug --progress
-	cd dist && strip coveralls && tar -cvzf coveralls-linux.tar.gz coveralls
-
-release_mac:
-	crystal build src/cli.cr -o dist/coveralls --release --no-debug --progress
-	cd dist && strip coveralls && tar -cvzf coveralls-mac.tar.gz coveralls
-
-release: | release_linux release_mac
+build:
+	shards build coveralls --progress
 
 test:
 	crystal spec --order random --error-on-warnings
 
 lint:
 	bin/ameba
+
+release_linux:
+	docker build . --build-arg CRYSTAL_VERSION=$(CRYSTAL_VERSION) --tag coverage-reporter:1.0
+	docker run --rm -t -v $(shell pwd):/app \
+		-w /app --user $(UUID):$(GUID) \
+		coverage-reporter:1.0 \
+		shards build coveralls --production --release --static --no-debug --progress
+	cd bin && strip coveralls && tar -cvzf ../dist/coveralls-linux.tar.gz coveralls && cp coveralls ../dist/
+
+release: release_linux
 
 .ONESHELL:
 new_version:

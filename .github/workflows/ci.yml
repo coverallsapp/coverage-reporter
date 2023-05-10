@@ -15,7 +15,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.8.1
+        crystal: 1.8
     - name: Install dependencies
       run: shards install
     - name: Run tests
@@ -29,7 +29,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.8.1
+        crystal: 1.8
     - name: Install dependencies
       run: shards install
     - name: Run linter
@@ -42,9 +42,8 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.8.1
-    - run: shards install
-    - run: make
+        crystal: 1.8
+    - run: make build
     - name: Install kcov
       run: |
         sudo apt-get update
@@ -56,4 +55,4 @@ jobs:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
       run: |
         cd coverage
-        ../dist/coveralls --base-path src/coverage_reporter/
+        ../bin/coveralls --base-path src/coverage_reporter/
