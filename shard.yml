@@ -1,5 +1,7 @@
 name: coverage-reporter
 version: 0.3.9
+crystal: ">= 1.7.2"
+license: MIT
 
 authors:
   - Jordan Oroshiba <jordan@oroshiba.me>
@@ -22,6 +24,6 @@ development_dependencies:
   crystal-kcov:
     github: vici37/crystal-kcov
 
-crystal: ">= 1.7.2"
-
-license: MIT
+targets:
+  coveralls:
+    main: src/cli.cr

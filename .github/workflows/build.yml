@@ -68,9 +68,6 @@ jobs:
         with:
           crystal: 1.8
 
-      - name: Install dependencies
-        run: shards install --production
-
       - name: Build (Linux)
         run: make release_linux
 
