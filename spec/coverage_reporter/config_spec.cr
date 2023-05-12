@@ -128,7 +128,7 @@ Spectator.describe CoverageReporter::Config do
     context "for Circle CI" do
       before_each do
         ENV["CIRCLECI"] = "1"
-        ENV["CIRCLE_WORKFLOW_ID"] = "9"
+        ENV["CIRCLE_BUILD_NUM"] = "9"
         ENV["CI_PULL_REQUEST"] = "PR 987"
         ENV["CIRCLE_BUILD_NUM"] = "8"
         ENV["CIRCLE_BRANCH"] = "circle-branch"
@@ -153,7 +153,7 @@ Spectator.describe CoverageReporter::Config do
       # Imagine we are on Circle
       before_each do
         ENV["CIRCLECI"] = "1"
-        ENV["CIRCLE_WORKFLOW_ID"] = "circle-service-number"
+        ENV["CIRCLE_BUILD_NUM"] = "circle-service-number"
         ENV["CI_PULL_REQUEST"] = "PR 123"
         ENV["CIRCLE_BRANCH"] = "circle-branch"
         ENV["CI_BRANCH"] = "ci-branch"
