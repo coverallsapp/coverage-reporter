@@ -6,11 +6,22 @@ module CoverageReporter
   # See: [https://github.com/simplecov-ruby/simplecov](https://github.com/simplecov-ruby/simplecov)
   class SimplecovParser < BaseParser
     alias Coverage = Array(Int64?)
-    alias Branches = Hash(String, Hash(String, Int64?))
-    alias LinesAndBranches = Hash(String, Array(Int64?) | Branches)
-    alias Timestamp = Int64
-    alias FileStats = Hash(String, Coverage | LinesAndBranches)
-    alias SimplecovFormat = Hash(String, Hash(String, FileStats | Timestamp))
+
+    class ComplexCoverage
+      include JSON::Serializable
+
+      property lines : Coverage
+      property branches : Hash(String, Hash(String, Int64?))
+    end
+
+    class Report
+      include JSON::Serializable
+
+      property coverage : Hash(String, Coverage | ComplexCoverage)
+      property timestamp : Int64?
+    end
+
+    alias SimplecovReport = Hash(String, Report)
 
     def globs : Array(String)
       [
@@ -26,20 +37,20 @@ module CoverageReporter
     def parse(filename : String) : Array(FileReport)
       reports = [] of FileReport
 
-      data = SimplecovFormat.from_json(File.read(filename))
+      data = SimplecovReport.from_json(File.read(filename))
 
-      data.each do |_service, output|
-        output["coverage"].as(FileStats).each do |name, info|
+      data.each do |_service, report|
+        report.coverage.each do |name, info|
           coverage = [] of Int64?
           branches = [] of Int64?
 
           case info
           when Coverage
             coverage = info
-          when LinesAndBranches
-            coverage = info["lines"].as(Coverage)
-            if info["branches"]?
-              info["branches"].as(Branches).each do |branch, branch_info|
+          when ComplexCoverage
+            coverage = info.lines
+            unless info.branches.empty?
+              info.branches.each do |branch, branch_info|
                 branch_number = 0
                 line_number = branch.split(", ")[2].to_i64
                 branch_info.each_value do |hits|
