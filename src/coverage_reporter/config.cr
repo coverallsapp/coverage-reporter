@@ -59,6 +59,7 @@ module CoverageReporter
 
     delegate :[], to: to_h
     delegate :[]?, to: to_h
+    delegate :carryforward, to: @yaml
 
     def to_h
       @options ||=
