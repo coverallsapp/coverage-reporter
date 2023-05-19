@@ -65,4 +65,7 @@ service_name: my-ci
 
 # Coveralls endpoint
 endpoint: https://coveralls.io
+
+# Carryforward flags (or all to carry-forward all previous jobs)
+carryforward: all
 ```
