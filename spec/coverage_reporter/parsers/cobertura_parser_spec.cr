@@ -9,7 +9,9 @@ Spectator.describe CoverageReporter::CoberturaParser do
     it "matches correct filenames" do
       expect(subject.matches?("cobertura.xml")).to eq false
       expect(subject.matches?("spec/fixtures/cobertura/cobertura.xml")).to eq true
+      expect(subject.matches?("spec/fixtures/cobertura/cobertura-oneline.xml")).to eq true
       expect(subject.matches?("spec/fixtures/jacoco/jacoco-report.xml")).to eq false
+      expect(subject.matches?("spec/fixtures/jacoco/jacoco-oneline-report.xml")).to eq false
     end
   end
 
