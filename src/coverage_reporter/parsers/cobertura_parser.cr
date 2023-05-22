@@ -23,11 +23,11 @@ module CoverageReporter
 
     def matches?(filename) : Bool
       File.each_line(filename) do |line|
-        next if /\s*<\?xml\s+version=/.matches?(line)
-        next if /\s*<!--/.matches?(line)
-
         return true if /<!DOCTYPE\s+coverage.*cobertura/.matches?(line)
         return true if /<coverage/.matches?(line)
+
+        next if /\s*<\?xml\s+version=/.matches?(line)
+        next if /\s*<!--/.matches?(line)
 
         return false
       end

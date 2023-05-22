@@ -18,11 +18,11 @@ module CoverageReporter
 
     def matches?(filename) : Bool
       File.each_line(filename) do |line|
-        next if /\s*<\?xml\s+version=/.matches?(line)
-        next if /\s*<!--/.matches?(line)
-
         return true if /<!DOCTYPE.*jacoco/i.matches?(line)
         return true if /<report/.matches?(line)
+
+        next if /\s*<\?xml\s+version=/.matches?(line)
+        next if /\s*<!--/.matches?(line)
 
         return false
       end
