@@ -64,7 +64,7 @@ module CoverageReporter
     # from a CI-specific ENV, or can be set explicitly via `COVERALLS_SERVICE_NUMBER`
     # environment variable.
     def parallel_done
-      api = Api::Webhook.new(config, carryforward)
+      api = Api::Webhook.new(config, carryforward || config.carryforward)
 
       api.send_request(dry_run)
     end

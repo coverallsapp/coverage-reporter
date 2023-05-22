@@ -10,6 +10,7 @@ module CoverageReporter
     property repo_secret_token : String?
     property repo_name : String?
     property endpoint : String?
+    property carryforward : String?
 
     DEFAULT_LOCATION = ".coveralls.yml"
 
