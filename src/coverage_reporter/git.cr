@@ -67,8 +67,12 @@ module CoverageReporter
     end
 
     protected def command_line(command) : String
+      err = IO::Memory.new
       io = IO::Memory.new
-      Process.run(command, shell: true, output: io)
+      ret = Process.run(command, shell: true, output: io, error: err)
+      unless ret.success?
+        Log.error("Error running '#{command}'; return code: #{ret}")
+      end
       io.to_s
     end
 

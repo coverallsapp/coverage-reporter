@@ -3,7 +3,7 @@ GUID := $(shell id -g)
 CRYSTAL_VERSION := 1.8
 
 build:
-	shards build coveralls --progress
+	shards build coveralls --progress --error-trace
 
 test:
 	crystal spec --order random --error-on-warnings
