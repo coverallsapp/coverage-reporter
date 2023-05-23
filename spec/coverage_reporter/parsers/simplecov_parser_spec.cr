@@ -44,5 +44,19 @@ Spectator.describe CoverageReporter::SimplecovParser do
         })
       end
     end
+
+    context "with only lines" do
+      let(filename) { "spec/fixtures/simplecov/with-only-lines.resultset.json" }
+
+      it "parses correctly" do
+        reports = subject.parse(filename)
+        expect(reports.size).to eq 1
+        expect(reports[0].to_h).to eq({
+          :name     => "home/user/app/models/user.rb",
+          :branches => [] of Int64,
+          :coverage => [nil, 1, 1, 0, nil, nil, 1, 0, nil, nil, 1, 0, 0, nil, nil, nil],
+        })
+      end
+    end
   end
 end
