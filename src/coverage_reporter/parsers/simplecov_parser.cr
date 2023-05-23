@@ -11,7 +11,7 @@ module CoverageReporter
       include JSON::Serializable
 
       property lines : Coverage
-      property branches : Hash(String, Hash(String, Int64?))
+      property branches : Hash(String, Hash(String, Int64?)) | Nil
     end
 
     class Report
@@ -49,8 +49,9 @@ module CoverageReporter
             coverage = info
           when ComplexCoverage
             coverage = info.lines
-            unless info.branches.empty?
-              info.branches.each do |branch, branch_info|
+            info_branches = info.branches
+            if info_branches
+              info_branches.each do |branch, branch_info|
                 branch_number = 0
                 line_number = branch.split(", ")[2].to_i64
                 branch_info.each_value do |hits|
