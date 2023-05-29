@@ -5,10 +5,12 @@ module CoverageReporter
   module Log
     extend self
 
-    RED = Colorize::Color256.new(196)
+    RED    = Colorize::Color256.new(196) # ff0000
+    YELLOW = Colorize::Color256.new(220) # ffaf00
 
     enum Level
       Error
+      Warning
       Info
       Debug
     end
@@ -23,6 +25,10 @@ module CoverageReporter
 
     def info(*args)
       log(Level::Info, STDOUT, *args)
+    end
+
+    def warn(*args)
+      log(Level::Warning, STDERR, *(args.try(&.map(&.to_s.colorize(YELLOW)))))
     end
 
     def error(*args)

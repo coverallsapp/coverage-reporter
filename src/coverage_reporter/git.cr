@@ -72,10 +72,11 @@ module CoverageReporter
       io = IO::Memory.new
       ret = Process.run(command, shell: true, output: io, error: err)
       unless ret.success?
-        Log.debug("Error running command:".colorize(Log::RED))
-        Log.error("⚠️ #{command} (return code #{ret})")
+        Log.debug("Error running command:".colorize(Log::YELLOW))
         Log.debug
-        Log.debug(err.to_s.colorize(Log::RED))
+        Log.warn("⚠️ #{command} (return code #{ret})")
+        Log.debug
+        Log.debug(err.to_s.colorize(Log::YELLOW))
       end
       io.to_s
     end
