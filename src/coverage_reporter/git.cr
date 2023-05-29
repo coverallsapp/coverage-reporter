@@ -1,5 +1,6 @@
 require "io"
 require "process"
+require "colorize"
 
 module CoverageReporter
   # General Git information required for Coveralls API.
@@ -67,8 +68,16 @@ module CoverageReporter
     end
 
     protected def command_line(command) : String
+      err = IO::Memory.new
       io = IO::Memory.new
-      Process.run(command, shell: true, output: io)
+      ret = Process.run(command, shell: true, output: io, error: err)
+      unless ret.success?
+        Log.debug("Error running command:".colorize(Log::YELLOW))
+        Log.debug
+        Log.warn("⚠️ #{command} (return code #{ret})")
+        Log.debug
+        Log.debug(err.to_s.colorize(Log::YELLOW))
+      end
       io.to_s
     end
 

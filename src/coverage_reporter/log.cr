@@ -1,10 +1,16 @@
+require "colorize"
+
 module CoverageReporter
   # Console output manager.
   module Log
     extend self
 
+    RED    = Colorize::Color256.new(196) # ff0000
+    YELLOW = Colorize::Color256.new(220) # ffaf00
+
     enum Level
       Error
+      Warning
       Info
       Debug
     end
@@ -21,8 +27,12 @@ module CoverageReporter
       log(Level::Info, STDOUT, *args)
     end
 
+    def warn(*args)
+      log(Level::Warning, STDERR, *(args.try(&.map(&.to_s.colorize(YELLOW)))))
+    end
+
     def error(*args)
-      log(Level::Error, STDERR, *args)
+      log(Level::Error, STDERR, *(args.try(&.map(&.to_s.colorize(RED)))))
     end
 
     private def log(level, io, *args)
