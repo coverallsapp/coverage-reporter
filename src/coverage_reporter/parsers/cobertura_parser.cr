@@ -1,5 +1,5 @@
-require "xml"
 require "./base_parser"
+require "xml"
 
 module CoverageReporter
   class CoberturaParser < BaseParser
