@@ -105,7 +105,7 @@ module CoverageReporter
         return parser.parse(filename)
       end
 
-      Log.info "⚠️ Coverage reporter does not yet know how to process this file: #{filename}"
+      Log.warn "⚠️ Coverage reporter does not yet know how to process this file: #{filename}"
       [] of FileReport
     end
   end
