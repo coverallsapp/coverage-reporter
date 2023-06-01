@@ -24,21 +24,23 @@ module CoverageReporter
       data = build_request
       api_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
 
+      headers = DEFAULT_HEADERS.merge({
+        "Content-Type"                 => "application/json",
+        "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
+        "X-Coveralls-CI"               => @config[:service_name]?,
+      }.compact)
+
       Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
       Log.info "🚀 Posting coverage data to #{api_url}"
 
+      Log.debug "---\n⛑ Debug Headers:\n#{headers.to_pretty_json}"
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
       return if dry_run
 
       res = Crest.post(
         api_url,
-        headers: DEFAULT_HEADERS.merge({
-          "Content-Type"                 => "application/json",
-          "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
-          "X-Coveralls-Files"            => @source_files.filenames.join(","),
-          "X-Coveralls-CI"               => @config[:service_name]?,
-        }.compact),
+        headers: headers,
         form: {:json => data.to_json.to_s}.to_json,
         tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
       )
