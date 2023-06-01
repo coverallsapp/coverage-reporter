@@ -42,7 +42,6 @@ Spectator.describe CoverageReporter::Api::Jobs do
         "X-Coveralls-Reporter"         => "coverage-reporter",
         "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
         "X-Coveralls-Coverage-Formats" => "cobertura",
-        "X-Coveralls-Files"            => "cobertura.xml",
         "X-Coveralls-Source"           => "cli",
       },
       body: {
