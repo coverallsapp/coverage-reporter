@@ -2,6 +2,7 @@ require "../source_files"
 require "../git"
 require "../config"
 require "crest"
+require "compress/gzip"
 require "json"
 
 module CoverageReporter
@@ -37,7 +38,7 @@ module CoverageReporter
       api_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
 
       headers = DEFAULT_HEADERS.merge({
-        "Content-Type"                 => "application/json",
+        "Content-Type"                 => "application/gzip",
         "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
         "X-Coveralls-CI"               => @config[:service_name]?,
       }.compact)
@@ -50,11 +51,15 @@ module CoverageReporter
 
       return if dry_run
 
+      gzipped_json = String.build do |io|
+        Compress::Gzip::Writer.open(io, &.print(data.to_json.to_s))
+      end
+
       res = Crest.post(
         api_url,
         headers: headers,
-        form: {:json => data.to_json.to_s}.to_json,
-        tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
+        form: gzipped_json,
+        tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil,
       )
 
       Api.show_response(res)

@@ -36,31 +36,34 @@ Spectator.describe CoverageReporter::Api::Jobs do
   end
 
   it "calls the /jobs endpoint" do
+    data = config.to_h.merge({
+      :source_files => [
+        {
+          :name     => "app/main.cr",
+          :coverage => [1, 2, nil],
+        },
+        {
+          :name     => "app/helper.cr",
+          :coverage => [5, nil, 43],
+        },
+      ],
+      :parallel => parallel,
+      :git      => git_info,
+      :run_at   => ENV["COVERALLS_RUN_AT"],
+    }).to_json.to_s
+    body = String.build do |io|
+      Compress::Gzip::Writer.open(io, &.print(data))
+    end
+
     WebMock.stub(:post, endpoint).with(
       headers: {
-        "Content-Type"                 => "application/json",
+        "Content-Type"                 => "application/gzip",
         "X-Coveralls-Reporter"         => "coverage-reporter",
         "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
         "X-Coveralls-Coverage-Formats" => "cobertura",
         "X-Coveralls-Source"           => "cli",
       },
-      body: {
-        :json => config.to_h.merge({
-          :source_files => [
-            {
-              :name     => "app/main.cr",
-              :coverage => [1, 2, nil],
-            },
-            {
-              :name     => "app/helper.cr",
-              :coverage => [5, nil, 43],
-            },
-          ],
-          :parallel => parallel,
-          :git      => git_info,
-          :run_at   => ENV["COVERALLS_RUN_AT"],
-        }).to_json.to_s,
-      }.to_json,
+      body: body,
     ).to_return(status: 200, body: {:result => "ok"}.to_json)
 
     subject.send_request
