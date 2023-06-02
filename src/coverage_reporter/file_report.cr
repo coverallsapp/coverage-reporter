@@ -52,6 +52,7 @@ module CoverageReporter
       return name if base_path.blank?
       return name if File.exists?(name)
       return File.join(base_path, name) if Dir[base_path].empty?
+
       Dir[base_path].map { |dir| File.join(dir, name) }.each do |joined_name|
         return joined_name if File.exists?(joined_name)
       end
