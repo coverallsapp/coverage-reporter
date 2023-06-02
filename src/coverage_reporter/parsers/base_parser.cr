@@ -41,18 +41,22 @@ module CoverageReporter
       {{ @type.stringify.gsub(/(.*::)(\w+)Parser/, "\\2").downcase }}
     end
 
-    # Returns MD5 hashsum of a file.
-    def self.source_digest(filename : String) : String | Nil
-      return unless File.exists?(filename)
-
-      Digest::MD5.hexdigest(File.read(filename))
-    end
-
     # Initializes the parser.
     #
     # *base_path* can be used to join with all paths in coverage report in order
     # to properly reference a file.
-    def initialize(base_path : String? = nil)
+    def initialize(@base_path : String? = nil)
+    end
+
+    def file_report(name, coverage, branches = nil, source_digest = nil)
+      FileReport.new(
+        name: name,
+        coverage: coverage,
+        branches: branches,
+        source_digest: source_digest,
+        format: {{ @type.stringify.gsub(/(.*::)(\w+)Parser/, "\\2").downcase }},
+        base_path: @base_path,
+      )
     end
 
     # Returns an array of globs that will be used to look for coverage reports.

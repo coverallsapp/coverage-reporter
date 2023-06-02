@@ -63,12 +63,10 @@ module CoverageReporter
           end
 
           reports.push(
-            FileReport.new(
+            file_report(
               name: name,
               coverage: coverage,
               branches: branches,
-              source_digest: BaseParser.source_digest(name),
-              format: self.class.name,
             )
           )
         end

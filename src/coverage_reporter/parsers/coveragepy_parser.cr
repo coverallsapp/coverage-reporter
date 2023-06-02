@@ -54,11 +54,9 @@ module CoverageReporter
       lines.map do |name, hits|
         coverage = get_coverage(name, hits)
 
-        FileReport.new(
+        file_report(
           name: name,
           coverage: coverage,
-          source_digest: BaseParser.source_digest(name),
-          format: self.class.name,
         )
       end
     end
