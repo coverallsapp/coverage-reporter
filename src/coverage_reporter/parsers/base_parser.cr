@@ -48,6 +48,8 @@ module CoverageReporter
     def initialize(@base_path : String? = nil)
     end
 
+    # Creates a `FileReport` instance. Use this method instead of explicit
+    # creation with FileReport.new().
     def file_report(name, coverage, branches = nil, source_digest = nil)
       FileReport.new(
         name: name,
