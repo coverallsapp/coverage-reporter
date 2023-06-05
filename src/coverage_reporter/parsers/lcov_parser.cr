@@ -100,12 +100,10 @@ module CoverageReporter
         end
       end
 
-      FileReport.new(
+      file_report(
         name: filename,
         coverage: coverage,
         branches: branches,
-        source_digest: BaseParser.source_digest(filename),
-        format: self.class.name,
       )
     end
 

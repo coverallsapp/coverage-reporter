@@ -71,11 +71,10 @@ module CoverageReporter
       files.map do |name, info|
         branch_number : Int64 = 0
 
-        path = File.join(@base_path.to_s, name)
-        FileReport.new(
-          name: path,
+        # path = File.join(@base_path.to_s, name)
+        file_report(
+          name: name,
           coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
-          source_digest: BaseParser.source_digest(path),
           branches: info.branches.keys.sort!.flat_map do |line|
             branch = -1.to_i64
             info.branches[line].flat_map do |hits|
@@ -84,7 +83,6 @@ module CoverageReporter
               [line, branch_number, branch, hits]
             end
           end,
-          format: self.class.name,
         )
       end
     end

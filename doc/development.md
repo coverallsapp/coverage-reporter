@@ -17,10 +17,6 @@ require "./base_parser"
 
 module CoverageReporter
   class MyParser < BaseParser
-    # Use *base_path* to append to file names retrieved from the coverage report.
-    def initialize(@base_path : String)
-    end
-
     # Returns array of globs for automatic coverage report detection.
     def globs : Array(String)
       ["**/*/*.mycov", "*.mycov"]
@@ -33,6 +29,11 @@ module CoverageReporter
 
     def parse(filename : String) : Array(FileReport)
       # ... format-specific parsing
+
+      [
+        # provide an array of file_report
+        file_report(name: name, coverage: coverage)
+      ]
     end
   end
 end

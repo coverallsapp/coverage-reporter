@@ -50,13 +50,11 @@ module CoverageReporter
       end
 
       coverage.map do |name, lines|
-        FileReport.new(
+        file_report(
           name: name,
-          source_digest: BaseParser.source_digest(name),
           coverage: (1..(lines.keys.max? || 0)).map do |line_no|
             lines[line_no]?
           end,
-          format: self.class.name,
         )
       end
     end

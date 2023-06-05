@@ -39,14 +39,13 @@ module CoverageReporter
     def parse(filename : String) : Array(FileReport)
       data = CoverallsFormat.from_json(File.read(filename))
       data.source_files.map do |source_file|
-        name = File.join(@base_path.to_s, source_file.name)
+        # name = File.join(@base_path.to_s, source_file.name)
 
-        FileReport.new(
-          name: name,
+        file_report(
+          name: source_file.name,
           coverage: source_file.coverage,
           branches: source_file.branches,
-          source_digest: source_file.source_digest || BaseParser.source_digest(name),
-          format: self.class.name,
+          source_digest: source_file.source_digest,
         )
       end
     end

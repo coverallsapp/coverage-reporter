@@ -47,5 +47,21 @@ Spectator.describe CoverageReporter::JacocoParser do
         expect(reports[0].name).to match /^src\/main\/java\/com\/jacocodemo\//
       end
     end
+
+    context "with base_path as glob" do
+      let(filename) { "spec/fixtures/jacoco/jacoco-report-multiple-packages.xml" }
+      let(base_path) { "spec/fixtures/jacoco/**/*" }
+
+      it "finds all files" do
+        reports = subject.parse(filename)
+
+        expect(reports.size).to eq 3
+        expect(reports.map(&.name)).to eq [
+          "spec/fixtures/jacoco/sources/jacoco-project-1/com/proj1/MessageBuilder.java",
+          "spec/fixtures/jacoco/sources/jacoco-project-1/com/proj1/Info.java",
+          "spec/fixtures/jacoco/sources/jacoco-project-2/com/proj2/MessageService.java",
+        ]
+      end
+    end
   end
 end
