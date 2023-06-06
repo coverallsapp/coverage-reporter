@@ -106,7 +106,6 @@ Usage: coveralls report [file reports] [options]
     --allow-empty                    Allow empty coverage results and exit 0
     --compare-ref=REF                Git branch name to compare the coverage with
     --compare-sha=SHA                Git commit SHA to compare the coverage with
-    --carryforward=FLAGS             Comma-separated list of parallel job flags
     --service-name=NAME              Build service name override
     --service-job-id=ID              Build job override
     --service-build-url=URL          Build URL override

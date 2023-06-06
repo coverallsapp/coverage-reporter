@@ -25,6 +25,9 @@ Spectator.describe CoverageReporter::Cli do
     it "parses overrides" do
       reporter = subject.run %w(
         report
+        --parallel
+        -j super-flag
+        --base-path src/*
         --service-name=service-name
         --service-job-id=job-id
         --service-build-url=build-url
@@ -32,10 +35,15 @@ Spectator.describe CoverageReporter::Cli do
         --service-branch=branch
         --service-pull-request=pr
         --build-number=build-number
+        --compare-ref=develop
         --dry-run
       )
 
+      expect(reporter.job_flag_name).to eq "super-flag"
+      expect(reporter.parallel).to eq true
+      expect(reporter.compare_ref).to eq "develop"
       expect(reporter.dry_run).to eq true
+      expect(reporter.base_path).to eq "src/*"
       expect(reporter.overrides.try(&.to_h)).to eq({
         :service_name         => "service-name",
         :service_number       => "build-number",
@@ -84,11 +92,15 @@ Spectator.describe CoverageReporter::Cli do
     it "accepts --carryforward option" do
       reporter = subject.run %w(
         done
+        --build-number 3
         --carryforward "1,2,3"
         --dry-run
       )
 
       expect(reporter.carryforward).to eq "\"1,2,3\""
+      expect(reporter.overrides.try(&.to_h)).to eq({
+        :service_number => "3",
+      })
     end
 
     it "accepts --format option" do

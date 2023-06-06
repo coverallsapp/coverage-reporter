@@ -150,10 +150,6 @@ module CoverageReporter::Cli
           opts.compare_sha = sha.presence
         end
 
-        parser.on("--carryforward=FLAGS", "Comma-separated list of parallel job flags") do |flags|
-          opts.carryforward = flags
-        end
-
         parser.on("--service-name=NAME", "Build service name override") do |service_name|
           opts.service_name = service_name.presence
         end
