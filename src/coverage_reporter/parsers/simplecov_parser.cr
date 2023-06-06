@@ -52,7 +52,7 @@ module CoverageReporter
             info_branches = info.branches
             if info_branches
               info_branches.each do |branch, branch_info|
-                branch_number = 0.to_u64
+                branch_number = 0u64
                 line_number = branch.split(", ")[2].to_u64
                 branch_info.each_value do |hits|
                   branch_number += 1

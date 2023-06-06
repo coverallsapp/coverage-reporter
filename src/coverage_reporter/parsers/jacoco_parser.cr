@@ -54,7 +54,7 @@ module CoverageReporter
             cnt = cb + mb
             if cnt > 0
               cnt.times do |i|
-                branches[line_node.attributes["nr"].content.to_u64] << (i < cb ? 1 : 0).to_u64
+                branches[line_node.attributes["nr"].content.to_u64] << (i < cb ? 1u64 : 0u64)
               end
             end
 
@@ -74,7 +74,7 @@ module CoverageReporter
           name: name,
           coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
           branches: info.branches.keys.sort!.flat_map do |line|
-            branch = 0.to_u64
+            branch = 0u64
             info.branches[line].flat_map do |hits|
               branch_number += 1
               [line, branch_number, branch, hits]

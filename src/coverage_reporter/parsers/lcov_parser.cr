@@ -54,7 +54,7 @@ module CoverageReporter
           line_no = $1.to_u64
           count = $2.to_u64
           coverage = info[source_file].coverage
-          coverage[line_no] = (coverage[line_no]? || 0.to_u64) + count
+          coverage[line_no] = (coverage[line_no]? || 0u64) + count
         when re("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)")
           line_no = $1.to_u64
           block_no = $2.to_u32
@@ -66,7 +66,7 @@ module CoverageReporter
             branches[line_no]? || {} of UInt32 => Hash(UInt32, Hits)
           branches_block = branches_line[block_no] =
             branches_line[block_no]? || {} of UInt32 => Hits
-          branches_block[branch_no] = (branches_block[branch_no]? || 0.to_u64) + hits
+          branches_block[branch_no] = (branches_block[branch_no]? || 0u64) + hits
         when re("\\Aend_of_record")
           source_file = nil
         end

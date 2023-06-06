@@ -47,7 +47,7 @@ module CoverageReporter
                                    if text.strip == "}"
                                      nil
                                    else
-                                     0.to_u64
+                                     0u64
                                    end
                                  else
                                    count.to_u64
