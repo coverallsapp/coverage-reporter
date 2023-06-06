@@ -2,11 +2,11 @@ require "./base_parser"
 
 module CoverageReporter
   class LcovParser < BaseParser
-    alias LineInfo = Hash(Int64, Int64)
-    alias BranchInfo = Hash(Int64, LineInfo)
+    alias LineInfo = Hash(Line, Hits)
+    alias BranchInfo = Hash(UInt32, Hash(UInt32, Hits))
     record Info,
       coverage : LineInfo,
-      branches : Hash(Int64, BranchInfo)
+      branches : Hash(Line, BranchInfo)
 
     # Use *base_path* to join with paths found in reports.
     def initialize(@base_path : String?)
@@ -39,8 +39,8 @@ module CoverageReporter
     private def lcov_info(filename : String) : Hash(String, Info)
       info = Hash(String, Info).new do |h, k|
         h[k] = Info.new(
-          coverage: {} of Int64 => Int64,
-          branches: {} of Int64 => BranchInfo,
+          coverage: {} of Line => Hits,
+          branches: {} of Line => BranchInfo,
         )
       end
 
@@ -51,22 +51,22 @@ module CoverageReporter
         when re("\\ASF:(.+)")
           source_file = base_path ? File.join(base_path, $1) : $1
         when re("\\ADA:(\\d+),(\\d+)")
-          line_no = $1.to_i64
-          count = $2.to_i64
+          line_no = $1.to_u64
+          count = $2.to_u64
           coverage = info[source_file].coverage
-          coverage[line_no] = (coverage[line_no]? || 0.to_i64) + count
+          coverage[line_no] = (coverage[line_no]? || 0.to_u64) + count
         when re("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)")
-          line_no = $1.to_i64
-          block_no = $2.to_i64
-          branch_no = $3.to_i64
-          hits = $4 == "-" ? 0 : $4.to_i64
+          line_no = $1.to_u64
+          block_no = $2.to_u32
+          branch_no = $3.to_u32
+          hits = $4 == "-" ? 0 : $4.to_u64
 
           branches = info[source_file].branches
           branches_line = branches[line_no] =
-            branches[line_no]? || {} of Int64 => LineInfo
+            branches[line_no]? || {} of UInt32 => Hash(UInt32, Hits)
           branches_block = branches_line[block_no] =
-            branches_line[block_no]? || {} of Int64 => Int64
-          branches_block[branch_no] = (branches_block[branch_no]? || 0.to_i64) + hits
+            branches_line[block_no]? || {} of UInt32 => Hits
+          branches_block[branch_no] = (branches_block[branch_no]? || 0.to_u64) + hits
         when re("\\Aend_of_record")
           source_file = nil
         end
@@ -83,14 +83,14 @@ module CoverageReporter
       lines = 0
       File.each_line(filename) { lines += 1 }
 
-      coverage = Array(Int64?).new(lines, 0)
+      coverage = Array(Hits?).new(lines, 0)
       lines.times do |index|
         coverage[index] = info.coverage[index + 1]?
       end
 
-      branches = nil : Array(Int64?) | Nil
+      branches = nil : Array(Hits) | Nil
       unless info.branches.empty?
-        branches = [] of Int64?
+        branches = [] of Hits
         info.branches.each do |line, blocks|
           blocks.each do |block, branches_number|
             branches_number.each do |branch, hits|

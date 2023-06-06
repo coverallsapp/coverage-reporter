@@ -20,7 +20,7 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      coverage = {} of Int64 => Int64?
+      coverage = {} of Line => Hits?
       name : String? = nil
       File.each_line(filename, chomp: true) do |line|
         match = COVERAGE_RE.match(line).try(&.to_a)
@@ -29,7 +29,7 @@ module CoverageReporter
         count, number, text = match[1..3]
         next unless number && text && count
 
-        number = number.to_i64
+        number = number.to_u64
 
         if number == 0
           match = /([^:]+):(.*)$/.match(text).try(&.to_a)
@@ -47,10 +47,10 @@ module CoverageReporter
                                    if text.strip == "}"
                                      nil
                                    else
-                                     0.to_i64
+                                     0.to_u64
                                    end
                                  else
-                                   count.to_i64
+                                   count.to_u64
                                  end
         end
       end

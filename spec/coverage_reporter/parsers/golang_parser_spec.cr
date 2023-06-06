@@ -29,7 +29,7 @@ Spectator.describe CoverageReporter::GolangParser do
         nil, nil, nil, 0, 0, 0, 0, nil, 0, nil, nil, 0, 0, 0, 0, 0, nil, nil, 1, 2, 1, 1,
         nil, 1, 1, 0, 0, nil, 1, 1, 0, 0, nil, 1, 1, 1, 1, 1, 2, 1, 3, 1, 0, 0, nil, nil,
         1, 0, 0, nil, 1, 0, 0, nil, 1,
-      ] of Int64?
+      ] of UInt64?
     end
   end
 end

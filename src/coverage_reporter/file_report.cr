@@ -1,4 +1,7 @@
 module CoverageReporter
+  alias Hits = UInt64
+  alias Line = UInt64
+
   # File coverage report entity for Coveralls API.
   class FileReport
     getter coverage, branches, format
@@ -19,15 +22,15 @@ module CoverageReporter
 
     def initialize(
       @name : String,
-      @coverage : Array(Int64?),
-      @branches : Array(Int64?) | Array(Int64) | Nil = nil,
+      @coverage : Array(Hits?),
+      @branches : Array(Hits) | Nil = nil,
       @source_digest : String | Nil = nil,
       @format : String? = nil,
       @base_path : String? = nil
     )
     end
 
-    def to_h : Hash(Symbol, String | Array(Int64?) | Array(Int64))
+    def to_h : Hash(Symbol, String | Array(Hits?) | Array(Hits))
       {
         :name          => name,
         :coverage      => coverage,

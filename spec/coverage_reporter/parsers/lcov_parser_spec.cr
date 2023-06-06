@@ -28,7 +28,7 @@ Spectator.describe CoverageReporter::LcovParser do
        nil, 1, nil, 2, 2, 2, 1, nil, 2, nil, nil, 1, 3, 1, 1, nil, nil, 2, 2, 2, nil, 1,
        1, nil, 2, nil, nil, nil, 1, 1, nil, nil, 1, 50, 50, 50, 50, 20, nil, 50, 50, 2,
        nil, 50, 50, 50, 31, nil, 50, 24, nil, 50, nil, nil, nil, nil, nil, nil, nil, nil,
-       nil, nil, nil, nil, nil, nil, nil, nil, nil] of Int64?
+       nil, nil, nil, nil, nil, nil, nil, nil, nil] of UInt64?
     end
 
     it "parses correctly" do

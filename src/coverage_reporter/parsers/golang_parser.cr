@@ -27,8 +27,8 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      coverage = Hash(String, Hash(Int64, Int64)).new do |h, k|
-        h[k] = Hash(Int64, Int64).new do |hh, kk|
+      coverage = Hash(String, Hash(Line, Hits)).new do |h, k|
+        h[k] = Hash(Line, Hits).new do |hh, kk|
           hh[kk] = 0
         end
       end
@@ -40,9 +40,9 @@ module CoverageReporter
         next unless match
 
         name = match[1]
-        line_no_start = match[2].to_i64
-        line_no_end = match[3].to_i64
-        hits = match[4].to_i64
+        line_no_start = match[2].to_u64
+        line_no_end = match[3].to_u64
+        hits = match[4].to_u64
 
         (line_no_start..line_no_end).each do |line_no|
           coverage[name][line_no] += hits

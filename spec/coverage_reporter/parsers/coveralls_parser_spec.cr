@@ -21,7 +21,7 @@ Spectator.describe CoverageReporter::CoverallsParser do
       expect(result[0].to_h).to eq({
         :name          => "file.cpp",
         :coverage      => [nil, nil, 1, 1, 1, nil, 1, 1, 1],
-        :branches      => [] of Array(Int64?),
+        :branches      => [] of Array(UInt64),
         :source_digest => "74a2a8e2849b4ebf97c08c3da0d83703",
       })
     end
@@ -35,7 +35,7 @@ Spectator.describe CoverageReporter::CoverallsParser do
         expect(result[0].to_h).to eq({
           :name          => "#{base_path}/file.cpp",
           :coverage      => [nil, nil, 1, 1, 1, nil, 1, 1, 1],
-          :branches      => [] of Array(Int64?),
+          :branches      => [] of Array(UInt64),
           :source_digest => "74a2a8e2849b4ebf97c08c3da0d83703",
         })
       end

@@ -6,8 +6,8 @@ module CoverageReporter
       include JSON::Serializable
 
       property name : String
-      property coverage : Array(Int64?)
-      property branches : Array(Int64?) | Nil
+      property coverage : Array(Hits?)
+      property branches : Array(Hits) | Nil
       property source_digest : String?
     end
 
