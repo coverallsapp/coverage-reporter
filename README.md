@@ -57,16 +57,16 @@ coveralls report --repo-token=rg8ZznwNq05g3HDfknodmueeRciuiiPDE
 # Use concrete report file
 coveralls report coverage/lcov.info
 
-# Use parallel reports
-coveralls report project1/coverage/lcov.info --parallel
-coveralls report project2/coverage/lcov.info --parallel
+# Use parallel reports (must reference the same build number)
+coveralls report project1/coverage/lcov.info --parallel --build-number 1
+coveralls report project2/coverage/lcov.info --parallel --build-number 1
 # ...
-coveralls done
+coveralls done --build-number 1
 
 # Provide a job flag and use carry-forwarding
-coveralls report --job-flag "unit-tests" --parallel
-coveralls report --job-flag "integration-tests" --parallel
-coveralls done --carryforward "unit-tests,integration-tests"
+coveralls report --job-flag "unit-tests" --parallel --build-number 2
+coveralls report --job-flag "integration-tests" --parallel --build-number 2
+coveralls done --carryforward "unit-tests,integration-tests" --build-number 2
 
 # Testing options: no real reporting, print payload
 coveralls report --debug --dry-run

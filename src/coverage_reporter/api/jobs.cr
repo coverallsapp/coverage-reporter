@@ -16,7 +16,7 @@ module CoverageReporter
     )
       if @parallel
         Log.info "⭐️ Running in parallel mode. " \
-                 "You must call the webhook after all jobs finish: `coveralls --done`"
+                 "You must call the webhook after all jobs finish: `coveralls done --build-number #{@config.to_h[:service_number]?}`"
       end
     end
 

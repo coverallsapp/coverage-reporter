@@ -258,7 +258,7 @@ module CoverageReporter::Cli
         opts.job_flag_name = flag.presence
       end
 
-      parser.on("-p", "--parallel", "DEPRECATED: Set the parallel flag. Requires webhook for completion (coveralls --done)") do
+      parser.on("-p", "--parallel", "DEPRECATED: Set the parallel flag. Requires webhook for completion (coveralls done)") do
         opts.parallel = true
       end
 

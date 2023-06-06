@@ -105,7 +105,7 @@ module CoverageReporter
       parsers.each do |parser|
         next unless parser.matches?(filename)
 
-        Log.debug("☝️ Detected coverage format: #{parser.class.name}")
+        Log.debug("☝️ Detected coverage format: #{parser.class.name} - #{filename}")
         return parser.parse(filename)
       end
 
