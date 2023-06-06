@@ -50,7 +50,7 @@ module CoverageReporter
 
     # Creates a `FileReport` instance. Use this method instead of explicit
     # creation with FileReport.new().
-    def file_report(name, coverage : Array(Hits?), branches = nil, source_digest = nil)
+    def file_report(name, coverage, branches = nil, source_digest = nil)
       FileReport.new(
         name: name,
         coverage: coverage,
