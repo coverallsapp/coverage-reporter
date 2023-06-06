@@ -8,7 +8,7 @@ Spectator.describe CoverageReporter::Reporter do
       compare_ref: compare_ref,
       compare_sha: compare_sha,
       config_path: config_path,
-      coverage_file: coverage_file,
+      coverage_files: coverage_files,
       coverage_format: coverage_format,
       dry_run: false,
       fail_empty: fail_empty,
@@ -24,7 +24,7 @@ Spectator.describe CoverageReporter::Reporter do
   let(compare_ref) { nil }
   let(compare_sha) { nil }
   let(config_path) { nil }
-  let(coverage_file) { nil }
+  let(coverage_files) { nil }
   let(coverage_format) { nil }
   let(fail_empty) { true }
   let(job_flag_name) { nil }
@@ -73,7 +73,7 @@ Spectator.describe CoverageReporter::Reporter do
     end
 
     context "when report is empty" do
-      let(coverage_file) { "spec/fixtures/lcov/empty.lcov" }
+      let(coverage_files) { ["spec/fixtures/lcov/empty.lcov"] }
 
       it "raises NoSourceFiles" do
         expect { subject.report }

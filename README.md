@@ -49,27 +49,27 @@ Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releas
 
 ```bash
 # Automatic lookup for supported reports and sending them to https://coveralls.io
-coveralls
+coveralls report
 
 # Provide explicit repo token
-coveralls --repo-token=rg8ZznwNq05g3HDfknodmueeRciuiiPDE
+coveralls report --repo-token=rg8ZznwNq05g3HDfknodmueeRciuiiPDE
 
 # Use concrete report file
-coveralls --file coverage/lcov.info
+coveralls report coverage/lcov.info
 
 # Use parallel reports
-coveralls --file project1/coverage/lcov.info --parallel
-coveralls --file project2/coverage/lcov.info --parallel
+coveralls report project1/coverage/lcov.info --parallel
+coveralls report project2/coverage/lcov.info --parallel
 # ...
-coveralls --done
+coveralls done
 
 # Provide a job flag and use carry-forwarding
-coveralls --job-flag "unit-tests" --parallel
-coveralls --job-flag "integration-tests" --parallel
-coveralls --done --carryforward "unit-tests,integration-tests"
+coveralls report --job-flag "unit-tests" --parallel
+coveralls report --job-flag "integration-tests" --parallel
+coveralls done --carryforward "unit-tests,integration-tests"
 
 # Testing options: no real reporting, print payload
-coveralls --debug --dry-run
+coveralls report --debug --dry-run
 ```
 
 <details>
@@ -77,17 +77,31 @@ coveralls --debug --dry-run
 
 ```
 $ coveralls -h
-Coveralls Coverage Reporter v0.3.3
-Usage: coveralls [options]
-    -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
-    -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
-    -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
-    -fFILENAME, --file=FILENAME      Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)
-    -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
-    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls --done)
-    -d, --done                       Call webhook after all parallel jobs (-p) done
+Usage: coveralls [command] [options]
+    report                           Report coverage
+    done                             Close a parallel build
+    version                          Print version
+    --debug                          Debug mode: data being sent to Coveralls will be printed to console
+    --dry-run                        Dry run (no request sent)
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
+    -h, --help                       Show this help
+    -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
+    -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
+
+$ coveralls report -h
+Usage: coveralls report [file reports] [options]
+    --debug                          Debug mode: data being sent to Coveralls will be printed to console
+    --dry-run                        Dry run (no request sent)
+    -n, --no-logo                    Do not show Coveralls logo in logs
+    -q, --quiet                      Suppress all output
+    -h, --help                       Show this help
+    -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
+    -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
+    --build-number=ID                Build number
+    -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
+    -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
+    -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls done)
     --format=FORMAT                  Force coverage file format, supported formats: lcov, simplecov, cobertura, jacoco, gcov, golang, python
     --allow-empty                    Allow empty coverage results and exit 0
     --compare-ref=REF                Git branch name to compare the coverage with
@@ -99,10 +113,18 @@ Usage: coveralls [options]
     --service-job-url=URL            Build job URL override
     --service-branch=NAME            Branch name override
     --service-pull-request=NUMBER    PR number override
+
+$ coveralls done -h
+Usage: coveralls done [options]
     --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
-    -v, --version                    Show version
+    -n, --no-logo                    Do not show Coveralls logo in logs
+    -q, --quiet                      Suppress all output
     -h, --help                       Show this help
+    -rTOKEN, --repo-token=TOKEN      Sets coveralls repo token, overrides settings in yaml or environment variable
+    -cPATH, --config-path=PATH       Set the coveralls yaml config file location, will default to check '.coveralls.yml'
+    --carryforward=FLAGS             Comma-separated list of parallel job flags
+    --build-number=ID                Build number
 ```
 
 </details>

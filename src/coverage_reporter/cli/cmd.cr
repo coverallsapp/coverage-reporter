@@ -15,7 +15,7 @@ module CoverageReporter::Cli
       compare_ref: opts.compare_ref,
       compare_sha: opts.compare_sha,
       config_path: opts.config_path,
-      coverage_file: opts.filename,
+      coverage_files: opts.coverage_files.try(&.uniq),
       coverage_format: opts.format,
       dry_run: opts.dry_run?,
       fail_empty: !opts.allow_empty?,
@@ -67,7 +67,7 @@ module CoverageReporter::Cli
   end
 
   private class Opts
-    property filename : String?
+    property coverage_files : Array(String) | Nil
     property format : String?
     property repo_token : String?
     property base_path : String?
@@ -112,7 +112,7 @@ module CoverageReporter::Cli
       parser.banner = "Usage: coveralls [command] [options]"
 
       parser.on("report", "Report coverage") do
-        parser.banner = "Usage: coveralls report [options]"
+        parser.banner = "Usage: coveralls report [file reports] [options]"
 
         parser.on("--build-number=ID", "Build number") do |build_number|
           opts.service_number = build_number
@@ -126,15 +126,11 @@ module CoverageReporter::Cli
           opts.base_path = path
         end
 
-        parser.on("-fFILENAME", "--file=FILENAME", "Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
-          opts.filename = name.presence
-        end
-
         parser.on("-jFLAG", "--job-flag=FLAG", "Coverage job flag name, e.g. Unit Tests") do |flag|
           opts.job_flag_name = flag.presence
         end
 
-        parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls --done)") do
+        parser.on("-p", "--parallel", "Set the parallel flag. Requires webhook for completion (coveralls done)") do
           opts.parallel = true
         end
 
@@ -181,9 +177,13 @@ module CoverageReporter::Cli
         parser.on("--service-pull-request=NUMBER", "PR number override") do |service_pull_request|
           opts.service_pull_request = service_pull_request.presence
         end
+
+        parser.unknown_args do |unknown_args, after_dash_args|
+          opts.coverage_files = unknown_args + after_dash_args
+        end
       end
 
-      parser.on("done", "Close a parallel build") do
+      parser.on("done", "Call a webhook after all parallel reports") do
         parser.banner = "Usage: coveralls done [options]"
 
         opts.parallel_done = true
@@ -253,7 +253,9 @@ module CoverageReporter::Cli
       end
 
       parser.on("-fFILENAME", "--file=FILENAME", "DEPRECATED: Coverage artifact file to be reported, e.g. coverage/lcov.info (detected by default)") do |name|
-        opts.filename = name.presence
+        next if name.blank?
+
+        opts.coverage_files = [name]
       end
 
       parser.on("-jFLAG", "--job-flag=FLAG", "DEPRECATED: Coverage job flag name, e.g. Unit Tests") do |flag|

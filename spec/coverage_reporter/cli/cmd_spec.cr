@@ -22,6 +22,31 @@ Spectator.describe CoverageReporter::Cli do
       })
     end
 
+    it "parses overrides" do
+      reporter = subject.run %w(
+        report
+        --service-name=service-name
+        --service-job-id=job-id
+        --service-build-url=build-url
+        --service-job-url=job-url
+        --service-branch=branch
+        --service-pull-request=pr
+        --build-number=build-number
+        --dry-run
+      )
+
+      expect(reporter.dry_run).to eq true
+      expect(reporter.overrides.try(&.to_h)).to eq({
+        :service_name         => "service-name",
+        :service_number       => "build-number",
+        :service_job_id       => "job-id",
+        :service_build_url    => "build-url",
+        :service_job_url      => "job-url",
+        :service_branch       => "branch",
+        :service_pull_request => "pr",
+      })
+    end
+
     it "doesn't apply empty values as overrides" do
       reporter = subject.run %w(
         --service-name=
@@ -56,6 +81,16 @@ Spectator.describe CoverageReporter::Cli do
       expect(reporter.carryforward).to eq "\"1,2,3\""
     end
 
+    it "accepts --carryforward option" do
+      reporter = subject.run %w(
+        done
+        --carryforward "1,2,3"
+        --dry-run
+      )
+
+      expect(reporter.carryforward).to eq "\"1,2,3\""
+    end
+
     it "accepts --format option" do
       reporter = subject.run %w(
         --format lcov
@@ -71,7 +106,38 @@ Spectator.describe CoverageReporter::Cli do
         --dry-run
       )
 
-      expect(reporter.coverage_file).to eq "spec/fixtures/lcov/test.lcov"
+      expect(reporter.coverage_files).to eq ["spec/fixtures/lcov/test.lcov"]
+    end
+
+    it "reports multiple files" do
+      reporter = subject.run %w(
+        report
+        spec/fixtures/lcov/test.lcov
+        spec/fixtures/lcov/test.lcov
+        spec/fixtures/lcov/empty.lcov
+        --dry-run
+      )
+
+      expect(reporter.coverage_files).to eq [
+        "spec/fixtures/lcov/test.lcov",
+        "spec/fixtures/lcov/empty.lcov",
+      ]
+    end
+
+    it "reports multiple files after --" do
+      reporter = subject.run %w(
+        report
+        --dry-run
+        --
+        spec/fixtures/lcov/test.lcov
+        spec/fixtures/lcov/test.lcov
+        spec/fixtures/lcov/empty.lcov
+      )
+
+      expect(reporter.coverage_files).to eq [
+        "spec/fixtures/lcov/test.lcov",
+        "spec/fixtures/lcov/empty.lcov",
+      ]
     end
   end
 end
