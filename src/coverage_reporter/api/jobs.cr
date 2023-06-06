@@ -14,9 +14,21 @@ module CoverageReporter
       @source_files : SourceFiles,
       @git_info : Hash(Symbol, Hash(Symbol, String) | String)
     )
+      service_number = @config.to_h[:service_number]?
       if @parallel
-        Log.info "⭐️ Running in parallel mode. " \
-                 "You must call the webhook after all jobs finish: `coveralls done --build-number #{@config.to_h[:service_number]?}`"
+        Log.info(
+          String.build do |io|
+            io << "⭐️ Running in parallel mode. "
+            if service_number
+              io << "You must call the webhook after all jobs finish: `coveralls done --build-number #{service_number}`"
+            end
+          end
+        )
+        unless service_number
+          Log.warn("⚠️ You won't be able to close the build because build number is empty.\n" \
+                   "⚠️ Provide --build-number option or COVERALLS_SERVICE_NUMBER environment variable to " \
+                   "create parallel jobs for one build and be able to close it.")
+        end
       end
     end
 
