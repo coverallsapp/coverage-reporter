@@ -29,13 +29,13 @@ Spectator.describe CoverageReporter::JacocoParser do
 
       expect(with_branches.coverage).to eq [
         nil, nil, 3, nil, nil, nil, 4, nil, 6, nil, 0, nil, nil, nil, 11, nil, nil, 3,
-      ] of Int64?
+      ] of UInt64?
       expect(with_branches.branches).to eq [
         9, 1, 0, 1,
         9, 2, 1, 1,
         9, 3, 2, 0,
         9, 4, 3, 0,
-      ] of Int64?
+      ] of UInt64?
     end
 
     context "with base_path" do

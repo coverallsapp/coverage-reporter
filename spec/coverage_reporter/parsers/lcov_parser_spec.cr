@@ -20,15 +20,15 @@ Spectator.describe CoverageReporter::LcovParser do
   describe "#parse" do
     let(filename) { "spec/fixtures/lcov/test.lcov" }
     let(coverage) do
-      [1, 1, 1, nil, 1, 66, 66, nil, nil, 1, 323, 63, 63, 63, 60, nil, 3, nil, 63, 32,
-       nil, 63, 63, 63, 3, nil, 63, 60, nil, 3, nil, 63, 27, 27, 27, nil, nil, 323, nil,
-       nil, 1, 5, 5, nil, 2, nil, nil, 3, 3, 1, 1, 1, 1, nil, 0, nil, nil, 2, 2, 2, 0,
-       nil, 2, nil, nil, 2, 2, nil, nil, nil, nil, 1, 1, 1, 1, 1, 1, nil, 1, 1, nil, 1,
-       87, 87, 6, 6, 6, 6, 9, 6, 6, nil, 81, nil, nil, nil, 1, 1, nil, nil, 1, 1, nil,
-       nil, 1, nil, 2, 2, 2, 1, nil, 2, nil, nil, 1, 3, 1, 1, nil, nil, 2, 2, 2, nil, 1,
-       1, nil, 2, nil, nil, nil, 1, 1, nil, nil, 1, 50, 50, 50, 50, 20, nil, 50, 50, 2,
-       nil, 50, 50, 50, 31, nil, 50, 24, nil, 50, nil, nil, nil, nil, nil, nil, nil, nil,
-       nil, nil, nil, nil, nil, nil, nil, nil, nil] of Int64?
+      [1, 1, 1, nil, 1, 66, 66, nil, nil, 1, 323, 18446744073709551615u64, 63, 63, 60,
+       nil, 3, nil, 63, 32, nil, 63, 63, 63, 3, nil, 63, 60, nil, 3, nil, 63, 27, 27, 27,
+       nil, nil, 323, nil, nil, 1, 5, 5, nil, 2, nil, nil, 3, 3, 1, 1, 1, 1, nil, 0, nil,
+       nil, 2, 2, 2, 0, nil, 2, nil, nil, 2, 2, nil, nil, nil, nil, 1, 1, 1, 1, 1, 1, nil,
+       1, 1, nil, 1, 87, 87, 6, 6, 6, 6, 9, 6, 6, nil, 81, nil, nil, nil, 1, 1, nil, nil,
+       1, 1, nil, nil, 1, nil, 2, 2, 2, 1, nil, 2, nil, nil, 1, 3, 1, 1, nil, nil, 2, 2,
+       2, nil, 1, 1, nil, 2, nil, nil, nil, 1, 1, nil, nil, 1, 50, 50, 50, 50, 20, nil,
+       50, 50, 2, nil, 50, 50, 50, 31, nil, 50, 24, nil, 50, nil, nil, nil, nil, nil,
+       nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil] of UInt64?
     end
 
     it "parses correctly" do

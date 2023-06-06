@@ -30,7 +30,7 @@ Spectator.describe CoverageReporter::CoberturaParser do
       expect(with_branches.coverage).to eq [
         nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil,
         0, nil, 0, nil, 1, nil, 1, 0, 0, 0, nil, nil, nil, nil, 1, 0, 0, 1, 1,
-      ] of Int64?
+      ] of UInt64?
       expect(with_branches.branches).to eq [
         15, 1, 0, 0,
         17, 2, 0, 0,
@@ -41,18 +41,18 @@ Spectator.describe CoverageReporter::CoberturaParser do
         31, 7, 0, 0,
         32, 8, 0, 1,
         33, 9, 0, 1,
-      ] of Int64?
+      ] of UInt64?
 
       with_branches_on_one_line = reports.find! do |report|
         report.name == "org/scoverage/samples/InstrumentLoader.scala"
       end
       expect(with_branches_on_one_line.coverage).to eq [
         nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil, 1, nil, 1,
-      ] of Int64?
+      ] of UInt64?
       expect(with_branches_on_one_line.branches).to eq [
         12, 1, 0, 1,
         12, 2, 1, 0,
-      ] of Int64?
+      ] of UInt64?
     end
 
     context "with base_path" do

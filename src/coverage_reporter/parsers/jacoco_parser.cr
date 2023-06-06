@@ -4,8 +4,8 @@ require "./base_parser"
 module CoverageReporter
   class JacocoParser < BaseParser
     record Info,
-      coverage : Hash(Int64, Int64),
-      branches : Hash(Int64, Array(Int64))
+      coverage : Hash(Line, Hits),
+      branches : Hash(Line, Array(Hits))
 
     def globs : Array(String)
       ["**/*/jacoco*.xml"]
@@ -34,8 +34,8 @@ module CoverageReporter
 
       files = Hash(String, Info).new do |h, k|
         h[k] = Info.new(
-          coverage: {} of Int64 => Int64,
-          branches: {} of Int64 => Array(Int64),
+          coverage: {} of Line => Hits,
+          branches: {} of Line => Array(Hits),
         )
       end
 
@@ -45,21 +45,21 @@ module CoverageReporter
         node.xpath_nodes("sourcefile").each do |sourcefile_node|
           file = sourcefile_node.attributes["name"].content
           name = "#{dir}/#{file}"
-          coverage = Hash(Int64, Int64).new { |hh, kk| hh[kk] = 0 }
-          branches = Hash(Int64, Array(Int64)).new { |hh, kk| hh[kk] = [] of Int64 }
+          coverage = Hash(Line, Hits).new { |hh, kk| hh[kk] = 0 }
+          branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
 
           sourcefile_node.xpath_nodes("line").each do |line_node|
-            cb = line_node.attributes["cb"].content.to_i64
-            mb = line_node.attributes["mb"].content.to_i64
+            cb = line_node.attributes["cb"].content.to_u64
+            mb = line_node.attributes["mb"].content.to_u64
             cnt = cb + mb
             if cnt > 0
               cnt.times do |i|
-                branches[line_node.attributes["nr"].content.to_i64] << (i < cb ? 1 : 0)
+                branches[line_node.attributes["nr"].content.to_u64] << (i < cb ? 1u64 : 0u64)
               end
             end
 
-            coverage[line_node.attributes["nr"].content.to_i64] =
-              line_node.attributes["ci"].content.to_i64
+            coverage[line_node.attributes["nr"].content.to_u64] =
+              line_node.attributes["ci"].content.to_u64
           end
 
           files[name].coverage.merge!(coverage)
@@ -68,17 +68,18 @@ module CoverageReporter
       end
 
       files.map do |name, info|
-        branch_number : Int64 = 0
+        branch_number : Hits = 0
 
         file_report(
           name: name,
           coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
           branches: info.branches.keys.sort!.flat_map do |line|
-            branch = -1.to_i64
+            branch = 0u64
             info.branches[line].flat_map do |hits|
               branch_number += 1
-              branch += 1
               [line, branch_number, branch, hits]
+            ensure
+              branch += 1
             end
           end,
         )

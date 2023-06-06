@@ -5,13 +5,13 @@ module CoverageReporter
   #
   # See: [https://github.com/simplecov-ruby/simplecov](https://github.com/simplecov-ruby/simplecov)
   class SimplecovParser < BaseParser
-    alias Coverage = Array(Int64?)
+    alias Coverage = Array(Hits?)
 
     class ComplexCoverage
       include JSON::Serializable
 
       property lines : Coverage
-      property branches : Hash(String, Hash(String, Int64?)) | Nil
+      property branches : Hash(String, Hash(String, Hits)) | Nil
     end
 
     class Report
@@ -41,8 +41,8 @@ module CoverageReporter
 
       data.each do |_service, report|
         report.coverage.each do |name, info|
-          coverage = [] of Int64?
-          branches = [] of Int64?
+          coverage = [] of Hits?
+          branches = [] of Hits
 
           case info
           when Coverage
@@ -52,8 +52,8 @@ module CoverageReporter
             info_branches = info.branches
             if info_branches
               info_branches.each do |branch, branch_info|
-                branch_number = 0
-                line_number = branch.split(", ")[2].to_i64
+                branch_number = 0u64
+                line_number = branch.split(", ")[2].to_u64
                 branch_info.each_value do |hits|
                   branch_number += 1
                   branches.push(line_number, 0, branch_number, hits)

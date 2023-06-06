@@ -31,18 +31,18 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      lines = {} of String => Array(Int64)
+      lines = {} of String => Array(Hits)
 
       DB.open "sqlite3://#{filename}" do |db|
         db.query(QUERY) do |rs|
           rs.each do
             name = rs.read(String)
             numbits = rs.read(Slice(UInt8))
-            nums = [] of Int64
+            nums = [] of Hits
             numbits.each_with_index do |byte, byte_i|
               8.times do |bit_i|
                 if byte & (1 << bit_i) != 0
-                  nums << (byte_i * 8 + bit_i).to_i64
+                  nums << (byte_i * 8 + bit_i).to_u64
                 end
               end
             end
@@ -61,10 +61,10 @@ module CoverageReporter
       end
     end
 
-    private def get_coverage(name : String, hits : Array(Int64)) : Array(Int64?)
-      coverage = {} of Int64 => Int64?
+    private def get_coverage(name : String, hits : Array(Hits)) : Array(Hits?)
+      coverage = {} of Line => Hits?
 
-      line_no = 1
+      line_no = 1.to_u64
       under_def = false
       docstring = false
       brackets = 0
@@ -137,7 +137,7 @@ module CoverageReporter
     rescue File::NotFoundError
       Log.error("Couldn't open file #{name}")
 
-      [] of Int64?
+      [] of Hits?
     end
   end
 end
