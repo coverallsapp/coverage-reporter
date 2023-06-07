@@ -8,7 +8,7 @@ module CoverageReporter
   #
   # New parsers can be easily added. See `BaseParser` for details.
   class Parser
-    getter coverage_file : String?
+    getter coverage_files : Array(String) | Nil
     getter coverage_format : String?
     getter base_path : String?
     getter parsers : Array(BaseParser)
@@ -46,19 +46,23 @@ module CoverageReporter
       end
     end
 
-    def initialize(@coverage_file : String?, @coverage_format : String?, @base_path : String?)
+    def initialize(@coverage_files : Array(String) | Nil, @coverage_format : String?, @base_path : String?)
       @parsers = PARSERS.map(&.new(@base_path)).to_a
     end
 
     # Returns coverage report files that can be parsed by utility.
     def files : Array(String)
-      if custom_file = coverage_file
-        if !File.exists?(custom_file)
-          raise NotFound.new(custom_file)
+      custom_files = coverage_files
+      if custom_files && !custom_files.empty?
+        custom_files.each do |custom_file|
+          if !File.exists?(custom_file)
+            raise NotFound.new(custom_file)
+          end
+
+          Log.info "📄 Using coverage file: #{custom_file}"
         end
 
-        Log.info "📄 Using coverage file: #{custom_file}"
-        return [custom_file]
+        return custom_files
       end
 
       files = [] of String
@@ -101,7 +105,7 @@ module CoverageReporter
       parsers.each do |parser|
         next unless parser.matches?(filename)
 
-        Log.debug("☝️ Detected coverage format: #{parser.class.name}")
+        Log.debug("☝️ Detected coverage format: #{parser.class.name} - #{filename}")
         return parser.parse(filename)
       end
 

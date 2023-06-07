@@ -1,15 +1,15 @@
 require "../spec_helper"
 
 Spectator.describe CoverageReporter::Parser do
-  subject { described_class.new(coverage_file, coverage_format, base_path) }
+  subject { described_class.new(coverage_files, coverage_format, base_path) }
 
-  let(coverage_file) { nil }
+  let(coverage_files) { nil }
   let(coverage_format) { nil }
   let(base_path) { nil }
 
   describe "#parse" do
     context "for exact file" do
-      let(coverage_file) { "spec/fixtures/lcov/test.lcov" }
+      let(coverage_files) { ["spec/fixtures/lcov/test.lcov"] }
 
       it "returns reports for one file" do
         reports = subject.parse
@@ -18,7 +18,7 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "for non-existing file" do
-        let(coverage_file) { "spec/fixtures/oops/coverage" }
+        let(coverage_files) { ["spec/fixtures/oops/coverage"] }
 
         it "raises error" do
           expect { subject.parse }
@@ -27,7 +27,7 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "for an unknown file format" do
-        let(coverage_file) { "spec/fixtures/lcov/test.js" }
+        let(coverage_files) { ["spec/fixtures/lcov/test.js"] }
 
         it "returns reports for one file" do
           reports = subject.parse
@@ -46,7 +46,7 @@ Spectator.describe CoverageReporter::Parser do
         end
 
         context "when a file is specified" do
-          let(coverage_file) { "spec/fixtures/lcov/for-base-path-lcov" }
+          let(coverage_files) { ["spec/fixtures/lcov/for-base-path-lcov"] }
           let(base_path) { "spec/fixtures/lcov" }
 
           it "returns report only for specified file" do
@@ -57,7 +57,7 @@ Spectator.describe CoverageReporter::Parser do
         end
 
         context "when another format file specified" do
-          let(coverage_file) { "spec/fixtures/gcov/main.c.gcov" }
+          let(coverage_files) { ["spec/fixtures/gcov/main.c.gcov"] }
 
           it "returns empty report" do
             reports = subject.parse

@@ -7,7 +7,7 @@ module CoverageReporter
       compare_ref,
       compare_sha,
       config_path,
-      coverage_file,
+      coverage_files,
       coverage_format,
       dry_run,
       fail_empty,
@@ -28,7 +28,7 @@ module CoverageReporter
       @compare_ref : String?,
       @compare_sha : String?,
       @config_path : String?,
-      @coverage_file : String?,
+      @coverage_files : Array(String) | Nil,
       @coverage_format : String?,
       @dry_run : Bool,
       @fail_empty : Bool,
@@ -46,7 +46,7 @@ module CoverageReporter
     # current directory will be searched for all supported report formats.
     def report
       source_files = Parser.new(
-        coverage_file: coverage_file,
+        coverage_files: coverage_files,
         coverage_format: coverage_format,
         base_path: base_path,
       ).parse
