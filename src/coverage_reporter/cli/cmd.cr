@@ -193,7 +193,7 @@ module CoverageReporter::Cli
         end
       end
 
-      parser.on("version", "Print version") do
+      parser.on("version", "Show version") do
         puts VERSION
         exit 0
       end
