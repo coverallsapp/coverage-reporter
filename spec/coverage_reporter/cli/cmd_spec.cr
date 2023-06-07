@@ -82,22 +82,22 @@ Spectator.describe CoverageReporter::Cli do
 
     it "accepts --carryforward option" do
       reporter = subject.run %w(
-        --carryforward "1,2,3"
+        --carryforward 1,2,3
         --dry-run
       )
 
-      expect(reporter.carryforward).to eq "\"1,2,3\""
+      expect(reporter.carryforward).to eq "1,2,3"
     end
 
     it "accepts --carryforward option" do
       reporter = subject.run %w(
         done
         --build-number 3
-        --carryforward "1,2,3"
+        --carryforward 1,2,3
         --dry-run
       )
 
-      expect(reporter.carryforward).to eq "\"1,2,3\""
+      expect(reporter.carryforward).to eq "1,2,3"
       expect(reporter.overrides.try(&.to_h)).to eq({
         :service_number => "3",
       })
