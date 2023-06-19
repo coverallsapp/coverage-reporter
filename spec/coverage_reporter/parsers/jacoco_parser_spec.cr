@@ -5,6 +5,16 @@ Spectator.describe CoverageReporter::JacocoParser do
 
   let(base_path) { nil }
 
+  describe "#globs" do
+    it "finds all jacoco files" do
+      expect(Dir[subject.globs]).to contain(
+        "spec/fixtures/jacoco/jacoco-oneline-report.xml",
+        "spec/fixtures/jacoco/jacoco-report-multiple-packages.xml",
+        "spec/fixtures/jacoco/jacoco-report.xml",
+      )
+    end
+  end
+
   describe "#matches?" do
     it "matches correct filenames" do
       expect(subject.matches?("spec/fixtures/jacoco/jacoco-report.xml")).to eq true

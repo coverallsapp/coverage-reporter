@@ -3,6 +3,14 @@ require "../../spec_helper"
 Spectator.describe CoverageReporter::SimplecovParser do
   subject { described_class.new }
 
+  describe "#globs" do
+    it "finds all simplecov files" do
+      expect(Dir[subject.globs]).to contain(
+        "spec/fixtures/simplecov/.resultset.json",
+      )
+    end
+  end
+
   describe "#matches?" do
     it "matches correct filenames" do
       expect(subject.matches?(".resultset.jsonb")).to eq false

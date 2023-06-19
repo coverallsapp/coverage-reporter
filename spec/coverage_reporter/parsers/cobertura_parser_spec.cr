@@ -5,6 +5,15 @@ Spectator.describe CoverageReporter::CoberturaParser do
 
   let(base_path) { nil }
 
+  describe "#globs" do
+    it "finds all cobertura files" do
+      expect(Dir[subject.globs]).to contain(
+        "spec/fixtures/cobertura/cobertura.xml",
+        "spec/fixtures/cobertura/cobertura-coverage.xml",
+      )
+    end
+  end
+
   describe "#matches?" do
     it "matches correct filenames" do
       expect(subject.matches?("cobertura.xml")).to eq false

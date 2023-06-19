@@ -16,8 +16,8 @@ module CoverageReporter
       [
         "**/*/cobertura.xml",
         "cobertura.xml",
-        "**/*/coverage.xml",
-        "coverage.xml",
+        "**/*/*coverage.xml",
+        "*coverage.xml",
       ]
     end
 
