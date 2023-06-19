@@ -13,7 +13,8 @@ module CoverageReporter
         @service_number : String? = nil,
         @service_pull_request : String? = nil,
         @commit_sha : String? = nil,
-        @repo_name : String? = nil
+        @repo_name : String? = nil,
+        @run_attempt : String? = nil
       ); end
 
       def to_h : Hash(Symbol, String)
@@ -29,6 +30,7 @@ module CoverageReporter
           :service_pull_request => @service_pull_request,
           :commit_sha           => @commit_sha,
           :repo_name            => @repo_name,
+          :run_attempt          => @run_attempt,
         }.compact
       end
     end

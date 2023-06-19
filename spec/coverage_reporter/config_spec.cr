@@ -185,12 +185,14 @@ Spectator.describe CoverageReporter::Config do
         ENV["GITHUB_HEAD_REF"] = "fix/bug"
         ENV["GITHUB_SHA"] = "github-commit-sha"
         ENV["GITHUB_REF"] = "refs/pull/123"
+        ENV["GITHUB_RUN_ATTEMPT"] = "3"
       end
 
       it "gets info from ENV" do
         expect(subject).to eq({
           :repo_token           => repo_token,
           :repo_name            => "owner/repo",
+          :run_attempt          => "3",
           :service_name         => "github",
           :service_number       => "12345",
           :service_job_id       => "test",
