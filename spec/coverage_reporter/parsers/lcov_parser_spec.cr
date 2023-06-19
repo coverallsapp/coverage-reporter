@@ -5,6 +5,17 @@ Spectator.describe CoverageReporter::LcovParser do
 
   let(base_path) { nil }
 
+  describe "#globs" do
+    it "finds all lcov files" do
+      expect(Dir[subject.globs]).to contain(
+        "spec/fixtures/lcov/empty.lcov",
+        "spec/fixtures/lcov/test.lcov",
+        "spec/fixtures/lcov/coverage/test.lcov",
+        "spec/fixtures/lcov/test-current-folder.lcov",
+      )
+    end
+  end
+
   describe "#matches?" do
     it "matches correct filenames" do
       expect(subject.matches?("somefile.lcov")).to eq true
