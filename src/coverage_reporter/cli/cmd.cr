@@ -93,6 +93,7 @@ module CoverageReporter::Cli
     property service_job_url : String?
     property service_branch : String?
     property service_pull_request : String?
+    property service_attempt : String?
 
     def overrides : CI::Options
       CI::Options.new(
@@ -103,6 +104,7 @@ module CoverageReporter::Cli
         service_job_url: service_job_url,
         service_branch: service_branch,
         service_pull_request: service_pull_request,
+        service_attempt: service_attempt,
       )
     end
   end
@@ -154,24 +156,28 @@ module CoverageReporter::Cli
           opts.service_name = service_name.presence
         end
 
-        parser.on("--service-job-id=ID", "Build job override") do |service_job_id|
-          opts.service_job_id = service_job_id.presence
+        parser.on("--job-id=ID", "Build job override") do |job_id|
+          opts.service_job_id = job_id.presence
         end
 
-        parser.on("--service-build-url=URL", "Build URL override") do |service_build_url|
-          opts.service_build_url = service_build_url.presence
+        parser.on("--build-url=URL", "Build URL override") do |build_url|
+          opts.service_build_url = build_url.presence
         end
 
-        parser.on("--service-job-url=URL", "Build job URL override") do |service_job_url|
-          opts.service_job_url = service_job_url.presence
+        parser.on("--job-url=URL", "Build job URL override") do |job_url|
+          opts.service_job_url = job_url.presence
         end
 
-        parser.on("--service-branch=NAME", "Branch name override") do |service_branch|
-          opts.service_branch = service_branch.presence
+        parser.on("--branch=NAME", "Branch name override") do |branch|
+          opts.service_branch = branch.presence
         end
 
-        parser.on("--service-pull-request=NUMBER", "PR number override") do |service_pull_request|
-          opts.service_pull_request = service_pull_request.presence
+        parser.on("--pull-request=NUMBER", "PR number override") do |pull_request|
+          opts.service_pull_request = pull_request.presence
+        end
+
+        parser.on("--attempt=NUMBER", "Run attempt number") do |attempt|
+          opts.service_attempt = attempt
         end
 
         parser.unknown_args do |unknown_args, after_dash_args|
@@ -190,6 +196,10 @@ module CoverageReporter::Cli
 
         parser.on("--build-number=ID", "Build number") do |build_number|
           opts.service_number = build_number
+        end
+
+        parser.on("--attempt", "Run attempt number") do |attempt|
+          opts.service_attempt = attempt
         end
       end
 

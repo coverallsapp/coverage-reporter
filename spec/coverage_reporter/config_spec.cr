@@ -192,7 +192,7 @@ Spectator.describe CoverageReporter::Config do
         expect(subject).to eq({
           :repo_token           => repo_token,
           :repo_name            => "owner/repo",
-          :run_attempt          => "3",
+          :service_attempt      => "3",
           :service_name         => "github",
           :service_number       => "12345",
           :service_job_id       => "test",
