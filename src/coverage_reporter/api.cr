@@ -6,6 +6,14 @@ module CoverageReporter
   module Api
     extend self
 
+    DEFAULT_HEADERS = HTTP::Headers{
+      "X-Coveralls-Reporter"         => "coverage-reporter",
+      "X-Coveralls-Reporter-Version" => VERSION,
+      "X-Coveralls-Source"           => ENV["COVERALLS_SOURCE_HEADER"]?.presence || "cli",
+      "Accept"                       => "*/*",
+      "User-Agent"                   => "Crystal #{Crystal::VERSION}",
+    }
+
     class HTTPError < Exception
       getter status_code : Int32
       getter response : String
@@ -20,14 +28,6 @@ module CoverageReporter
     class InternalServerError < HTTPError; end
 
     class UnprocessableEntity < HTTPError; end
-
-    DEFAULT_HEADERS = HTTP::Headers{
-      "X-Coveralls-Reporter"         => "coverage-reporter",
-      "X-Coveralls-Reporter-Version" => VERSION,
-      "X-Coveralls-Source"           => ENV["COVERALLS_SOURCE_HEADER"]?.presence || "cli",
-      "Accept"                       => "*/*",
-      "User-Agent"                   => "Crystal #{Crystal::VERSION}",
-    }
 
     def handle_response(res)
       case res.status

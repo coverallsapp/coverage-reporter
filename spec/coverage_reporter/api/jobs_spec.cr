@@ -26,17 +26,17 @@ Spectator.describe CoverageReporter::Api::Jobs do
   end
 
   let(endpoint) { "#{CoverageReporter::Config::DEFAULT_ENDPOINT}/api/#{CoverageReporter::Api::Jobs::API_VERSION}/jobs" }
-
-  before_each do
-    ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)
+  let(boundary) { CoverageReporter::Api::Jobs::BOUNDARY }
+  let(headers) do
+    {
+      "Content-Type"                 => "multipart/form-data; boundary=#{boundary}",
+      "X-Coveralls-Reporter"         => "coverage-reporter",
+      "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
+      "X-Coveralls-Coverage-Formats" => "cobertura",
+      "X-Coveralls-Source"           => "cli",
+    }
   end
-
-  after_each do
-    WebMock.reset
-    ENV.clear
-  end
-
-  it "calls the /jobs endpoint" do
+  let(request_body) do
     data = config.to_h.merge({
       :source_files => [
         {
@@ -59,25 +59,49 @@ Spectator.describe CoverageReporter::Api::Jobs do
       end
     )
 
-    req_body = IO::Memory.new
-    boundary = CoverageReporter::Api::Jobs::BOUNDARY
-    HTTP::FormData.build(req_body, boundary) do |formdata|
+    body = IO::Memory.new
+    HTTP::FormData.build(body, boundary) do |formdata|
       metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
       headers = HTTP::Headers{"Content-Type" => "application/gzip"}
       formdata.file("json_file", json_file, metadata, headers)
     end
 
+    body.to_s
+  end
+
+  before_each do
+    ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)
+  end
+
+  after_each do
+    WebMock.reset
+    ENV.clear
+  end
+
+  it "calls the /jobs endpoint" do
     WebMock.stub(:post, endpoint).with(
-      headers: {
-        "Content-Type"                 => "multipart/form-data; boundary=#{boundary}",
-        "X-Coveralls-Reporter"         => "coverage-reporter",
-        "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
-        "X-Coveralls-Coverage-Formats" => "cobertura",
-        "X-Coveralls-Source"           => "cli",
-      },
-      body: req_body.to_s,
+      headers: headers,
+      body: request_body,
     ).to_return(status: 200, body: {:result => "ok"}.to_json)
 
     subject.send_request
+  end
+
+  it "raises error when 500 is received" do
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 500, body: {:result => "Internal Server Error"}.to_json)
+
+    expect { subject.send_request }.to raise_error(CoverageReporter::Api::InternalServerError)
+  end
+
+  it "raises error when 422 is received" do
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 422, body: {:result => "Unprocessable Entity"}.to_json)
+
+    expect { subject.send_request }.to raise_error(CoverageReporter::Api::UnprocessableEntity)
   end
 end
