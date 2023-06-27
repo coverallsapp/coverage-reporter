@@ -1,4 +1,5 @@
 require "../../spec_helper"
+require "http"
 
 Spectator.describe CoverageReporter::Api::Jobs do
   subject { described_class.new(config, parallel, source_files, git_info) }
@@ -55,15 +56,27 @@ Spectator.describe CoverageReporter::Api::Jobs do
       Compress::Gzip::Writer.open(io, &.print(data))
     end
 
+    io = IO::Memory.new
+    channel = Channel(String).new(1)
+
+    boundary = CoverageReporter::Api::Jobs::BOUNDARY
+    HTTP::FormData.build(io, boundary) do |formdata|
+      channel.send(formdata.content_type)
+
+      metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
+      headers = HTTP::Headers{"Content-Type" => "application/gzip"}
+      formdata.file("json_file", IO::Memory.new(body), metadata, headers)
+    end
+
     WebMock.stub(:post, endpoint).with(
       headers: {
-        "Content-Type"                 => "application/gzip",
+        "Content-Type"                 => "multipart/form-data; boundary=#{boundary}",
         "X-Coveralls-Reporter"         => "coverage-reporter",
         "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
         "X-Coveralls-Coverage-Formats" => "cobertura",
         "X-Coveralls-Source"           => "cli",
       },
-      body: body,
+      body: io.to_s,
     ).to_return(status: 200, body: {:result => "ok"}.to_json)
 
     subject.send_request

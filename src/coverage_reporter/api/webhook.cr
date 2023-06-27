@@ -1,4 +1,3 @@
-# require "crest"
 require "http"
 require "json"
 

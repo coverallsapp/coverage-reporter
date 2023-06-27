@@ -8,6 +8,7 @@ require "json"
 module CoverageReporter
   class Api::Jobs
     API_VERSION = "v1"
+    BOUNDARY    = "CoverageReporterBoundary".rjust(50, '-')
 
     def initialize(
       @config : Config,
@@ -56,7 +57,9 @@ module CoverageReporter
       end
 
       with_file(IO::Memory.new(gzipped_json)) do |content_type, body|
-        headers.merge!(HTTP::Headers{"Content-Type" => content_type})
+        # NOTE: Removing quotes from boundary -- required by Coveralls.io nginx rule
+        headers.merge!(HTTP::Headers{"Content-Type" => content_type.gsub("\"", "")})
+
         response = HTTP::Client.post(
           api_url,
           body: body,
@@ -84,11 +87,11 @@ module CoverageReporter
         channel = Channel(String).new(1)
 
         spawn do
-          HTTP::FormData.build(writer) do |formdata|
+          HTTP::FormData.build(writer, BOUNDARY) do |formdata|
             channel.send(formdata.content_type)
 
             metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
-            headers = HTTP::Headers{"Content-Type" => "application/x-gzip"}
+            headers = HTTP::Headers{"Content-Type" => "application/gzip"}
             formdata.file("json_file", gzfile, metadata, headers)
           end
 
