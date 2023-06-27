@@ -1,4 +1,5 @@
-require "crest"
+# require "crest"
+require "http"
 require "json"
 
 module CoverageReporter
@@ -22,18 +23,20 @@ module CoverageReporter
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
       return if dry_run
+      headers = DEFAULT_HEADERS.dup
+      headers.merge!(HTTP::Headers{
+        "Content-Type"   => "application/json",
+        "X-Coveralls-CI" => @config[:service_name]? || "unknown",
+      })
 
-      res = Crest.post(
+      res = HTTP::Client.post(
         webhook_url,
-        headers: DEFAULT_HEADERS.merge({
-          "Content-Type"   => "application/json",
-          "X-Coveralls-CI" => @config[:service_name]?,
-        }.compact),
-        form: data.to_json,
+        headers: headers,
+        body: data.to_json,
         tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
       )
 
-      Api.show_response(res)
+      Api.handle_response(res)
     end
   end
 end

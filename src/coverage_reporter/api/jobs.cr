@@ -1,7 +1,7 @@
 require "../source_files"
 require "../git"
 require "../config"
-require "crest"
+require "http"
 require "compress/gzip"
 require "json"
 
@@ -37,11 +37,11 @@ module CoverageReporter
       data = build_request
       api_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
 
-      headers = DEFAULT_HEADERS.merge({
-        "Content-Type"                 => "application/gzip",
+      headers = DEFAULT_HEADERS.dup
+      headers.merge!(HTTP::Headers{
         "X-Coveralls-Coverage-Formats" => @source_files.map(&.format.to_s).sort!.uniq!.join(","),
-        "X-Coveralls-CI"               => @config[:service_name]?,
-      }.compact)
+        "X-Coveralls-CI"               => @config[:service_name]? || "unknown",
+      })
 
       Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
       Log.info "🚀 Posting coverage data to #{api_url}"
@@ -55,14 +55,17 @@ module CoverageReporter
         Compress::Gzip::Writer.open(io, &.print(data.to_json.to_s))
       end
 
-      res = Crest.post(
-        api_url,
-        headers: headers,
-        form: gzipped_json,
-        tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil,
-      )
+      with_file(IO::Memory.new(gzipped_json)) do |content_type, body|
+        headers.merge!(HTTP::Headers{"Content-Type" => content_type})
+        response = HTTP::Client.post(
+          api_url,
+          body: body,
+          headers: headers,
+          tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
+        )
 
-      Api.show_response(res)
+        Api.handle_response(response)
+      end
     end
 
     private def build_request
@@ -74,6 +77,26 @@ module CoverageReporter
           :run_at       => ENV.fetch("COVERALLS_RUN_AT", Time::Format::RFC_3339.format(Time.local)),
         }
       )
+    end
+
+    private def with_file(gzfile, &)
+      IO.pipe do |reader, writer|
+        channel = Channel(String).new(1)
+
+        spawn do
+          HTTP::FormData.build(writer) do |formdata|
+            channel.send(formdata.content_type)
+
+            metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
+            headers = HTTP::Headers{"Content-Type" => "application/x-gzip"}
+            formdata.file("json_file", gzfile, metadata, headers)
+          end
+
+          writer.close
+        end
+
+        yield(channel.receive, reader)
+      end
     end
   end
 end

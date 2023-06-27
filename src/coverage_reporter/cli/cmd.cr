@@ -44,10 +44,10 @@ module CoverageReporter::Cli
     Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
     ERROR
     exit 1
-  rescue ex : Crest::InternalServerError
+  rescue ex : Api::InternalServerError
     Log.error "⚠️ Internal server error. Please contact Coveralls team."
     exit 1
-  rescue ex : Crest::UnprocessableEntity
+  rescue ex : Api::UnprocessableEntity
     Log.error <<-ERROR
     ---
     Error: #{ex.message}
@@ -57,6 +57,15 @@ module CoverageReporter::Cli
     This is often the is the result of an incorrectly set repo token.
     More info/troubleshooting here: https://docs.coveralls.io
     - 💛, Coveralls
+    ERROR
+    exit 1
+  rescue ex : Api::HTTPError
+    Log.error <<-ERROR
+    Unhandled HTTP error:
+    ---
+    Error: #{ex.message} (#{ex.status_code})
+    Message: #{ex.response}
+    ---
     ERROR
     exit 1
   rescue ex
