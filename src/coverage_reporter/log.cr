@@ -9,6 +9,7 @@ module CoverageReporter
     YELLOW = Colorize::Color256.new(220) # ffaf00
 
     enum Level
+      Suppress
       Error
       Warning
       Info

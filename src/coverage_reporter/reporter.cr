@@ -2,19 +2,38 @@ require "./*"
 
 module CoverageReporter
   class Reporter
-    getter base_path,
-      carryforward,
-      compare_ref,
-      compare_sha,
-      config_path,
-      coverage_files,
-      coverage_format,
-      dry_run,
-      fail_empty,
-      job_flag_name,
-      overrides,
-      parallel,
-      repo_token
+    struct Settings
+      getter base_path,
+        carryforward,
+        compare_ref,
+        compare_sha,
+        config_path,
+        coverage_files,
+        coverage_format,
+        dry_run,
+        fail_empty,
+        job_flag_name,
+        overrides,
+        parallel,
+        repo_token
+
+      def initialize(
+        @base_path : String? = nil,
+        @carryforward : String? = nil,
+        @compare_ref : String? = nil,
+        @compare_sha : String? = nil,
+        @config_path : String? = nil,
+        @coverage_files : Array(String) | Nil = nil,
+        @coverage_format : String? = nil,
+        @dry_run : Bool = false,
+        @fail_empty : Bool = false,
+        @job_flag_name : String? = nil,
+        @overrides : CI::Options? = nil,
+        @parallel : Bool = false,
+        @repo_token : String? = nil
+      )
+      end
+    end
 
     class NoSourceFiles < BaseException
       def message
@@ -22,21 +41,14 @@ module CoverageReporter
       end
     end
 
-    def initialize(
-      @base_path : String?,
-      @carryforward : String?,
-      @compare_ref : String?,
-      @compare_sha : String?,
-      @config_path : String?,
-      @coverage_files : Array(String) | Nil,
-      @coverage_format : String?,
-      @dry_run : Bool,
-      @fail_empty : Bool,
-      @job_flag_name : String?,
-      @overrides : CI::Options?,
-      @parallel : Bool,
-      @repo_token : String?
-    )
+    getter settings : Settings
+
+    def initialize(*args, **kwargs)
+      @settings = Settings.new(*args, **kwargs)
+    end
+
+    def configure(*args, **kwargs)
+      initialize(*args, **kwargs)
     end
 
     # Parses the coverage reports in the current directory or the given *coverage_file*
@@ -46,15 +58,15 @@ module CoverageReporter
     # current directory will be searched for all supported report formats.
     def report
       source_files = Parser.new(
-        coverage_files: coverage_files,
-        coverage_format: coverage_format,
-        base_path: base_path,
+        coverage_files: settings.coverage_files,
+        coverage_format: settings.coverage_format,
+        base_path: settings.base_path,
       ).parse
-      raise NoSourceFiles.new(fail_empty) unless source_files.size > 0
+      raise NoSourceFiles.new(settings.fail_empty) unless source_files.size > 0
 
-      api = Api::Jobs.new(config, parallel, source_files, Git.info(config))
+      api = Api::Jobs.new(config, settings.parallel, source_files, Git.info(config))
 
-      api.send_request(dry_run)
+      api.send_request(settings.dry_run)
     end
 
     # Reports that all parallel jobs were reported and Coveralls can aggregate
@@ -64,19 +76,19 @@ module CoverageReporter
     # from a CI-specific ENV, or can be set explicitly via `COVERALLS_SERVICE_NUMBER`
     # environment variable.
     def parallel_done
-      api = Api::Webhook.new(config, carryforward || config.carryforward)
+      api = Api::Webhook.new(config, settings.carryforward || config.carryforward)
 
-      api.send_request(dry_run)
+      api.send_request(settings.dry_run)
     end
 
     private def config
       @config ||= Config.new(
-        repo_token: dry_run ? "dry-run" : repo_token,
-        flag_name: job_flag_name,
-        compare_ref: compare_ref,
-        compare_sha: compare_sha,
-        path: config_path,
-        overrides: overrides,
+        repo_token: settings.dry_run ? "dry-run" : settings.repo_token,
+        flag_name: settings.job_flag_name,
+        compare_ref: settings.compare_ref,
+        compare_sha: settings.compare_sha,
+        path: settings.config_path,
+        overrides: settings.overrides,
       )
     end
   end
