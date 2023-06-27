@@ -26,6 +26,7 @@ module CoverageReporter
           service_build_url: build_url,
           service_job_url: build_url,
           service_pull_request: pull_request,
+          service_attempt: ENV["GITHUB_RUN_ATTEMPT"]?.presence,
           commit_sha: ENV["GITHUB_SHA"]?.presence,
         ).to_h
       end

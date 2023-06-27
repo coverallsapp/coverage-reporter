@@ -55,6 +55,41 @@ Spectator.describe CoverageReporter::Cli do
       })
     end
 
+    it "parses overrides (new args)" do
+      reporter = subject.run %w(
+        report
+        --parallel
+        -j super-flag
+        --base-path src/*
+        --service-name=service-name
+        --job-id=job-id
+        --build-url=build-url
+        --job-url=job-url
+        --branch=branch
+        --pull-request=pr
+        --build-number=build-number
+        --compare-ref=develop
+        --attempt=4
+        --dry-run
+      )
+
+      expect(reporter.job_flag_name).to eq "super-flag"
+      expect(reporter.parallel).to eq true
+      expect(reporter.compare_ref).to eq "develop"
+      expect(reporter.dry_run).to eq true
+      expect(reporter.base_path).to eq "src/*"
+      expect(reporter.overrides.try(&.to_h)).to eq({
+        :service_name         => "service-name",
+        :service_number       => "build-number",
+        :service_job_id       => "job-id",
+        :service_build_url    => "build-url",
+        :service_job_url      => "job-url",
+        :service_branch       => "branch",
+        :service_pull_request => "pr",
+        :service_attempt      => "4",
+      })
+    end
+
     it "doesn't apply empty values as overrides" do
       reporter = subject.run %w(
         --service-name=

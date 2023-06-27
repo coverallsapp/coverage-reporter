@@ -12,6 +12,7 @@ module CoverageReporter
         @service_name : String? = nil,
         @service_number : String? = nil,
         @service_pull_request : String? = nil,
+        @service_attempt : String? = nil,
         @commit_sha : String? = nil,
         @repo_name : String? = nil
       ); end
@@ -27,6 +28,7 @@ module CoverageReporter
           :service_name         => @service_name,
           :service_number       => @service_number,
           :service_pull_request => @service_pull_request,
+          :service_attempt      => @service_attempt,
           :commit_sha           => @commit_sha,
           :repo_name            => @repo_name,
         }.compact
