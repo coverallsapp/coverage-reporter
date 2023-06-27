@@ -52,20 +52,19 @@ Spectator.describe CoverageReporter::Api::Jobs do
       :git      => git_info,
       :run_at   => ENV["COVERALLS_RUN_AT"],
     }).to_json.to_s
-    body = String.build do |io|
-      Compress::Gzip::Writer.open(io, &.print(data))
-    end
 
-    io = IO::Memory.new
-    channel = Channel(String).new(1)
+    json_file = IO::Memory.new(
+      String.build do |io|
+        Compress::Gzip::Writer.open(io, &.print(data))
+      end
+    )
 
+    req_body = IO::Memory.new
     boundary = CoverageReporter::Api::Jobs::BOUNDARY
-    HTTP::FormData.build(io, boundary) do |formdata|
-      channel.send(formdata.content_type)
-
+    HTTP::FormData.build(req_body, boundary) do |formdata|
       metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
       headers = HTTP::Headers{"Content-Type" => "application/gzip"}
-      formdata.file("json_file", IO::Memory.new(body), metadata, headers)
+      formdata.file("json_file", json_file, metadata, headers)
     end
 
     WebMock.stub(:post, endpoint).with(
@@ -76,7 +75,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
         "X-Coveralls-Coverage-Formats" => "cobertura",
         "X-Coveralls-Source"           => "cli",
       },
-      body: io.to_s,
+      body: req_body.to_s,
     ).to_return(status: 200, body: {:result => "ok"}.to_json)
 
     subject.send_request

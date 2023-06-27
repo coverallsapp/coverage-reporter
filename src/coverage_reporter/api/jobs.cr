@@ -52,11 +52,13 @@ module CoverageReporter
 
       return if dry_run
 
-      gzipped_json = String.build do |io|
-        Compress::Gzip::Writer.open(io, &.print(data.to_json.to_s))
-      end
+      json_gz = IO::Memory.new(
+        String.build do |io|
+          Compress::Gzip::Writer.open(io, &.print(data.to_json.to_s))
+        end
+      )
 
-      with_file(IO::Memory.new(gzipped_json)) do |content_type, body|
+      with_file(json_gz) do |content_type, body|
         # NOTE: Removing quotes from boundary -- required by Coveralls.io nginx rule
         headers.merge!(HTTP::Headers{"Content-Type" => content_type.gsub("\"", "")})
 
@@ -82,7 +84,7 @@ module CoverageReporter
       )
     end
 
-    private def with_file(gzfile, &)
+    private def with_file(json_gz, &)
       IO.pipe do |reader, writer|
         channel = Channel(String).new(1)
 
@@ -92,7 +94,7 @@ module CoverageReporter
 
             metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
             headers = HTTP::Headers{"Content-Type" => "application/gzip"}
-            formdata.file("json_file", gzfile, metadata, headers)
+            formdata.file("json_file", json_gz, metadata, headers)
           end
 
           writer.close

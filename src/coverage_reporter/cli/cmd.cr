@@ -61,7 +61,7 @@ module CoverageReporter::Cli
     exit 1
   rescue ex : Api::HTTPError
     Log.error <<-ERROR
-    Unhandled HTTP error:
+    HTTP error:
     ---
     Error: #{ex.message} (#{ex.status_code})
     Message: #{ex.response}

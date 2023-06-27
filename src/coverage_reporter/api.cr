@@ -31,7 +31,7 @@ module CoverageReporter
 
     def handle_response(res)
       case res.status
-      when HTTP::Status::OK
+      when HTTP::Status::OK, HTTP::Status::CREATED
         Log.info "---\n✅ API Response: #{res.body}\n- 💛, Coveralls"
       when HTTP::Status::INTERNAL_SERVER_ERROR
         raise InternalServerError.new(res)
