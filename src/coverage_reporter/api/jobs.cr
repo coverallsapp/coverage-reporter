@@ -66,7 +66,7 @@ module CoverageReporter
           api_url,
           body: body,
           headers: headers,
-          tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
+          tls: nil
         )
 
         Api.handle_response(response)

@@ -51,13 +51,19 @@ module CoverageReporter
             coverage = info.lines
             info_branches = info.branches
             if info_branches
+              prev_line = 0u64
+              condition_number = 0u64
               info_branches.each do |branch, branch_info|
-                branch_number = 0u64
                 line_number = branch.split(", ")[2].to_u64
+                condition_number = 0u64 if line_number != prev_line
+                prev_line = line_number
+                branch_number = 0u64
                 branch_info.each_value do |hits|
                   branch_number += 1
-                  branches.push(line_number, 0, branch_number, hits)
+                  branches.push(line_number, condition_number, branch_number, hits)
                 end
+              ensure
+                condition_number += 1
               end
             end
           end
