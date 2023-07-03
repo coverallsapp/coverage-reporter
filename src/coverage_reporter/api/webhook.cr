@@ -32,7 +32,7 @@ module CoverageReporter
         webhook_url,
         headers: headers,
         body: data.to_json,
-        tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
+        tls: nil
       )
 
       Api.handle_response(res)
