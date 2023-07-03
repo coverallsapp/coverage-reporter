@@ -2,38 +2,20 @@ require "./*"
 
 module CoverageReporter
   class Reporter
-    struct Settings
-      getter base_path,
-        carryforward,
-        compare_ref,
-        compare_sha,
-        config_path,
-        coverage_files,
-        coverage_format,
-        dry_run,
-        fail_empty,
-        job_flag_name,
-        overrides,
-        parallel,
-        repo_token
-
-      def initialize(
-        @base_path : String? = nil,
-        @carryforward : String? = nil,
-        @compare_ref : String? = nil,
-        @compare_sha : String? = nil,
-        @config_path : String? = nil,
-        @coverage_files : Array(String) | Nil = nil,
-        @coverage_format : String? = nil,
-        @dry_run : Bool = false,
-        @fail_empty : Bool = false,
-        @job_flag_name : String? = nil,
-        @overrides : CI::Options? = nil,
-        @parallel : Bool = false,
-        @repo_token : String? = nil
-      )
-      end
-    end
+    record Settings,
+      base_path : String? = nil,
+      carryforward : String? = nil,
+      compare_ref : String? = nil,
+      compare_sha : String? = nil,
+      config_path : String? = nil,
+      coverage_files : Array(String) | Nil = nil,
+      coverage_format : String? = nil,
+      dry_run : Bool = false,
+      fail_empty : Bool = false,
+      job_flag_name : String? = nil,
+      overrides : CI::Options? = nil,
+      parallel : Bool = false,
+      repo_token : String? = nil
 
     class NoSourceFiles < BaseException
       def message
