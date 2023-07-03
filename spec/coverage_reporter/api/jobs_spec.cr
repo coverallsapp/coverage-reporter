@@ -104,4 +104,37 @@ Spectator.describe CoverageReporter::Api::Jobs do
 
     expect { subject.send_request }.to raise_error(CoverageReporter::Api::UnprocessableEntity)
   end
+
+  it "redirects" do
+    redirect_url = "https://coveralls-redirect.io/api/v1/jobs"
+
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 307, body: "Temporary redirect", headers: {"location" => redirect_url})
+
+    WebMock.stub(:post, redirect_url).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 200, body: {:result => "ok"}.to_json)
+
+    expect { subject.send_request }.not_to raise_error
+  end
+
+  it "redirects relatively" do
+    redirect_path = "/api/v9/jobs"
+    redirect_url = "#{CoverageReporter::Config::DEFAULT_ENDPOINT}#{redirect_path}"
+
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 302, body: "Found", headers: {"location" => redirect_path})
+
+    WebMock.stub(:post, redirect_url).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 200, body: {:result => "ok"}.to_json)
+
+    expect { subject.send_request }.not_to raise_error
+  end
 end

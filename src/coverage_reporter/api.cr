@@ -41,5 +41,34 @@ module CoverageReporter
         raise HTTPError.new(res)
       end
     end
+
+    def tls_for(uri : URI) : OpenSSL::SSL::Context::Client?
+      return nil unless uri.scheme == "https"
+      return nil if uri.host == "coveralls.io"
+
+      OpenSSL::SSL::Context::Client.insecure
+    end
+
+    def with_redirects(uri : URI, max_redirects : Int32 = 10, & : URI -> HTTP::Client::Response) : HTTP::Client::Response
+      redirect_num = 0
+      response = yield(uri)
+
+      while redirect?(response) && redirect_num < max_redirects
+        new_uri = URI.parse(response.headers["location"])
+        unless new_uri.absolute?
+          new_uri.scheme = uri.scheme
+          new_uri.host = uri.host
+        end
+        uri = new_uri
+        response = yield(uri)
+        redirect_num += 1
+      end
+
+      response
+    end
+
+    def redirect?(response : HTTP::Client::Response) : Bool
+      {301, 302, 303, 307, 308}.includes?(response.status_code)
+    end
   end
 end

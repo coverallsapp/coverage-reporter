@@ -35,8 +35,9 @@ module CoverageReporter
     end
 
     def send_request(dry_run : Bool = false)
+      jobs_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
+      jobs_uri = URI.parse(jobs_url)
       data = build_request
-      api_url = "#{@config.endpoint}/api/#{API_VERSION}/jobs"
 
       headers = DEFAULT_HEADERS.dup
       headers.merge!(HTTP::Headers{
@@ -45,7 +46,7 @@ module CoverageReporter
       })
 
       Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
-      Log.info "🚀 Posting coverage data to #{api_url}"
+      Log.info "🚀 Posting coverage data to #{jobs_url}"
 
       Log.debug "---\n⛑ Debug Headers:\n#{headers.to_pretty_json}"
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
@@ -62,12 +63,14 @@ module CoverageReporter
         # NOTE: Removing quotes from boundary -- required by Coveralls.io nginx rule
         headers.merge!(HTTP::Headers{"Content-Type" => content_type.gsub("\"", "")})
 
-        response = HTTP::Client.post(
-          api_url,
-          body: body,
-          headers: headers,
-          tls: nil
-        )
+        response = Api.with_redirects(jobs_uri) do |uri|
+          HTTP::Client.post(
+            uri,
+            body: body,
+            headers: headers,
+            tls: Api.tls_for(uri)
+          )
+        end
 
         Api.handle_response(response)
       end
@@ -85,23 +88,18 @@ module CoverageReporter
     end
 
     private def with_file(json_gz, &)
-      IO.pipe do |reader, writer|
-        channel = Channel(String).new(1)
+      body = IO::Memory.new
+      channel = Channel(String).new(1)
 
-        spawn do
-          HTTP::FormData.build(writer, BOUNDARY) do |formdata|
-            channel.send(formdata.content_type)
+      HTTP::FormData.build(body, BOUNDARY) do |formdata|
+        channel.send(formdata.content_type)
 
-            metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
-            headers = HTTP::Headers{"Content-Type" => "application/gzip"}
-            formdata.file("json_file", json_gz, metadata, headers)
-          end
-
-          writer.close
-        end
-
-        yield(channel.receive, reader)
+        metadata = HTTP::FormData::FileMetadata.new(filename: "json_file")
+        headers = HTTP::Headers{"Content-Type" => "application/gzip"}
+        formdata.file("json_file", json_gz, metadata, headers)
       end
+
+      yield(channel.receive, body.to_s)
     end
   end
 end

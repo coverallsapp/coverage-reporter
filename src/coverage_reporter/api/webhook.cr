@@ -8,6 +8,7 @@ module CoverageReporter
 
     def send_request(dry_run : Bool = false)
       webhook_url = "#{@config.endpoint}/webhook"
+      webhook_uri = URI.parse(webhook_url)
 
       Log.info "⭐️ Calling parallel done webhook: #{webhook_url}"
 
@@ -28,12 +29,14 @@ module CoverageReporter
         "X-Coveralls-CI" => @config[:service_name]? || "unknown",
       })
 
-      res = HTTP::Client.post(
-        webhook_url,
-        headers: headers,
-        body: data.to_json,
-        tls: nil
-      )
+      res = Api.with_redirects(webhook_uri) do |uri|
+        HTTP::Client.post(
+          uri,
+          headers: headers,
+          body: data.to_json,
+          tls: Api.tls_for(uri)
+        )
+      end
 
       Api.handle_response(res)
     end
