@@ -5,11 +5,11 @@ require "colorize"
 module CoverageReporter::Cli
   extend self
 
-  def run(args = ARGV)
+  def run(args = ARGV, reporter = CoverageReporter::Reporter.new)
     opts = parse_args(args)
     greet(opts.no_logo?)
 
-    reporter = CoverageReporter::Reporter.new(
+    reporter.configure(
       base_path: opts.base_path,
       carryforward: opts.carryforward,
       compare_ref: opts.compare_ref,
@@ -31,23 +31,23 @@ module CoverageReporter::Cli
       reporter.report
     end
 
-    reporter
+    0
   rescue ex : BaseException
     Log.error ex.message
-    exit(ex.fail? ? 1 : 0)
+    ex.fail? ? 1 : 0
   rescue ex : Socket::Error
     Log.error ex.message
-    exit 1
+    1
   rescue ex : ArgumentError
     Log.error <<-ERROR
     Oops! #{ex.message}
     Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
     ERROR
-    exit 1
-  rescue ex : Crest::InternalServerError
+    1
+  rescue ex : Api::InternalServerError
     Log.error "⚠️ Internal server error. Please contact Coveralls team."
-    exit 1
-  rescue ex : Crest::UnprocessableEntity
+    1
+  rescue ex : Api::UnprocessableEntity
     Log.error <<-ERROR
     ---
     Error: #{ex.message}
@@ -58,12 +58,21 @@ module CoverageReporter::Cli
     More info/troubleshooting here: https://docs.coveralls.io
     - 💛, Coveralls
     ERROR
-    exit 1
+    1
+  rescue ex : Api::HTTPError
+    Log.error <<-ERROR
+    HTTP error:
+    ---
+    Error: #{ex.message} (#{ex.status_code})
+    Message: #{ex.response}
+    ---
+    ERROR
+    1
   rescue ex
     raise(ex) if opts.try(&.debug?)
 
     Log.error ex.inspect
-    exit 1
+    1
   end
 
   private class Opts

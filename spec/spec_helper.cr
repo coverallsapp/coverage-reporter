@@ -1,4 +1,5 @@
 require "../src/coverage_reporter"
+require "./support/*"
 
 require "webmock"
 require "spectator"
@@ -9,6 +10,6 @@ Spectator.configure do |config|
 
   config.before_suite do
     ENV.clear
-    CoverageReporter::Log.set(CoverageReporter::Log::Level::Error)
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Suppress)
   end
 end

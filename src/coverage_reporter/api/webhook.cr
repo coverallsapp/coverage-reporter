@@ -1,4 +1,4 @@
-require "crest"
+require "http"
 require "json"
 
 module CoverageReporter
@@ -8,6 +8,7 @@ module CoverageReporter
 
     def send_request(dry_run : Bool = false)
       webhook_url = "#{@config.endpoint}/webhook"
+      webhook_uri = URI.parse(webhook_url)
 
       Log.info "⭐️ Calling parallel done webhook: #{webhook_url}"
 
@@ -22,18 +23,22 @@ module CoverageReporter
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
       return if dry_run
+      headers = DEFAULT_HEADERS.dup
+      headers.merge!(HTTP::Headers{
+        "Content-Type"   => "application/json",
+        "X-Coveralls-CI" => @config[:service_name]? || "unknown",
+      })
 
-      res = Crest.post(
-        webhook_url,
-        headers: DEFAULT_HEADERS.merge({
-          "Content-Type"   => "application/json",
-          "X-Coveralls-CI" => @config[:service_name]?,
-        }.compact),
-        form: data.to_json,
-        tls: ENV["COVERALLS_ENDPOINT"]? ? OpenSSL::SSL::Context::Client.insecure : nil
-      )
+      res = Api.with_redirects(webhook_uri) do |uri|
+        HTTP::Client.post(
+          uri,
+          headers: headers,
+          body: data.to_json,
+          tls: Api.tls_for(uri)
+        )
+      end
 
-      Api.show_response(res)
+      Api.handle_response(res)
     end
   end
 end

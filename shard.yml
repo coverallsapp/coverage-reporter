@@ -8,8 +8,6 @@ authors:
   - Nick Merwin <nick@coveralls.io>
 
 dependencies:
-  crest:
-    github: mamantoha/crest
   sqlite3:
     github: crystal-lang/crystal-sqlite3
 

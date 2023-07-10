@@ -14,6 +14,7 @@ Metrics/CyclomaticComplexity:
     - src/coverage_reporter/parsers/lcov_parser.cr
     - src/coverage_reporter/parsers/gcov_parser.cr
     - src/coverage_reporter/parsers/coveragepy_parser.cr
+    - src/coverage_reporter/cli/cmd.cr
 
 Lint/PercentArrays:
   Enabled: true

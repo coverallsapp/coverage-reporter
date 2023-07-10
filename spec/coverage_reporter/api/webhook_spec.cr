@@ -8,24 +8,48 @@ Spectator.describe CoverageReporter::Api::Webhook do
 
   after_each { WebMock.reset }
 
+  let(headers) do
+    {
+      "Content-Type"                 => "application/json",
+      "X-Coveralls-Reporter"         => "coverage-reporter",
+      "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
+      "X-Coveralls-Source"           => "cli",
+    }
+  end
+
+  let(body) do
+    {
+      :repo_token   => "token",
+      :carryforward => "flag1,flag2",
+      :payload      => {
+        :build_num => nil,
+        :status    => "done",
+      },
+    }.to_json
+  end
+
   it "calls the /webhook endpoint" do
     WebMock.stub(:post, endpoint).with(
-      headers: {
-        "Content-Type"                 => "application/json",
-        "X-Coveralls-Reporter"         => "coverage-reporter",
-        "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
-        "X-Coveralls-Source"           => "cli",
-      },
-      body: {
-        :repo_token   => "token",
-        :carryforward => "flag1,flag2",
-        :payload      => {
-          :build_num => nil,
-          :status    => "done",
-        },
-      }.to_json
+      headers: headers,
+      body: body
     ).to_return(status: 200, body: {"response" => "ok"}.to_json)
 
     subject.send_request
+  end
+
+  it "follows the redirect" do
+    redirect_url = "https://coveralls-redirect.io/webhook"
+
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: body,
+    ).to_return(status: 301, body: "Moved permanently", headers: {"location" => redirect_url})
+
+    WebMock.stub(:post, redirect_url).with(
+      headers: headers,
+      body: body
+    ).to_return(status: 200, body: {"response" => "ok"}.to_json)
+
+    expect { subject.send_request }.not_to raise_error
   end
 end
