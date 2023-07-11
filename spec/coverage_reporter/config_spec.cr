@@ -498,5 +498,26 @@ Spectator.describe CoverageReporter::Config do
         })
       end
     end
+
+    context "for Xcode Cloud" do
+      before_each do
+        ENV["CI_XCODE_PROJECT"] = "/Users/coveralls/coverage-reporter"
+        ENV["CI_BUILD_NUMBER"] = "321"
+        ENV["CI_COMMIT"] = "commit-sha"
+        ENV["CI_BRANCH"] = "feature/add-xcode-ci-support"
+        ENV["CI_PULL_REQUEST_NUMBER"] = "42"
+      end
+
+      it "provides custom options" do
+        expect(subject).to eq({
+          :repo_token           => repo_token,
+          :service_name         => "xcode-cloud",
+          :service_number       => "321",
+          :service_branch       => "feature/add-xcode-ci-support",
+          :service_pull_request => "42",
+          :commit_sha           => "commit-sha",
+        })
+      end
+    end
   end
 end
