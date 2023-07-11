@@ -178,6 +178,7 @@ coveralls -f coverage.xml
 - Codeship
 - Drone
 - Buildkite
+- Xcode Cloud
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/ci-services#option-1-use-common-environment-variables)
 
