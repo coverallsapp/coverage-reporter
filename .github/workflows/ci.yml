@@ -10,7 +10,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-2022]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -20,7 +20,21 @@ jobs:
       with:
         crystal: 1.9
     - name: Install dependencies
-      run: shards install ${{ matrix.os == 'windows-latest' && '--skip-postinstall --skip-executables' || '' }}
+      run: shards install ${{ startsWith(runner.os, 'Windows') && '--skip-postinstall --skip-executables' || '' }}
+
+      # If this step breaks, try inspecting MSVC directory and consider changing appropriate paths.
+      #
+      #   ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
+      #
+      # Since windows runner can be updated the version can change in future releases.
+    - name: Install SQLite3 + generate sqlite3.lib
+      if: startsWith(runner.os, 'Windows')
+      run: |
+        choco install sqlite -y
+        cd C:\ProgramData\chocolatey\lib\SQLite\tools
+        ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
+        & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
+        cp sqlite3.lib 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\lib\x64'
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 
