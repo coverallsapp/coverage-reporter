@@ -15,7 +15,8 @@ module CoverageReporter
       job_flag_name : String? = nil,
       overrides : CI::Options? = nil,
       parallel : Bool = false,
-      repo_token : String? = nil
+      repo_token : String? = nil,
+      measure : Bool = false
 
     class NoSourceFiles < BaseException
       def message
@@ -39,16 +40,20 @@ module CoverageReporter
     # If *coverage_file* is provided only its content will be parsed. Otherwise
     # current directory will be searched for all supported report formats.
     def report
-      source_files = Parser.new(
-        coverage_files: settings.coverage_files,
-        coverage_format: settings.coverage_format,
-        base_path: settings.base_path,
-      ).parse
+      source_files = measure("Report parsing") do
+        Parser.new(
+          coverage_files: settings.coverage_files,
+          coverage_format: settings.coverage_format,
+          base_path: settings.base_path,
+        ).parse
+      end
       raise NoSourceFiles.new(settings.fail_empty) unless source_files.size > 0
 
       api = Api::Jobs.new(config, settings.parallel, source_files, Git.info(config))
 
-      api.send_request(settings.dry_run)
+      measure("Report request") do
+        api.send_request(settings.dry_run)
+      end
     end
 
     # Reports that all parallel jobs were reported and Coveralls can aggregate
@@ -60,7 +65,9 @@ module CoverageReporter
     def parallel_done
       api = Api::Webhook.new(config, settings.carryforward || config.carryforward)
 
-      api.send_request(settings.dry_run)
+      measure("Webhook request") do
+        api.send_request(settings.dry_run)
+      end
     end
 
     private def config
@@ -72,6 +79,18 @@ module CoverageReporter
         path: settings.config_path,
         overrides: settings.overrides,
       )
+    end
+
+    private def measure(name : String, &)
+      return yield unless settings.measure
+      start = Time.monotonic
+
+      yield
+    ensure
+      if start
+        elapsed_time = Time.monotonic - start
+        Log.info("⏱️ (#{name}): #{elapsed_time}")
+      end
     end
   end
 end

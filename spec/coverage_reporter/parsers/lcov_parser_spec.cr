@@ -30,26 +30,33 @@ Spectator.describe CoverageReporter::LcovParser do
 
   describe "#parse" do
     let(filename) { "spec/fixtures/lcov/test.lcov" }
+    let(digest) { "bbc3522fe6728f6e24bfe930a87ecc54" }
     let(coverage) do
-      [1, 1, 1, nil, 1, 66, 66, nil, nil, 1, 323, 18446744073709551615u64, 63, 63, 60,
-       nil, 3, nil, 63, 32, nil, 63, 63, 63, 3, nil, 63, 60, nil, 3, nil, 63, 27, 27, 27,
-       nil, nil, 323, nil, nil, 1, 5, 5, nil, 2, nil, nil, 3, 3, 1, 1, 1, 1, nil, 0, nil,
-       nil, 2, 2, 2, 0, nil, 2, nil, nil, 2, 2, nil, nil, nil, nil, 1, 1, 1, 1, 1, 1, nil,
-       1, 1, nil, 1, 87, 87, 6, 6, 6, 6, 9, 6, 6, nil, 81, nil, nil, nil, 1, 1, nil, nil,
-       1, 1, nil, nil, 1, nil, 2, 2, 2, 1, nil, 2, nil, nil, 1, 3, 1, 1, nil, nil, 2, 2,
-       2, nil, 1, 1, nil, 2, nil, nil, nil, 1, 1, nil, nil, 1, 50, 50, 50, 50, 20, nil,
-       50, 50, 2, nil, 50, 50, 50, 31, nil, 50, 24, nil, 50, nil, nil, nil, nil, nil,
-       nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil] of UInt64?
+      [1, nil, nil, 1, nil, nil, nil, nil, nil, 2, 2, nil, 18446744073709551615u64,
+       nil, nil, nil, 2, 2, nil, 2, nil, 2, nil, nil, nil, 1, 1, nil, nil, nil,
+       1, nil, nil, nil, 0, nil, nil, nil, 1] of UInt64?
+    end
+    let(branches) do
+      [10, 0, 0, 1, 10, 0, 1, 1,
+       10, 1, 0, 0, 10, 1, 1, 1,
+       11, 2, 0, 1, 11, 2, 1, 1,
+       20, 3, 0, 1, 20, 3, 1, 1] of UInt64
     end
 
     it "parses correctly" do
       reports = subject.parse(filename)
 
-      expect(reports.size).to eq 1
+      expect(reports.size).to eq 2
       expect(reports[0].to_h).to eq({
-        :name          => "spec/fixtures/lcov/test.js",
+        :name          => "spec/fixtures/lcov/index.js",
+        :coverage      => [1, 1],
+        :source_digest => "97afaf84480a9f3fbb13393085b1d49d",
+      })
+      expect(reports[1].to_h).to eq({
+        :name          => "spec/fixtures/lcov/lib/run.js",
         :coverage      => coverage,
-        :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+        :branches      => branches,
+        :source_digest => digest,
       })
     end
 
@@ -60,11 +67,12 @@ Spectator.describe CoverageReporter::LcovParser do
       it "parses correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 1
-        expect(reports[0].to_h).to eq({
-          :name          => "spec/fixtures/lcov/test.js",
+        expect(reports.size).to eq 2
+        expect(reports[1].to_h).to eq({
+          :name          => "spec/fixtures/lcov/lib/run.js",
           :coverage      => coverage,
-          :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+          :branches      => branches,
+          :source_digest => digest,
         })
       end
     end
@@ -75,11 +83,12 @@ Spectator.describe CoverageReporter::LcovParser do
       it "parses correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 1
-        expect(reports[0].to_h).to eq({
-          :name          => "spec/fixtures/lcov/test.js",
+        expect(reports.size).to eq 2
+        expect(reports[1].to_h).to eq({
+          :name          => "spec/fixtures/lcov/lib/run.js",
           :coverage      => coverage,
-          :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+          :branches      => branches,
+          :source_digest => digest,
         })
       end
     end
@@ -90,11 +99,12 @@ Spectator.describe CoverageReporter::LcovParser do
       it "parses correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 1
-        expect(reports[0].to_h).to eq({
-          :name          => "spec/fixtures/lcov/test.js",
+        expect(reports.size).to eq 2
+        expect(reports[1].to_h).to eq({
+          :name          => "spec/fixtures/lcov/lib/run.js",
           :coverage      => coverage,
-          :source_digest => "6e7aea5aa7198489561a44359dc7e1a4",
+          :branches      => branches,
+          :source_digest => digest,
         })
       end
     end
