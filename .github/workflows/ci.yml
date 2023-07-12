@@ -20,7 +20,7 @@ jobs:
       with:
         crystal: 1.9
     - name: Install dependencies
-      run: shards install
+      run: shards install ${{ matrix.os == 'windows-latest' && '--skip-postinstall --skip-executables' || '' }}
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 
