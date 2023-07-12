@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.4.3
+    version: 1.4.3+git.commit.a33f98624a30a62cdf03affe32e7469ab2287f9f
 
   crystal-kcov:
     git: https://github.com/vici37/crystal-kcov.git
@@ -22,5 +22,5 @@ shards:
 
   webmock:
     git: https://github.com/manastech/webmock.cr.git
-    version: 0.14.0+git.commit.42b347cdd64e13193e46167a03593944ae2b3d20
+    version: 0.14.0
 
