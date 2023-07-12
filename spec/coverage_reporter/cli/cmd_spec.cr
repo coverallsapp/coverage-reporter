@@ -84,6 +84,7 @@ Spectator.describe CoverageReporter::Cli do
           --build-number=build-number
           --compare-ref=develop
           --attempt=4
+          --measure
           --dry-run
         )
       end
@@ -159,6 +160,7 @@ Spectator.describe CoverageReporter::Cli do
       let(options) do
         %w(
           done
+          -m
           --build-number 3
           --carryforward 1,2,3
           --dry-run
