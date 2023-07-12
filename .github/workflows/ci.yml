@@ -58,4 +58,4 @@ jobs:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
       run: |
         cd coverage
-        ../bin/coveralls --base-path src/coverage_reporter/
+        ../bin/coveralls report --measure --base-path src/coverage_reporter/
