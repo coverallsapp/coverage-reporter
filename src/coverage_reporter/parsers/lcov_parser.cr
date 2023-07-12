@@ -80,9 +80,7 @@ module CoverageReporter
     end
 
     private def report(filename, info) : FileReport
-      lines = 0
-      File.each_line(filename) { lines += 1 }
-
+      lines = info.coverage.keys.max? || 0
       coverage = Array(Hits?).new(lines, 0)
       lines.times do |index|
         coverage[index] = info.coverage[index + 1]?

@@ -23,6 +23,7 @@ module CoverageReporter::Cli
       overrides: opts.overrides,
       parallel: opts.parallel?,
       repo_token: opts.repo_token,
+      measure: opts.debug? || opts.measure?,
     )
 
     if opts.parallel_done?
@@ -93,6 +94,7 @@ module CoverageReporter::Cli
     property? dry_run = false
     property? debug = false
     property? allow_empty = false
+    property? measure = false
 
     # CI options overrides
     property service_name : String?
@@ -189,6 +191,10 @@ module CoverageReporter::Cli
           opts.service_attempt = attempt
         end
 
+        parser.on("-m", "--measure", "Measure time for parsing and HTTP requests") do
+          opts.measure = true
+        end
+
         parser.unknown_args do |unknown_args, after_dash_args|
           opts.coverage_files = unknown_args + after_dash_args
         end
@@ -209,6 +215,10 @@ module CoverageReporter::Cli
 
         parser.on("--attempt", "Run attempt number") do |attempt|
           opts.service_attempt = attempt
+        end
+
+        parser.on("-m", "--measure", "Measure time for parsing and HTTP requests") do
+          opts.measure = true
         end
       end
 

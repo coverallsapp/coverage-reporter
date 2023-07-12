@@ -14,7 +14,7 @@ Spectator.describe CoverageReporter::Parser do
       it "returns reports for one file" do
         reports = subject.parse
 
-        expect(reports.size).to eq 1
+        expect(reports.size).to eq 2
       end
 
       context "for non-existing file" do
@@ -27,9 +27,9 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "for an unknown file format" do
-        let(coverage_files) { ["spec/fixtures/lcov/test.js"] }
+        let(coverage_files) { ["spec/fixtures/lcov/index.js"] }
 
-        it "returns reports for one file" do
+        it "returns an empty report" do
           reports = subject.parse
 
           expect(reports.size).to eq 0
@@ -42,7 +42,7 @@ Spectator.describe CoverageReporter::Parser do
         it "returns report only for specified format" do
           reports = subject.parse
 
-          expect(reports.size).to eq 1
+          expect(reports.size).to eq 2
         end
 
         context "when a file is specified" do
@@ -52,7 +52,7 @@ Spectator.describe CoverageReporter::Parser do
           it "returns report only for specified file" do
             reports = subject.parse
 
-            expect(reports.size).to eq 1
+            expect(reports.size).to eq 2
           end
         end
 
@@ -81,7 +81,7 @@ Spectator.describe CoverageReporter::Parser do
       it "returns reports for all files" do
         reports = subject.parse
 
-        expect(reports.size).to be > 1
+        expect(reports.size).to be > 2
       end
     end
   end
