@@ -1,6 +1,6 @@
 UUID := $(shell id -u)
 GUID := $(shell id -g)
-CRYSTAL_VERSION := 1.8
+CRYSTAL_VERSION := 1.9
 
 build:
 	shards build coveralls --progress --error-trace
