@@ -89,7 +89,7 @@ module CoverageReporter
     ensure
       if start
         elapsed_time = Time.monotonic - start
-        Log.info("⏱️ (#{name}): #{elapsed_time}")
+        Log.info("⏱️ #{name}: #{elapsed_time}")
       end
     end
   end
