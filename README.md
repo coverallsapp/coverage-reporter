@@ -83,6 +83,7 @@ Usage: coveralls [command] [options]
     version                          Print version
     --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
+    --no-fail                        Always exit with status 0
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
     -h, --help                       Show this help
@@ -93,6 +94,7 @@ $ coveralls report -h
 Usage: coveralls report [file reports] [options]
     --debug                          Debug mode: data being sent to Coveralls will be printed to console
     --dry-run                        Dry run (no request sent)
+    --no-fail                        Always exit with status 0
     -n, --no-logo                    Do not show Coveralls logo in logs
     -q, --quiet                      Suppress all output
     -h, --help                       Show this help
