@@ -32,22 +32,22 @@ module CoverageReporter::Cli
       reporter.report
     end
 
-    0
+    ok
   rescue ex : BaseException
     Log.error ex.message
-    ex.fail? ? 1 : 0
+    ex.fail? ? fail(opts) : ok
   rescue ex : Socket::Error
     Log.error ex.message
-    1
+    fail(opts)
   rescue ex : ArgumentError
     Log.error <<-ERROR
     Oops! #{ex.message}
     Coveralls Coverage Reporter v#{CoverageReporter::VERSION}
     ERROR
-    1
+    fail(opts)
   rescue ex : Api::InternalServerError
     Log.error "⚠️ Internal server error. Please contact Coveralls team."
-    1
+    fail(opts)
   rescue ex : Api::UnprocessableEntity
     Log.error <<-ERROR
     ---
@@ -59,7 +59,7 @@ module CoverageReporter::Cli
     More info/troubleshooting here: https://docs.coveralls.io
     - 💛, Coveralls
     ERROR
-    1
+    fail(opts)
   rescue ex : Api::HTTPError
     Log.error <<-ERROR
     HTTP error:
@@ -68,12 +68,12 @@ module CoverageReporter::Cli
     Message: #{ex.response}
     ---
     ERROR
-    1
+    fail(opts)
   rescue ex
     raise(ex) if opts.try(&.debug?)
 
     Log.error ex.inspect
-    1
+    fail(opts)
   end
 
   private class Opts
@@ -95,6 +95,7 @@ module CoverageReporter::Cli
     property? debug = false
     property? allow_empty = false
     property? measure = false
+    property? no_fail = false
 
     # CI options overrides
     property service_name : String?
@@ -240,6 +241,10 @@ module CoverageReporter::Cli
         opts.no_logo = true
       end
 
+      parser.on("--no-fail", "Always exit with status 0") do
+        opts.no_fail = true
+      end
+
       parser.on("-q", "--quiet", "Suppress all output") do
         Log.set(Log::Level::Error)
       end
@@ -353,6 +358,17 @@ module CoverageReporter::Cli
     puts
     puts option_parser
     exit 1
+  end
+
+  private def ok
+    0
+  end
+
+  private def fail(opts)
+    return 1 unless opts
+    return ok if opts.no_fail?
+
+    1
   end
 
   private def greet(no_logo : Bool)
