@@ -237,12 +237,12 @@ module CoverageReporter::Cli
         opts.dry_run = true
       end
 
-      parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
-        opts.no_logo = true
-      end
-
       parser.on("--no-fail", "Always exit with status 0") do
         opts.no_fail = true
+      end
+
+      parser.on("-n", "--no-logo", "Do not show Coveralls logo in logs") do
+        opts.no_logo = true
       end
 
       parser.on("-q", "--quiet", "Suppress all output") do
