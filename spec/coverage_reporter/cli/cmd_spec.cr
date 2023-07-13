@@ -260,6 +260,15 @@ Spectator.describe CoverageReporter::Cli do
           allow(reporter).to receive(:report).and_raise(error)
           expect(subject).to eq 1
         end
+
+        context "with --no-fail option" do
+          let(options) { %w(report --no-fail) }
+
+          it "returns 0" do
+            allow(reporter).to receive(:report).and_raise(error)
+            expect(subject).to eq 0
+          end
+        end
       end
 
       context "unprocessable entity" do
