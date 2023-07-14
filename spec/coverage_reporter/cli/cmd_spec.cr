@@ -163,6 +163,7 @@ Spectator.describe CoverageReporter::Cli do
           -m
           --build-number 3
           --carryforward 1,2,3
+          --create-build
           --dry-run
         )
       end
@@ -170,6 +171,27 @@ Spectator.describe CoverageReporter::Cli do
       it "accepts --carryforward option" do
         expect(subject).to eq 0
         expect(reporter.carryforward).to eq "1,2,3"
+        expect(reporter.create_build).to eq true
+        expect(reporter.overrides.try(&.to_h)).to eq({
+          :service_number => "3",
+        })
+      end
+    end
+
+    context "without carryforward (new args)" do
+      let(options) do
+        %w(
+          done
+          -m
+          --build-number 3
+          --no-fail
+        )
+      end
+
+      it "doesn't fail" do
+        expect(subject).to eq 0
+        expect(reporter.carryforward).to eq nil
+        expect(reporter.create_build).to eq false
         expect(reporter.overrides.try(&.to_h)).to eq({
           :service_number => "3",
         })
