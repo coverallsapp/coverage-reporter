@@ -23,8 +23,7 @@ module CoverageReporter::Cli
       overrides: opts.overrides,
       parallel: opts.parallel?,
       repo_token: opts.repo_token,
-      measure: opts.debug? || opts.measure?,
-      create_build: opts.create_build?
+      measure: opts.debug? || opts.measure?
     )
 
     if opts.parallel_done?
@@ -97,7 +96,6 @@ module CoverageReporter::Cli
     property? allow_empty = false
     property? measure = false
     property? no_fail = false
-    property? create_build = false
 
     # CI options overrides
     property service_name : String?
@@ -218,10 +216,6 @@ module CoverageReporter::Cli
 
         parser.on("--attempt", "Run attempt number") do |attempt|
           opts.service_attempt = attempt
-        end
-
-        parser.on("--create-build", "Create a build if it wasn't yet created") do
-          opts.create_build = true
         end
 
         parser.on("-m", "--measure", "Measure time for parsing and HTTP requests") do

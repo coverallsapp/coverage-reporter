@@ -16,8 +16,7 @@ module CoverageReporter
       overrides : CI::Options? = nil,
       parallel : Bool = false,
       repo_token : String? = nil,
-      measure : Bool = false,
-      create_build : Bool = false
+      measure : Bool = false
 
     class NoSourceFiles < BaseException
       def message
@@ -67,7 +66,6 @@ module CoverageReporter
       api = Api::Webhook.new(
         config: config,
         carryforward: settings.carryforward || config.carryforward,
-        create_build: settings.create_build,
         git: Git.info(config)
       )
 

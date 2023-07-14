@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe CoverageReporter::Api::Webhook do
-  subject { described_class.new(config, "flag1,flag2", false, git_info) }
+  subject { described_class.new(config, "flag1,flag2", git_info) }
 
   let(config) { CoverageReporter::Config.new("token") }
   let(git_info) { {:branch => "chore/add-tests", :head => {:message => "add tests"}} }
@@ -22,7 +22,6 @@ Spectator.describe CoverageReporter::Api::Webhook do
     {
       :repo_token   => "token",
       :carryforward => "flag1,flag2",
-      :create_build => false,
       :payload      => {
         :build_num => nil,
         :status    => "done",

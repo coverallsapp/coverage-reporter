@@ -6,7 +6,6 @@ module CoverageReporter
     def initialize(
       @config : Config,
       @carryforward : String?,
-      @create_build : Bool,
       @git : Hash(Symbol, Hash(Symbol, String) | String)
     )
     end
@@ -19,7 +18,6 @@ module CoverageReporter
 
       data = @config.to_h.merge({
         :carryforward => @carryforward,
-        :create_build => @create_build,
         :payload      => {
           :build_num => @config[:service_number]?,
           :status    => "done",
