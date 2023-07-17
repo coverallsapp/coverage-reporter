@@ -20,7 +20,7 @@ jobs:
       with:
         crystal: 1.9
     - name: Install dependencies
-      run: shards install ${{ startsWith(runner.os, 'Windows') && '--skip-postinstall --skip-executables' || '' }}
+      run: shards install
 
       # If this step breaks, try inspecting MSVC directory and consider changing appropriate paths.
       #
