@@ -8,6 +8,11 @@ module CoverageReporter
       coverage : LineInfo,
       branches : Hash(Line, BranchInfo)
 
+    SOURCE_FILE_RE     = Regex.new("\\ASF:(.+)", Regex::CompileOptions::MATCH_INVALID_UTF)
+    LINE_COVERAGE_RE   = Regex.new("\\ADA:(\\d+),(\\d+)", Regex::CompileOptions::MATCH_INVALID_UTF)
+    BRANCH_COVERAGE_RE = Regex.new("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)", Regex::CompileOptions::MATCH_INVALID_UTF)
+    END_RE             = Regex.new("\\Aend_of_record", Regex::CompileOptions::MATCH_INVALID_UTF)
+
     # Use *base_path* to join with paths found in reports.
     def initialize(@base_path : String?)
     end
@@ -48,14 +53,14 @@ module CoverageReporter
       source_file = nil : String?
       File.each_line(filename, chomp: true) do |line|
         case line
-        when re("\\ASF:(.+)")
+        when SOURCE_FILE_RE
           source_file = base_path ? File.join(base_path, $1) : $1
-        when re("\\ADA:(\\d+),(\\d+)")
+        when LINE_COVERAGE_RE
           line_no = $1.to_u64
           count = $2.to_u64
           coverage = info[source_file].coverage
           coverage[line_no] = (coverage[line_no]? || 0u64) + count
-        when re("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)")
+        when BRANCH_COVERAGE_RE
           line_no = $1.to_u64
           block_no = $2.to_u32
           branch_no = $3.to_u32
@@ -67,7 +72,7 @@ module CoverageReporter
           branches_block = branches_line[block_no] =
             branches_line[block_no]? || {} of UInt32 => Hits
           branches_block[branch_no] = (branches_block[branch_no]? || 0u64) + hits
-        when re("\\Aend_of_record")
+        when END_RE
           source_file = nil
         end
       end
@@ -103,12 +108,6 @@ module CoverageReporter
         coverage: coverage,
         branches: branches,
       )
-    end
-
-    # Returns a regular expression that doesn't raise an error when string
-    # contains non-UTF characters.
-    private def re(regex : String) : Regex
-      Regex.new(regex, Regex::CompileOptions::MATCH_INVALID_UTF)
     end
   end
 end
