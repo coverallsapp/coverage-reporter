@@ -23,7 +23,7 @@ module CoverageReporter::Cli
       overrides: opts.overrides,
       parallel: opts.parallel?,
       repo_token: opts.repo_token,
-      measure: opts.debug? || opts.measure?,
+      measure: opts.debug? || opts.measure?
     )
 
     if opts.parallel_done?

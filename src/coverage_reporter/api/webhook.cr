@@ -3,7 +3,11 @@ require "json"
 
 module CoverageReporter
   class Api::Webhook
-    def initialize(@config : Config, @carryforward : String?)
+    def initialize(
+      @config : Config,
+      @carryforward : String?,
+      @git : Hash(Symbol, Hash(Symbol, String) | String)
+    )
     end
 
     def send_request(dry_run : Bool = false)
@@ -18,6 +22,7 @@ module CoverageReporter
           :build_num => @config[:service_number]?,
           :status    => "done",
         },
+        :git => @git,
       }.compact)
 
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"

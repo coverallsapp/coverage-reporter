@@ -176,6 +176,25 @@ Spectator.describe CoverageReporter::Cli do
       end
     end
 
+    context "without carryforward (new args)" do
+      let(options) do
+        %w(
+          done
+          -m
+          --build-number 3
+          --no-fail
+        )
+      end
+
+      it "doesn't fail" do
+        expect(subject).to eq 0
+        expect(reporter.carryforward).to eq nil
+        expect(reporter.overrides.try(&.to_h)).to eq({
+          :service_number => "3",
+        })
+      end
+    end
+
     context "with format option" do
       let(options) do
         %w(
