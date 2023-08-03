@@ -55,6 +55,7 @@ jobs:
     - name: Report coverage
       env:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
+        COVERALLS_ENDPOINT: https://beta.coveralls.io
       run: |
         cd coverage
         ../bin/coveralls report --measure --base-path src/coverage_reporter/
