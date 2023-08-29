@@ -228,7 +228,7 @@ To get started you will need crystal [installed](https://crystal-lang.org/instal
 
 ```bash
 shards install
-make # dist/coverals will be created
+make # bin/coverals will be created
 ```
 
 Run specs:
