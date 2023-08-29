@@ -24,6 +24,7 @@ module CoverageReporter
       GolangParser,
       CoveragepyParser,
       CoverallsParser,
+      CloverParser,
     }
 
     class NotFound < BaseException
