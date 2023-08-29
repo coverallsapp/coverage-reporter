@@ -16,15 +16,15 @@ module CoverageReporter
       [
         "**/*/clover.xml",
         "clover.xml",
-        # "**/*/*coverage.xml",
-        # "*coverage.xml",
+        "**/*/*coverage.xml",
+        "*coverage.xml",
       ]
     end
 
     def matches?(filename) : Bool
       File.each_line(filename) do |line|
-        return true if /<!DOCTYPE\s+coverage.*cobertura/.matches?(line)
         return true if /<coverage/.matches?(line)
+        return true if /<project/.matches?(line)
 
         next if /\s*<\?xml\s+version=/.matches?(line)
         next if /\s*<!--/.matches?(line)
@@ -49,19 +49,28 @@ module CoverageReporter
         )
       end
 
-      xml.xpath_nodes("/coverage//class").each do |node|
-        name = node.attributes["filename"].content
+      xml.xpath_nodes("/coverage/project/file").each do |node|
+        name = node.attributes["name"].content
         coverage = Hash(Line, Hits?).new { |hh, kk| hh[kk] = 0 }
         branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
 
-        node.xpath_nodes("lines/line").each do |line_node|
-          if line_node.attributes["branch"]?.try(&.content) == "true"
-            branches[line_node.attributes["number"].content.to_u64] <<
-              line_node.attributes["hits"].content.to_u64
-          end
+        node.xpath_nodes("line").each do |line_node|
+          line_number = line_node.attributes["num"].content.to_u64
+          covered = line_node.attributes["type"].content
 
-          coverage[line_node.attributes["number"].content.to_u64] =
-            line_node.attributes["hits"].content.to_u64
+          if covered == "stmt" || covered == "method"
+            hits = line_node.attributes["count"].content.to_u64
+            coverage[line_number] = hits
+          elsif covered == "cond"
+            branch_hits = line_node.attributes["truecount"].content.to_u64
+            coverage[line_number] = 1  # Set 1 as an indicator of branch coverage
+            branches[line_number] = [branch_hits]
+          # elsif ["true", "false"].include?(covered)
+          elsif covered == "true"
+            branch_hits = line_node.attributes["count"].content.to_u64
+            coverage[line_number] = 1  # Set 1 as an indicator of branch coverage
+            branches[line_number] = [branch_hits]
+          end
         end
 
         files[name].coverage.merge!(coverage)
@@ -71,7 +80,6 @@ module CoverageReporter
       files.map do |name, info|
         branch_number : UInt64 = 0
 
-        # path = File.join(@base_path.to_s, name)
         file_report(
           name: name,
           coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
@@ -89,3 +97,4 @@ module CoverageReporter
     end
   end
 end
+

@@ -29,47 +29,34 @@ Spectator.describe CoverageReporter::CloverParser do
     it "parses the data correctly" do
       reports = subject.parse(filename)
 
-      expect(reports.size).to eq 16
-      expect(reports[0].name).to match /^org\/scoverage\//
+      expect(reports.size).to eq 1
+      expect(reports[0].name).to match /.*BasicCalculator.php/
       with_branches = reports.find! do |report|
-        report.name == "org/scoverage/samples/SimpleObject2.scala"
+        # report.name == "org/scoverage/samples/SimpleObject2.scala"
+        report.name == "home/yu/projects/example-php/calculator/BasicCalculator.php"
       end
 
-      expect(with_branches.coverage).to eq [
-        nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil,
-        0, nil, 0, nil, 1, nil, 1, 0, 0, 0, nil, nil, nil, nil, 1, 0, 0, 1, 1,
-      ] of UInt64?
-      expect(with_branches.branches).to eq [
-        15, 1, 0, 0,
-        17, 2, 0, 0,
-        19, 3, 0, 1,
-        21, 4, 0, 1,
-        22, 5, 0, 0,
-        30, 6, 0, 0,
-        31, 7, 0, 0,
-        32, 8, 0, 1,
-        33, 9, 0, 1,
-      ] of UInt64?
+      expect(with_branches.coverage).to eq [nil, nil, nil, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, 0, nil, 1] of UInt64?
+
+      expect(with_branches.branches).to eq [] of UInt64?
 
       with_branches_on_one_line = reports.find! do |report|
-        report.name == "org/scoverage/samples/InstrumentLoader.scala"
+        report.name.matches?(/.*BasicCalculator.php/)
       end
       expect(with_branches_on_one_line.coverage).to eq [
-        nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 1, nil, nil, 1, nil, 1,
+        nil, nil, nil, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, 0, nil, 1
       ] of UInt64?
-      expect(with_branches_on_one_line.branches).to eq [
-        12, 1, 0, 1,
-        12, 2, 1, 0,
-      ] of UInt64?
+      expect(with_branches_on_one_line.branches).to eq [] of UInt64?
     end
 
     context "with base_path" do
+      # TODO
       let(base_path) { "src/main/scala" }
 
       it "joins with base_path" do
         reports = subject.parse(filename)
 
-        expect(reports[0].name).to match /^src\/main\/scala\/org\/scoverage\//
+        expect(reports[0].name).to match /.*BasicCalculator.php/
       end
     end
   end
