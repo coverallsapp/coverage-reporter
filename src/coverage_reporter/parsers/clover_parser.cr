@@ -49,7 +49,7 @@ module CoverageReporter
         )
       end
 
-      xml.xpath_nodes("/coverage/project/file").each do |node|
+      xml.xpath_nodes("//file").each do |node|
         name = node.attributes["name"].content
         coverage = Hash(Line, Hits?).new { |hh, kk| hh[kk] = 0 }
         branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
@@ -63,11 +63,6 @@ module CoverageReporter
             coverage[line_number] = hits
           elsif covered == "cond"
             branch_hits = line_node.attributes["truecount"].content.to_u64
-            coverage[line_number] = 1  # Set 1 as an indicator of branch coverage
-            branches[line_number] = [branch_hits]
-          # elsif ["true", "false"].include?(covered)
-          elsif covered == "true"
-            branch_hits = line_node.attributes["count"].content.to_u64
             coverage[line_number] = 1  # Set 1 as an indicator of branch coverage
             branches[line_number] = [branch_hits]
           end
