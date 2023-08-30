@@ -16,19 +16,13 @@ module CoverageReporter
       [
         "**/*/clover.xml",
         "clover.xml",
-        "**/*/*coverage.xml",
-        "*coverage.xml",
       ]
     end
 
     def matches?(filename) : Bool
       File.each_line(filename) do |line|
-        return true if /<coverage/.matches?(line)
-        return true if /<project/.matches?(line)
-
+        return true if /<coverage generated=/.matches?(line)
         next if /\s*<\?xml\s+version=/.matches?(line)
-        next if /\s*<!--/.matches?(line)
-
         return false
       end
 
