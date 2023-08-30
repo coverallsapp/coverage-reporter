@@ -24,7 +24,7 @@ Spectator.describe CoverageReporter::CloverParser do
   # end
 
   describe "#parse" do
-    context "with basic coverage" do
+    context "with basic" do
       let(filename) { "spec/fixtures/clover/clover.xml" }
 
       it "parses the data correctly" do
@@ -36,7 +36,7 @@ Spectator.describe CoverageReporter::CloverParser do
       end
     end
 
-    context "with phpcsutils coverage" do
+    context "with clover-phpcsutils.xml" do
       let(filename) { "spec/fixtures/clover/clover-phpcsutils.xml" }
 
       it "parses the data correctly" do
@@ -48,7 +48,7 @@ Spectator.describe CoverageReporter::CloverParser do
       end
     end
 
-    context "with unleash coverage" do
+    context "with clover-unleash.xml" do
       let(filename) { "spec/fixtures/clover/clover-unleash.xml" }
 
       it "parses the data correctly" do
@@ -63,19 +63,32 @@ Spectator.describe CoverageReporter::CloverParser do
 
         # <line num="1" count="1" type="stmt"/>
         expect(with_branches.coverage[0]).to eq 1
+
         # no line
         expect(with_branches.coverage[3]).to eq nil
+
         # <line num="58" count="22" type="stmt"/>
         expect(with_branches.coverage[57]).to eq 22
+
         # <line num="217" count="2" type="cond" truecount="0" falsecount="1"/>
         expect(with_branches.coverage[216]).to eq 2
+
         # last line number
         # <line num="501" count="1" type="stmt"/>
         expect(with_branches.coverage.size).to eq 501
 
-        # if with_branches.branches.is_a?(Array)
-          # puts with_branches.branches.size
-        # end
+        branches = with_branches.branches
+        unless branches.nil?
+          expect((branches.size / 4).to_i).to eq 35
+
+          # <line num="48" count="1" type="cond" truecount="1" falsecount="1"/>
+          expect(branches[0]).to eq 48
+          expect(branches[1]).to eq 1
+
+          # <line num="54" count="1" type="cond" truecount="2" falsecount="0"/>
+          expect(branches[4]).to eq 54
+          expect(branches[5]).to eq 2
+        end
       end
     end
   end
