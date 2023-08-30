@@ -45,12 +45,12 @@ module CoverageReporter
         )
       end
 
-      xml.xpath_nodes("//file").each_with_index do |node, index|
+      xml.xpath_nodes("//file").each do |node|
         name = if node.attributes["path"]?
-          node.attributes["path"].content
-        else
-          node.attributes["name"].content
-        end
+                 node.attributes["path"].content
+               else
+                 node.attributes["name"].content
+               end
         coverage = Hash(Line, Hits?).new { |hh, kk| hh[kk] = 0 }
         branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
 
@@ -92,4 +92,3 @@ module CoverageReporter
     end
   end
 end
-

@@ -19,7 +19,6 @@ Spectator.describe CoverageReporter::CloverParser do
       expect(subject.matches?("spec/fixtures/clover/clover-phpcsutils.xml")).to eq true
       expect(subject.matches?("spec/fixtures/clover/clover-unleash.xml")).to eq true
 
-
       expect(subject.matches?("spec/fixtures/cobertura/cobertura.xml")).to eq false
       expect(subject.matches?("spec/fixtures/cobertura/cobertura-oneline.xml")).to eq false
       expect(subject.matches?("spec/fixtures/jacoco/jacoco-report.xml")).to eq false
