@@ -18,13 +18,13 @@ module CoverageReporter
     PARSERS = {
       LcovParser,
       SimplecovParser,
+      CloverParser,
       CoberturaParser,
       JacocoParser,
       GcovParser,
       GolangParser,
       CoveragepyParser,
       CoverallsParser,
-      CloverParser,
     }
 
     class NotFound < BaseException
