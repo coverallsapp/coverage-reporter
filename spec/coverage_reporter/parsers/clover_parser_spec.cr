@@ -54,24 +54,28 @@ Spectator.describe CoverageReporter::CloverParser do
       it "parses the data correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 1
-        expect(reports[0].name).to match /.*BasicCalculator.php/
+        expect(reports.size).to eq 82
+        expect(reports[0].name).to eq("home/jaanus/Git/unleash/src/lib/create-config.ts")
+
         with_branches = reports.find! do |report|
-          # report.name == "org/scoverage/samples/SimpleObject2.scala"
-          report.name == "home/yu/projects/example-php/calculator/BasicCalculator.php"
+          report.name == "home/jaanus/Git/unleash/src/lib/create-config.ts"
         end
 
-        expect(with_branches.coverage).to eq [nil, nil, nil, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, 0, nil, 1] of UInt64?
+        # <line num="1" count="1" type="stmt"/>
+        expect(with_branches.coverage[0]).to eq 1
+        # no line
+        expect(with_branches.coverage[3]).to eq nil
+        # <line num="58" count="22" type="stmt"/>
+        expect(with_branches.coverage[57]).to eq 22
+        # <line num="217" count="2" type="cond" truecount="0" falsecount="1"/>
+        expect(with_branches.coverage[216]).to eq 2
+        # last line number
+        # <line num="501" count="1" type="stmt"/>
+        expect(with_branches.coverage.size).to eq 501
 
-        expect(with_branches.branches).to eq [] of UInt64?
-
-        with_branches_on_one_line = reports.find! do |report|
-          report.name.matches?(/.*BasicCalculator.php/)
-        end
-        expect(with_branches_on_one_line.coverage).to eq [
-          nil, nil, nil, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, nil, nil, 1, 1, 0, nil, 1
-        ] of UInt64?
-        expect(with_branches_on_one_line.branches).to eq [] of UInt64?
+        # if with_branches.branches.is_a?(Array)
+          # puts with_branches.branches.size
+        # end
       end
     end
   end

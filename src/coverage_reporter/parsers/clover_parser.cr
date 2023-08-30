@@ -49,23 +49,27 @@ module CoverageReporter
         )
       end
 
-      xml.xpath_nodes("//file").each do |node|
-        name = node.attributes["name"].content
+      xml.xpath_nodes("//file").each_with_index do |node, index|
+        name = if node.attributes["path"]?
+          node.attributes["path"].content
+        else
+          node.attributes["name"].content
+        end
         coverage = Hash(Line, Hits?).new { |hh, kk| hh[kk] = 0 }
         branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
 
-        node.xpath_nodes("line").each do |line_node|
+        lines_nodes = node.xpath_nodes("line")
+        lines_nodes.each do |line_node|
           line_number = line_node.attributes["num"].content.to_u64
-          covered = line_node.attributes["type"].content
+          line_type = line_node.attributes["type"].content
 
-          if covered == "stmt" || covered == "method"
-            hits = line_node.attributes["count"].content.to_u64
-            coverage[line_number] = hits
-          elsif covered == "cond"
+          if line_type == "cond"
             branch_hits = line_node.attributes["truecount"].content.to_u64
-            coverage[line_number] = 1  # Set 1 as an indicator of branch coverage
             branches[line_number] = [branch_hits]
           end
+
+          hits = line_node.attributes["count"].content.to_u64
+          coverage[line_number] = hits
         end
 
         files[name].coverage.merge!(coverage)
