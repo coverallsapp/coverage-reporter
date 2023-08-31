@@ -22,6 +22,7 @@ jobs:
       # Since windows runner can be updated the version can change in future releases.
       - name: Install SQLite3 + generate sqlite3.lib
         run: |
+          ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
           choco install sqlite -y
           cd C:\ProgramData\chocolatey\lib\SQLite\tools
           ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
