@@ -152,6 +152,7 @@ With values used for `--format` option:
 - [x] Golang coverage format - `golang`
 - [x] Coveralls JSON format - `coveralls`
 - [x] Pytest-Cov ([:test_tube: beta](#pytest-cov-test_tube-beta)) - `python`
+- [x] Clover XML - `phpunit`
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
