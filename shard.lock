@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.4.3+git.commit.a33f98624a30a62cdf03affe32e7469ab2287f9f
+    version: 1.5.0+git.commit.18d193bd0831db721adeaed41655dd40cad3c0ae
 
   crystal-kcov:
     git: https://github.com/vici37/crystal-kcov.git
