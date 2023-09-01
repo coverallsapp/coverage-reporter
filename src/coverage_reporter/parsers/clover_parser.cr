@@ -61,7 +61,7 @@ module CoverageReporter
 
           if line_type == "cond"
             branch_hits = line_node.attributes["truecount"].content.to_u64
-            branches[line_number] = [branch_hits]
+            branches[line_number] << branch_hits
           end
 
           hits = line_node.attributes["count"].content.to_u64
