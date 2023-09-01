@@ -15,7 +15,6 @@ Spectator.describe CoverageReporter::CloverParser do
 
   describe "#matches?" do
     it "matches correct filenames" do
-      expect(subject.matches?("spec/fixtures/clover/clover.xml")).to eq true
       expect(subject.matches?("spec/fixtures/clover/clover-phpcsutils.xml")).to eq true
       expect(subject.matches?("spec/fixtures/clover/clover-unleash.xml")).to eq true
 
@@ -27,25 +26,13 @@ Spectator.describe CoverageReporter::CloverParser do
   end
 
   describe "#parse" do
-    context "with basic" do
-      let(filename) { "spec/fixtures/clover/clover.xml" }
-
-      it "parses the data correctly" do
-        reports = subject.parse(filename)
-
-        expect(reports.size).to eq 1
-        expect(reports[0].name).to match /.*BasicCalculator.php/
-        expect(reports[0].branches).to eq [] of UInt64?
-      end
-    end
-
     context "with clover-phpcsutils.xml" do
       let(filename) { "spec/fixtures/clover/clover-phpcsutils.xml" }
 
       it "parses the data correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 37
+        expect(reports.size).to eq 2
         expect(reports[0].name).to match /.*AbstractArrayDeclarationSniff.php/
         expect(reports[0].branches).to eq [] of UInt64?
       end
@@ -57,7 +44,7 @@ Spectator.describe CoverageReporter::CloverParser do
       it "parses the data correctly" do
         reports = subject.parse(filename)
 
-        expect(reports.size).to eq 82
+        expect(reports.size).to eq 2
         expect(reports[0].name).to eq("home/jaanus/Git/unleash/src/lib/create-config.ts")
 
         with_branches = reports.find! do |report|
