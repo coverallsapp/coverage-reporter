@@ -1,41 +1,45 @@
 ```
-⠀⠀⠀⠀⠀⠀⣿
-⠀⠀⠀⠀⠀⣼⣿⣧⠀⠀⠀⠀⠀⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷
+ ⠀⠀⠀⠀⠀⠀⣿
+ ⠀⠀⠀⠀⠀⣼⣿⣧⠀⠀⠀⠀⠀ ⠀⠀ ⣠⣶⣾⣿⡇⢀⣴⣾⣿⣷⣆ ⣿⣿⠀⣰⣿⡟⢸⣿⣿⣿⡇ ⣿⣿⣿⣷⣦⠀⠀⢠⣿⣿⣿⠀⠀⣿⣿⠁⠀⣼⣿⡇⠀⢀⣴⣾⣿⡷
 ⠶⣶⣶⣶⣾⣿⣿⣿⣷⣶⣶⣶⠶  ⣸⣿⡟ ⠀⢠⣿⣿⠃⠈⣿⣿⠀⣿⣿⢠⣿⡿⠀⣿⣿⣧⣤⠀⢸⣿⡇⣠⣿⡿⠀⢠⣿⡟⣿⣿⠀⢸⣿⡿⠀⠀⣿⣿⠃⠀⢸⣿⣧⣄
 ⠀⠀⠙⢻⣿⣿⣿⣿⣿⡟⠋⠁⠀⠀ ⣿⣿⡇⠀ ⢸⣿⣿⠀⣸⣿⡟⠀⣿⣿⣾⡿⠁ ⣿⣿⠛⠛⠀⣿⣿⢿⣿⣏⠀⢀⣿⣿⣁⣿⣿⠀⣾⣿⡇⠀⢸⣿⡿⠀⠀⡀⠙⣿⣿⡆
 ⠀⠀⢠⣿⣿⣿⠿⣿⣿⣿⡄⠀⠀⠀ ⠙⢿⣿⣿⠇⠈⠿⣿⣿⡿⠋⠀⠀⢿⣿⡿⠁⠀⢸⣿⣿⣿⡇⢸⣿⣿⠀⣿⣿⣄⣾⣿⠛⠛⣿⣿⢠⣿⣿⣿ ⣼⣿⣿⣿ ⣿⣿⡿⠋⠀
 ⠀⢀⣾⠟⠋⠀⠀⠀⠙⠻⣷⡀⠀⠀
 ```
 
-# Universal Coverage Reporter ![GitHub Action](https://github.com/coverallsapp/coverage-reporter/workflows/Build/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/coverallsapp/coverage-reporter/badge.svg?branch=master)](https://coveralls.io/github/coverallsapp/coverage-reporter?branch=master)
+# Universal Coverage Reporter
+
+[![Build](https://github.com/coverallsapp/coverage-reporter/actions/workflows/build.yml/badge.svg)](https://github.com/coverallsapp/coverage-reporter/actions/workflows/build.yml)
+[![Coverage Status](https://coveralls.io/repos/github/coverallsapp/coverage-reporter/badge.svg?branch=master)](https://coveralls.io/github/coverallsapp/coverage-reporter?branch=master)
 
 Auto-detects your coverage artifact files and CI environment to post to [Coveralls.io](https://coveralls.io).
 
 ## Install
 
-#### Linux
+### Linux
+
+You can omit `-C /usr/local/bin` argument to keep it in current directory.
 
 ```bash
-# You can omit '-C /usr/local/bin' argument to keep it in current directory
 curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 ```
 
-#### MacOS
+### MacOS
 
 ```bash
 brew tap coverallsapp/coveralls
 brew install coveralls
 ```
 
-#### Windows
+### Windows
 
-Bash:
+Bash
 
 ```bash
 curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.exe -o coveralls.exe
 ```
 
-PowerShell:
+PowerShell
 
 ```powershell
 Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-windows.exe" -OutFile "coveralls.exe"
@@ -43,7 +47,7 @@ Invoke-WebRequest -Uri "https://github.com/coverallsapp/coverage-reporter/releas
 
 ## Usage
 
-> See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
+See also [environment variables list](./doc/configuration.md#env-variables) and [YAML config](./doc/configuration.md#yaml-config) that control the utility behavior.
 
 ### Examples
 
@@ -73,7 +77,7 @@ coveralls report --debug --dry-run
 ```
 
 <details>
-<summary>For more options see <code>coveralls -h/--help</code></summary>
+<summary>For more options see <code>coveralls --help</code></summary>
 
 ```
 $ coveralls -h
@@ -132,11 +136,10 @@ Usage: coveralls done [options]
 
 ### CI Examples
 
-- [Github Actions](./doc/examples/github-actions.yml)
-- [Github Actions (using `coverallsapp/github-action`)](./doc/examples/github-actions-default.yml)
+- [GitHub Actions](./doc/examples/github-actions.yml)
+- [GitHub Actions (using `coverallsapp/github-action`)](./doc/examples/github-actions-default.yml)
 - [Circle CI](./doc/examples/circleci.yml)
 - [Circle CI (orb)](./doc/examples/circleci-orb.yml)
-
 
 ## Built-In Support
 
@@ -171,7 +174,7 @@ coveralls -f coverage.xml
 ### Supported CI Services
 
 - CircleCI
-- Github Actions
+- GitHub Actions
 - Travis
 - Jenkins
 - GitLab
@@ -220,9 +223,7 @@ SSL check will be automatically disabled to allow self-signed certificates.
 
 More info: [https://enterprise.coveralls.io](https://enterprise.coveralls.io)
 
----
-
-# Development
+## Development
 
 To get started you will need crystal [installed](https://crystal-lang.org/install/) on your machine and then you can run:
 
@@ -237,7 +238,7 @@ Run specs:
 make test
 ```
 
-# Deployment
+### Deployment
 
 Cutting new releases.
 
@@ -258,4 +259,4 @@ $ git push origin master --follow-tags
 3. Create a tag `git tag --annotate vX.X.X` with the same annotation as commit message
 4. Push with a tag `git push origin master --follow-tags`
 
-Github release will be created automatically.
+GitHub release will be created automatically.
