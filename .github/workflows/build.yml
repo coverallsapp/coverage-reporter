@@ -38,4 +38,4 @@ jobs:
 
       - name: Running
         shell: pwsh
-        run: coveralls.exe done -r 123
+        run: coveralls done -r 123
