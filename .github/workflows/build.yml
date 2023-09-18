@@ -33,9 +33,10 @@ jobs:
       - run: shards install --production
 
       - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
+
       - run: |
           cd dist
 
       - name: Running
         shell: pwsh
-        run: coveralls done -r 123
+        run: .\coveralls done -r 123
