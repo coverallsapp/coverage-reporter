@@ -39,7 +39,7 @@ module CoverageReporter
           uri,
           headers: headers,
           body: data.to_json,
-          tls: Api.tls_for(uri)
+          tls: Api.tls_for(uri, @config.force_insecure_requests)
         )
       end
 

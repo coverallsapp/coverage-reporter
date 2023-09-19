@@ -23,7 +23,8 @@ module CoverageReporter::Cli
       overrides: opts.overrides,
       parallel: opts.parallel?,
       repo_token: opts.repo_token,
-      measure: opts.debug? || opts.measure?
+      measure: opts.debug? || opts.measure?,
+      force_insecure_requests: opts.force_insecure_requests?,
     )
 
     if opts.parallel_done?
@@ -96,6 +97,7 @@ module CoverageReporter::Cli
     property? allow_empty = false
     property? measure = false
     property? no_fail = false
+    property? force_insecure_requests = false
 
     # CI options overrides
     property service_name : String?
@@ -220,6 +222,19 @@ module CoverageReporter::Cli
 
         parser.on("-m", "--measure", "Measure time for parsing and HTTP requests") do
           opts.measure = true
+        end
+      end
+
+      parser.on("--force-insecure-requests", "Workaround for unsupported OpenSSL v1.0.2, which forces insecure HTTPS requests") do
+        if CoverageReporter::OpenSSLVersion.new.can_fail?
+          opts.force_insecure_requests = true
+          Log.warn "⚠️  Coverage Reporter is using insecure HTTPS requests!"
+        else
+          error_message = <<-ERROR
+            Using insecure HTTPS requests is not supported for OpenSSL => #{OpenSSLVersion::WORKS}.
+          ERROR
+          Log.error error_message
+          raise(error_message)
         end
       end
 

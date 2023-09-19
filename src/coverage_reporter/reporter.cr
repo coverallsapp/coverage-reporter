@@ -16,7 +16,8 @@ module CoverageReporter
       overrides : CI::Options? = nil,
       parallel : Bool = false,
       repo_token : String? = nil,
-      measure : Bool = false
+      measure : Bool = false,
+      force_insecure_requests : Bool = false
 
     class NoSourceFiles < BaseException
       def message
@@ -82,6 +83,7 @@ module CoverageReporter
         compare_sha: settings.compare_sha,
         path: settings.config_path,
         overrides: settings.overrides,
+        force_insecure_requests: settings.force_insecure_requests,
       )
     end
 

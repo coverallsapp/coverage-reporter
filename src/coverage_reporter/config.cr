@@ -6,6 +6,7 @@ module CoverageReporter
   class Config
     getter repo_token : String?
     getter flag_name : String?
+    getter force_insecure_requests : Bool
 
     @options : Hash(Symbol, String)?
     @yaml : YamlConfig
@@ -45,7 +46,8 @@ module CoverageReporter
       @flag_name : String? = nil,
       @overrides : CI::Options? = nil,
       @compare_ref : String? = nil,
-      @compare_sha : String? = nil
+      @compare_sha : String? = nil,
+      @force_insecure_requests : Bool = false
     )
       @yaml = YamlConfig.read(path)
 
