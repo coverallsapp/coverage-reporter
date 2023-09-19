@@ -35,12 +35,14 @@ module CoverageReporter
       })
 
       res = Api.with_redirects(webhook_uri) do |uri|
-        HTTP::Client.post(
-          uri,
-          headers: headers,
-          body: data.to_json,
-          tls: Api.tls_for(uri, @config.force_insecure_requests)
-        )
+        Api.with_ssl_errors_handling do
+          HTTP::Client.post(
+            uri,
+            headers: headers,
+            body: data.to_json,
+            tls: Api.tls_for(uri, @config.force_insecure_requests)
+          )
+        end
       end
 
       Api.handle_response(res)
