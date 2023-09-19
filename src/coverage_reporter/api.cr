@@ -55,7 +55,7 @@ module CoverageReporter
     def with_ssl_errors_handling() : HTTP::Client::Response
       begin
         yield
-      rescue ex
+      rescue ex : OpenSSL::SSL::Error
         if OpenSSLVersion.new.can_fail?
           Log.error <<-ERROR
             Consider upgrading `openssl` library to version >= #{OpenSSLVersion::WORKS} or using --force-insecure-requests flag
