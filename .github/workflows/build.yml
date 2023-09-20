@@ -31,6 +31,9 @@ jobs:
 
       - name: Set static paths test
         run: |
+          echo $env:CRYSTAL_LIBRARY_RPATH
+          echo $env:CRYSTAL_LIBRARY_PATH
+
           echo ("CRYSTAL_LIBRARY_RPATH='C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/'") >> $env:GITHUB_ENV
           echo ("CRYSTAL_LIBRARY_PATH='C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/'") >> $env:GITHUB_ENV
 
