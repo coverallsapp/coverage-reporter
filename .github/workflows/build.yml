@@ -32,6 +32,7 @@ jobs:
       - name: Set static paths test
         run: |
           Write-Host "The operating system on the runner is Windows: $RUNNER_OS."
+          Write-Host "The operating system on the runner is Windows: $env:RUNNER_OS."
           Write-Host $env:CRYSTAL_LIBRARY_RPATH
           Write-Host $env:CRYSTAL_LIBRARY_PATH
 
