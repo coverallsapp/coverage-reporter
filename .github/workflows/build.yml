@@ -28,7 +28,7 @@ jobs:
           & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
           cp sqlite3.lib 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64'
 
-      - name: Set static paths
+      - name: Set static paths test
         run: |
           export CRYSTAL_LIBRARY_RPATH='C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/'
           export CRYSTAL_LIBRARY_PATH='C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/'
