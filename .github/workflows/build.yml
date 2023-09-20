@@ -16,6 +16,18 @@ jobs:
   build-windows:
     runs-on: windows-2022
     steps:
+      - name: Set static paths test
+        run: |
+          Write-Host "The operating system on the runner is Windows: $env:RUNNER_OS."
+          Write-Host "CRYSTAL_LIBRARY_RPATH: $env:CRYSTAL_LIBRARY_RPATH"
+          Write-Host "CRYSTAL_LIBRARY_PATH: $env:CRYSTAL_LIBRARY_PATH"
+
+          echo ("CRYSTAL_LIBRARY_RPATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/;" + $env:CRYSTAL_LIBRARY_RPATH) >> $env:GITHUB_ENV
+          echo ("CRYSTAL_LIBRARY_PATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64/;" + $env:CRYSTAL_LIBRARY_PATH) >> $env:GITHUB_ENV
+
+          Write-Host "CRYSTAL_LIBRARY_RPATH: $env:CRYSTAL_LIBRARY_RPATH"
+          Write-Host "CRYSTAL_LIBRARY_PATH: $env:CRYSTAL_LIBRARY_PATH"
+
       # If this step breaks, try inspecting MSVC directory and consider changing appropriate paths.
       #
       #   ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
@@ -28,12 +40,6 @@ jobs:
           ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
           & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
           cp sqlite3.lib 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64'
-
-      - name: Set static paths test
-        run: |
-          Write-Host "The operating system on the runner is Windows: $env:RUNNER_OS."
-          Write-Host "CRYSTAL_LIBRARY_RPATH: $env:CRYSTAL_LIBRARY_RPATH"
-          Write-Host "CRYSTAL_LIBRARY_PATH: $env:CRYSTAL_LIBRARY_PATH"
 
       - name: Checkout code
         uses: actions/checkout@v3
