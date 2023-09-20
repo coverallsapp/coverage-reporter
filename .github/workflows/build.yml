@@ -38,7 +38,7 @@ jobs:
 
       - name: Set PATH
         run: |
-          echo ($env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ';C:\ProgramData\chocolatey\lib\SQLite\tools') >> $env:GITHUB_ENV
+          echo "CRYSTAL_LIBRARY_PATH='$(crystal env CRYSTAL_LIBRARY_PATH);C:\ProgramData\chocolatey\lib\SQLite\tools'" >> $env::GITHUB_ENV
           Write-Host "crystal env: " + crystal env
 
       - run: shards install --production
