@@ -23,8 +23,8 @@ jobs:
           Write-Host "CRYSTAL_LIBRARY_PATH: $env:CRYSTAL_LIBRARY_PATH"
           Write-Host "GITHUB_ENV: $env:GITHUB_ENV"
 
-          echo ("$env:CRYSTAL_LIBRARY_RPATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64;" + $env:CRYSTAL_LIBRARY_RPATH) >> $env:GITHUB_ENV
-          echo ("$env:CRYSTAL_LIBRARY_PATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64;" + $env:CRYSTAL_LIBRARY_PATH) >> $env:GITHUB_ENV
+          echo ("CRYSTAL_LIBRARY_RPATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64;" + $env:CRYSTAL_LIBRARY_RPATH) >> $env:GITHUB_ENV
+          echo ("CRYSTAL_LIBRARY_PATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64;" + $env:CRYSTAL_LIBRARY_PATH) >> $env:GITHUB_ENV
 
           Write-Host "CRYSTAL_LIBRARY_RPATH: $env:CRYSTAL_LIBRARY_RPATH"
           Write-Host "CRYSTAL_LIBRARY_PATH: $env:CRYSTAL_LIBRARY_PATH"
