@@ -38,12 +38,21 @@ jobs:
 
       - name: Set PATH
         run: |
+          $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
+          Write-Host "crystal env: " + $(crystal env)
           echo "CRYSTAL_LIBRARY_PATH='$(crystal env CRYSTAL_LIBRARY_PATH);C:\ProgramData\chocolatey\lib\SQLite\tools'" >> $env::GITHUB_ENV
           Write-Host "crystal env: " + $(crystal env)
 
       - run: shards install --production
 
-      - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
+      - run: |
+          $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
+          Write-Host "crystal env: " + $(crystal env)
+          echo "CRYSTAL_LIBRARY_PATH='$(crystal env CRYSTAL_LIBRARY_PATH);C:\ProgramData\chocolatey\lib\SQLite\tools'" >> $env::GITHUB_ENV
+          Write-Host "crystal env: " + $(crystal env)
+          crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
+          Write-Host "crystal env: " + $(crystal env)
+
       - run: |
           cd dist
           tar -acf coveralls-windows.zip coveralls.exe
