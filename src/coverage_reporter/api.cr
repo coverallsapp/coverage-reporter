@@ -7,6 +7,19 @@ module CoverageReporter
   module Api
     extend self
 
+    OPENSSL_VERSION = `openssl version -v`
+
+    WORKS = SemanticVersion.new(1, 1, 0)
+    matches = /.*(\d+)\.(\d+)\.(\d+).*/.match(OPENSSL_VERSION)
+    unless matches.nil?
+      major = matches[1].to_i
+      minor = matches[2].to_i
+      patch = matches[3].to_i
+
+      current = SemanticVersion.new(major, minor, patch)
+      puts current
+      puts current < WORKS
+    end
 
     DEFAULT_HEADERS = HTTP::Headers{
       "X-Coveralls-Reporter"         => "coverage-reporter",
@@ -44,8 +57,7 @@ module CoverageReporter
       end
     end
 
-    def tls_for(uri : URI, force_insecure_requests : Bool = false) : OpenSSL::SSL::Context::Client?
-      return OpenSSL::SSL::Context::Client.insecure if force_insecure_requests
+    def tls_for(uri : URI) : OpenSSL::SSL::Context::Client?
       return nil unless uri.scheme == "https"
       return nil if uri.host == "coveralls.io"
 
