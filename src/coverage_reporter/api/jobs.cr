@@ -64,14 +64,12 @@ module CoverageReporter
         headers.merge!(HTTP::Headers{"Content-Type" => content_type.gsub("\"", "")})
 
         response = Api.with_redirects(jobs_uri) do |uri|
-          Api.with_ssl_errors_handling do
-            HTTP::Client.post(
-              uri,
-              body: body,
-              headers: headers,
-              tls: Api.tls_for(uri, @config.force_insecure_requests)
-            )
-          end
+          HTTP::Client.post(
+            uri,
+            body: body,
+            headers: headers,
+            tls: Api.tls_for(uri, @config.force_insecure_requests)
+          )
         end
 
         Api.handle_response(response)

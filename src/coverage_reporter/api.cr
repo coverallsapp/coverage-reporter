@@ -52,19 +52,6 @@ module CoverageReporter
       OpenSSL::SSL::Context::Client.insecure
     end
 
-    def with_ssl_errors_handling() : HTTP::Client::Response
-      begin
-        yield
-      rescue ex
-        if OpenSSLVersion.new.can_fail?
-          Log.error <<-ERROR
-            Consider upgrading `openssl` library to version >= #{OpenSSLVersion::WORKS} or using --force-insecure-requests flag
-          ERROR
-        end
-        raise(ex)
-      end
-    end
-
     def with_redirects(uri : URI, max_redirects : Int32 = 10, & : URI -> HTTP::Client::Response) : HTTP::Client::Response
       redirect_num = 0
       response = yield(uri)
