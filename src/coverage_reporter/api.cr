@@ -2,9 +2,11 @@ require "./config"
 require "./api/*"
 require "http"
 
+
 module CoverageReporter
   module Api
     extend self
+
 
     DEFAULT_HEADERS = HTTP::Headers{
       "X-Coveralls-Reporter"         => "coverage-reporter",
