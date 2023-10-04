@@ -55,7 +55,7 @@ jobs:
 
       - run: |
           cd dist
-          tar -acf coveralls-windows.zip coveralls.exe
+          tar -acf coveralls-windows.zip coveralls.exe "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll"
 
       - name: Upload exe
         uses: actions/upload-artifact@v3
@@ -63,7 +63,14 @@ jobs:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
-
+          
+      - name: Upload sqlite3.dll
+        uses: actions/upload-artifact@v3
+        with:
+          name: sqlite3.dll
+          path: "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll"
+          if-no-files-found: error
+          
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
