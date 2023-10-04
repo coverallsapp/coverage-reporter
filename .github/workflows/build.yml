@@ -53,9 +53,12 @@ jobs:
           crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress -Dpreview_win32_delay_load
           Write-Host "crystal env: " + $(crystal env)
 
+      - name: Copy dll
+      - run: cp "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll" dist\sqlite3.dll
+
       - run: |
           cd dist
-          tar -acf coveralls-windows.zip coveralls.exe "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll"
+          tar -acf coveralls-windows.zip coveralls.exe sqlite3.dll
 
       - name: Upload exe
         uses: actions/upload-artifact@v3
@@ -68,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: sqlite3.dll
-          path: "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll"
+          path: dist/sqlite3.dll
           if-no-files-found: error
           
       - name: Upload zip
