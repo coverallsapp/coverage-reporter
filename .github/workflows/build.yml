@@ -43,11 +43,10 @@ jobs:
           $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
           crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress -Dpreview_win32_delay_load
 
-      - name: Copy sqlite3.dll
-        run: cp "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll" dist\sqlite3.dll
-
-      - run: |
+      - name: copy dll and zip
+        run: |
           cd dist
+          cp "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll" sqlite3.dll
           tar -acf coveralls-windows.zip coveralls.exe sqlite3.dll
 
       - name: Upload exe
