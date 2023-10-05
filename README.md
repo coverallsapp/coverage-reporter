@@ -239,7 +239,7 @@ Run specs:
 make test
 ```
 
-## Windows vagrant setup:
+## Setup Windows in Vagrant
 
 ```linux
 vagrant init gusztavvargadr/windows-server-2022-standard-core
@@ -270,7 +270,6 @@ vagrant ssh
     $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
     # ready to build
 ```
-
 
 ### Deployment
 
