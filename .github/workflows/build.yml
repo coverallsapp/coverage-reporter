@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - master
-      - sr-64-github-action-coverage-reporter-crashing-on-windows
   push:
     tags:
       - 'v*'
