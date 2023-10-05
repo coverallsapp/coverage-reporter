@@ -36,22 +36,12 @@ jobs:
         with:
           crystal: 1.9
 
-      - name: Set PATH
-        run: |
-          $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
-          Write-Host "crystal env: " + $(crystal env)
-          echo "CRYSTAL_LIBRARY_PATH='$(crystal env CRYSTAL_LIBRARY_PATH);C:\ProgramData\chocolatey\lib\SQLite\tools'" >> $env::GITHUB_ENV
-          Write-Host "crystal env: " + $(crystal env)
-
       - run: shards install --production
 
+      - name: Set path and build
       - run: |
           $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
-          Write-Host "crystal env: " + $(crystal env)
-          echo "CRYSTAL_LIBRARY_PATH='$(crystal env CRYSTAL_LIBRARY_PATH);C:\ProgramData\chocolatey\lib\SQLite\tools'" >> $env::GITHUB_ENV
-          Write-Host "crystal env: " + $(crystal env)
           crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress -Dpreview_win32_delay_load
-          Write-Host "crystal env: " + $(crystal env)
 
       - name: Copy sqlite3.dll
         run: cp "C:\ProgramData\chocolatey\lib\SQLite\tools\sqlite3.dll" dist\sqlite3.dll
