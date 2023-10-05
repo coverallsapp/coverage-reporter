@@ -39,7 +39,7 @@ jobs:
       - run: shards install --production
 
       - name: Set path and build
-      - run: |
+        run: |
           $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
           crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress -Dpreview_win32_delay_load
 
