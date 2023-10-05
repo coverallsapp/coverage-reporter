@@ -134,6 +134,7 @@ jobs:
           'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
+          'sqlite3.dll#sqlite3.dll'
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
