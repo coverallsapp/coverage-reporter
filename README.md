@@ -239,6 +239,39 @@ Run specs:
 make test
 ```
 
+## Windows vagrant setup:
+
+```linux
+vagrant init gusztavvargadr/windows-server-2022-standard-core
+vagrant up
+vagrant ssh
+# type PowerShell<enter>
+```
+
+```PowerShell
+    # install scoop
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    irm get.scoop.sh -outfile 'install.ps1'
+    .\install.ps1 -RunAsAdmin
+    # install dev tools
+    scoop bucket add crystal-preview https://github.com/neatorobito/scoop-crystal
+    scoop install git
+    scoop install crystal
+    choco install sqlite
+    scoop install vs_2022_cpp_build_tools
+    # generate sqlite3.lib
+    cd C:\ProgramData\chocolatey\lib\SQLite\tools
+    & 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.37.32822\bin\Hostx86\x86\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib  /MACHINE:x64
+    # repo
+    cd C:\Users\vagrant
+    git clone https://github.com/coverallsapp/coverage-reporter.git
+    cd coverage-reporter
+    shards install
+    $env:CRYSTAL_LIBRARY_PATH = (crystal env CRYSTAL_LIBRARY_PATH) + ";C:\ProgramData\chocolatey\lib\SQLite\tools"
+    # ready to build
+```
+
+
 ### Deployment
 
 Cutting new releases.
