@@ -242,7 +242,7 @@ make test
 ## Setup Windows in Vagrant
 
 ```bash
-# on the host machine, after vagrant is set-up
+# On the host machine, after vagrant is set up
 vagrant init gusztavvargadr/windows-server-2022-standard-core
 vagrant up
 vagrant ssh
