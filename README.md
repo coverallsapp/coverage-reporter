@@ -239,6 +239,19 @@ Run specs:
 make test
 ```
 
+### Setup Windows in Vagrant
+
+```bash
+vagrant up
+
+# to re-run provision script
+vagrant provision
+
+# to access Windows VM
+vagrant ssh
+# type powershell<enter>
+```
+
 ### Deployment
 
 Cutting new releases.

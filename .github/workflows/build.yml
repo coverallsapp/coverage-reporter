@@ -15,19 +15,6 @@ jobs:
   build-windows:
     runs-on: windows-2022
     steps:
-      # If this step breaks, try inspecting MSVC directory and consider changing appropriate paths.
-      #
-      #   ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
-      #
-      # Since windows runner can be updated the version can change in future releases.
-      - name: Install SQLite3 + generate sqlite3.lib
-        run: |
-          choco install sqlite -y
-          cd C:\ProgramData\chocolatey\lib\SQLite\tools
-          ls 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\'
-          & 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\bin\Hostx64\x64\lib.exe' /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64
-          cp sqlite3.lib 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.37.32822\lib\x64'
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -36,11 +23,20 @@ jobs:
         with:
           crystal: 1.9
 
-      - run: shards install --production
+      - name: Build SQLite3 static library
+        run: "scripts/sqlite3-static.ps1"
 
-      - run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
-      - run: |
+      - name: Install shards dependencies
+        run: shards install --production
+
+      - name: Build coverage reporter CLI
+        run: crystal build src\cli.cr -o dist\coveralls --release --static --no-debug --progress
+
+      - name: Prepare distribution archive
+        run: |
           cd dist
+          $vsbase = vswhere.exe -products * -property installationPath
+          & "$vsbase\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64\dumpbin.exe" /dependents coveralls.exe
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
