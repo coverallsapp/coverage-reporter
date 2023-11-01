@@ -259,7 +259,7 @@ Cutting new releases.
 #### Auto (prefered)
 
 ```bash
-$ make new_release
+$ make new_version
 New version: 1.2.3
 Brief description: new coverage report support
 
