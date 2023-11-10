@@ -141,6 +141,23 @@ Usage: coveralls done [options]
 - [Circle CI](./doc/examples/circleci.yml)
 - [Circle CI (orb)](./doc/examples/circleci-orb.yml)
 
+
+### Throubleshooting
+
+#### OpenSSL connection errors
+
+**Example:**
+
+```
+<OpenSSL::SSL::Error:SSL_connect: error:0A000086:SSL routines::certificate verify failed>
+```
+
+**Solution**: provide correct certificate path with ENV-variable
+
+```
+SSL_CERT_FILE=/etc/pki/tls/cert.pem
+```
+
 ## Built-In Support
 
 ### Supported Coverage Report Formats
