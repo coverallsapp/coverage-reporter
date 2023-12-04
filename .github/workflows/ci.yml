@@ -10,7 +10,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-2022]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -19,8 +19,14 @@ jobs:
       uses: crystal-lang/install-crystal@v1
       with:
         crystal: 1.9
+
+    - name: Build SQLite3 static library
+      if: startsWith(runner.os, 'Windows')
+      run: "scripts/sqlite3-static.ps1"
+
     - name: Install dependencies
-      run: shards install
+      run: shards install ${{ startsWith(runner.os, 'Windows') && '--skip-postinstall --skip-executables' || '' }}
+
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 

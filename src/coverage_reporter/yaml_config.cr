@@ -15,7 +15,8 @@ module CoverageReporter
     DEFAULT_LOCATION = ".coveralls.yml"
 
     def self.read(path)
-      if File.exists?(path.to_s)
+      path_string = path.to_s
+      if path.presence && File.exists?(path_string)
         self.from_yaml(File.read(path.to_s))
       else
         self.from_yaml("---\n")
