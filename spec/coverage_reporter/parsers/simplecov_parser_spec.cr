@@ -6,7 +6,7 @@ Spectator.describe CoverageReporter::SimplecovParser do
   describe "#globs" do
     it "finds all simplecov files" do
       expect(Dir[subject.globs]).to contain(
-        "spec/fixtures/simplecov/.resultset.json",
+        Path.new("spec", "fixtures", "simplecov", ".resultset.json").to_s,
       )
     end
   end
