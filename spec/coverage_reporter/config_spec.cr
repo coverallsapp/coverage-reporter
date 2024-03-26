@@ -11,14 +11,111 @@ Spectator.describe CoverageReporter::Config do
     )
   end
 
-  before_each { ENV.clear }
-  after_each { ENV.clear }
-
   let(repo_token) { nil }
   let(path) { "" }
   let(job_flag_name) { nil }
   let(compare_ref) { nil }
   let(compare_sha) { nil }
+
+  before_each { delete_env_vars }
+  after_each { delete_env_vars }
+
+  def delete_env_vars
+    ENV.delete("APPVEYOR")
+    ENV.delete("APPVEYOR_BUILD_VERSION")
+    ENV.delete("APPVEYOR_REPO_BRANCH")
+    ENV.delete("APPVEYOR_REPO_COMMIT")
+    ENV.delete("APPVEYOR_REPO_NAME")
+    ENV.delete("BUILDKITE")
+    ENV.delete("BUILDKITE_BUILD_NUMBER")
+    ENV.delete("BUILDKITE_BUILD_ID")
+    ENV.delete("BUILDKITE_PULL_REQUEST")
+    ENV.delete("BUILDKITE_BRANCH")
+    ENV.delete("BUILDKITE_COMMIT")
+    ENV.delete("CF_BRANCH")
+    ENV.delete("CF_BUILD_ID")
+    ENV.delete("CF_PULL_REQUEST_ID")
+    ENV.delete("CF_BRANCH")
+    ENV.delete("CF_REVISION")
+    ENV.delete("CI_BRANCH")
+    ENV.delete("CI_BUILD_NUMBER")
+    ENV.delete("CI_BUILD_URL")
+    ENV.delete("CI_COMMIT")
+    ENV.delete("CI_COMMIT_ID")
+    ENV.delete("CI_JOB_ID")
+    ENV.delete("CI_NAME")
+    ENV.delete("CI_PULL_REQUEST")
+    ENV.delete("CI_XCODE_PROJECT")
+    ENV.delete("CI_PULL_REQUEST_NUMBER")
+    ENV.delete("CIRCLECI")
+    ENV.delete("CIRCLE_WORKFLOW_ID")
+    ENV.delete("CIRCLE_BUILD_NUM")
+    ENV.delete("CIRCLE_BRANCH")
+    ENV.delete("CIRCLE_BUILD_URL")
+    ENV.delete("COVERALLS_REPO_TOKEN")
+    ENV.delete("COVERALLS_RUN_LOCALLY")
+    ENV.delete("COVERALLS_SERVICE_NAME")
+    ENV.delete("COVERALLS_SERVICE_NUMBER")
+    ENV.delete("COVERALLS_SERVICE_JOB_ID")
+    ENV.delete("COVERALLS_GIT_BRANCH")
+    ENV.delete("COVERALLS_GIT_COMMIT")
+    ENV.delete("DRONE")
+    ENV.delete("DRONE_BUILD_NUMBER")
+    ENV.delete("DRONE_PULL_REQUEST")
+    ENV.delete("DRONE_BRANCH")
+    ENV.delete("DRONE_COMMIT")
+    ENV.delete("GITHUB_ACTIONS")
+    ENV.delete("GITHUB_HEAD_REF")
+    ENV.delete("GITHUB_JOB")
+    ENV.delete("GITHUB_REF")
+    ENV.delete("GITHUB_REF_NAME")
+    ENV.delete("GITHUB_REPOSITORY")
+    ENV.delete("GITHUB_RUN_ATTEMPT")
+    ENV.delete("GITHUB_RUN_ID")
+    ENV.delete("GITHUB_SERVER_URL")
+    ENV.delete("GITHUB_SHA")
+    ENV.delete("GITLAB_CI")
+    ENV.delete("CI_JOB_NAME")
+    ENV.delete("CI_PIPELINE_IID")
+    ENV.delete("CI_COMMIT_REF_NAME")
+    ENV.delete("CI_COMMIT_SHA")
+    ENV.delete("CI_JOB_URL")
+    ENV.delete("CI_PIPELINE_URL")
+    ENV.delete("CI_MERGE_REQUEST_IID")
+    ENV.delete("JENKINS_HOME")
+    ENV.delete("BUILD_ID")
+    ENV.delete("BUILD_NUMBER")
+    ENV.delete("BRANCH_NAME")
+    ENV.delete("ghprbPullId")
+    ENV.delete("SEMAPHORE")
+    ENV.delete("SEMAPHORE_WORKFLOW_ID")
+    ENV.delete("SEMAPHORE_GIT_WORKING_BRANCH")
+    ENV.delete("SEMAPHORE_GIT_PR_NUMBER")
+    ENV.delete("SEMAPHORE_GIT_SHA")
+    ENV.delete("SEMAPHORE_ORGANIZATION_URL")
+    ENV.delete("SEMAPHORE_JOB_ID")
+    ENV.delete("SURF_SHA1")
+    ENV.delete("SURF_REF")
+    ENV.delete("TDDIUM")
+    ENV.delete("TDDIUM_SESSION_ID")
+    ENV.delete("TDDIUM_TID")
+    ENV.delete("TDDIUM_PR_ID")
+    ENV.delete("TDDIUM_CURRENT_BRANCH")
+    ENV.delete("TRAVIS")
+    ENV.delete("TRAVIS_PULL_REQUEST")
+    ENV.delete("TRAVIS_BRANCH")
+    ENV.delete("TRAVIS_JOB_NUMBER")
+    ENV.delete("TRAVIS_BUILD_NUMBER")
+    ENV.delete("TF_BUILD")
+    ENV.delete("BUILD_BUILDID")
+    ENV.delete("SYSTEM_PULLREQUEST_PULLREQUESTNUMBER")
+    ENV.delete("BUILD_SOURCEBRANCHNAME")
+    ENV.delete("BUILD_SOURCEVERSION")
+    ENV.delete("WERCKER")
+    ENV.delete("WERCKER_BUILD_ID")
+    ENV.delete("WERCKER_GIT_BRANCH")
+    ENV.delete("WERCKER_GIT_COMMIT")
+  end
 
   describe ".new" do
     context "without repo_token" do
@@ -68,9 +165,7 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "with ENV preset" do
-      before_each do
-        ENV["COVERALLS_REPO_TOKEN"] = "env-token"
-      end
+      before_each { ENV["COVERALLS_REPO_TOKEN"] = "env-token" }
 
       it "doesn't raise an exception" do
         expect { subject }.not_to raise_error
@@ -150,7 +245,6 @@ Spectator.describe CoverageReporter::Config do
     end
 
     context "for generic CI" do
-      # Imagine we are on Circle
       before_each do
         ENV["CIRCLECI"] = "1"
         ENV["CIRCLE_WORKFLOW_ID"] = "circle-service-number"

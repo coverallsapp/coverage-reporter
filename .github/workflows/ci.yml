@@ -21,6 +21,8 @@ jobs:
         crystal: 1.9
     - name: Install dependencies
       run: shards install
+    - name: Install coverage.py
+      run: "pip install --upgrade pip && pip install coverage && pip install pytest"
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 
@@ -51,6 +53,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install kcov
+    - name: Install coverage.py
+      run: "pip install --upgrade pip && pip install coverage && pip install pytest"
     - name: Generate coverage
       run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/
     - name: Report coverage
