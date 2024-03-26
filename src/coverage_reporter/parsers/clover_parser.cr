@@ -57,8 +57,12 @@ module CoverageReporter
             branches[line_number] << branch_hits
           end
 
-          hits = line_node.attributes["count"].content.to_u64
-          coverage[line_number] = hits
+          if line_type == "method"
+            coverage[line_number] = 1
+          else
+            hits = line_node.attributes["count"].content.to_u64
+            coverage[line_number] = hits
+          end
         end
 
         files[name].coverage.merge!(coverage)
