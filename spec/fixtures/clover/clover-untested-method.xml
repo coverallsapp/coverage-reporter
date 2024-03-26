@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1693391816">
+  <project timestamp="1693391816">
+    <file name="/home/yu/projects/PHPCSUtils/PHPCSUtils/AbstractSniffs/AbstractArrayDeclarationSniff.php">
+      <class name="PHPCSUtils\AbstractSniffs\AbstractArrayDeclarationSniff" namespace="global">
+        <metrics complexity="44" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="79" coveredstatements="79" elements="82" coveredelements="82"/>
+      </class>
+      <line num="1" type="method" name="process" visibility="public" complexity="4" crap="4" count="0"/>
+      <line num="2" type="stmt" count="0"/>
+      <metrics loc="552" ncloc="237" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="79" coveredstatements="79" elements="82" coveredelements="82"/>
+    </file>
+    <metrics files="1" loc="11201" ncloc="5558" classes="36" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2420" coveredstatements="2376" elements="2602" coveredelements="2539"/>
+  </project>
+</coverage>

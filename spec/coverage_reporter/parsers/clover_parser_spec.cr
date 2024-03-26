@@ -17,6 +17,7 @@ Spectator.describe CoverageReporter::CloverParser do
     it "matches correct filenames" do
       expect(subject.matches?("spec/fixtures/clover/clover-phpcsutils.xml")).to eq true
       expect(subject.matches?("spec/fixtures/clover/clover-unleash.xml")).to eq true
+      expect(subject.matches?("spec/fixtures/clover/clover-untested-method.xml")).to eq true
 
       expect(subject.matches?("spec/fixtures/cobertura/cobertura.xml")).to eq false
       expect(subject.matches?("spec/fixtures/cobertura/cobertura-oneline.xml")).to eq false
@@ -35,6 +36,24 @@ Spectator.describe CoverageReporter::CloverParser do
         expect(reports.size).to eq 2
         expect(reports[0].name).to match /.*AbstractArrayDeclarationSniff.php/
         expect(reports[0].branches).to eq [] of UInt64?
+      end
+    end
+
+    context "with clover-untested-method.xml" do
+      let(filename) { "spec/fixtures/clover/clover-untested-method.xml" }
+
+      it "parses the data correctly" do
+        reports = subject.parse(filename)
+
+        the_file = reports.find! do |report|
+          report.name == "home/yu/projects/PHPCSUtils/PHPCSUtils/AbstractSniffs/AbstractArrayDeclarationSniff.php"
+        end
+
+        # <line num="1" type="method" name="process" visibility="public" complexity="4" crap="4" count="0"/>
+        expect(the_file.coverage[0]).to eq(1)
+
+        # <line num="2" type="stmt" count="0"/>
+        expect(the_file.coverage[1]).to eq(0)
       end
     end
 
