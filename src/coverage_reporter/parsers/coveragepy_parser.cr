@@ -31,34 +31,17 @@ module CoverageReporter
     end
 
     def parse(filename : String) : Array(FileReport)
-      lines = {} of String => Array(Hits)
+      # If you have coverage installed with xml support do this
+      # check the return value of run
+      # Run can raise an error: io::error
+      # Can use tmp file method 
+      Process.run(command: "coverage xml --data-infile #{filename} -o /tmp/coverage.xml")
+      parser = CoberturaParser.new(@base_path)
+      parser.parse("tmp/coverage.xml")
 
-      DB.open "sqlite3://#{filename}" do |db|
-        db.query(QUERY) do |rs|
-          rs.each do
-            name = rs.read(String)
-            numbits = rs.read(Slice(UInt8))
-            nums = [] of Hits
-            numbits.each_with_index do |byte, byte_i|
-              8.times do |bit_i|
-                if byte & (1 << bit_i) != 0
-                  nums << (byte_i * 8 + bit_i).to_u64
-                end
-              end
-            end
-            lines[name] = nums
-          end
-        end
-      end
-
-      lines.map do |name, hits|
-        coverage = get_coverage(name, hits)
-
-        file_report(
-          name: name,
-          coverage: coverage,
-        )
-      end
+      # else
+      # bring back all the sql parser I deleted
+      # or error? ask James
     end
 
     private def get_coverage(name : String, hits : Array(Hits)) : Array(Hits?)
