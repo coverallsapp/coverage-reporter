@@ -35,9 +35,9 @@ module CoverageReporter
       # check the return value of run
       # Run can raise an error: io::error
       # Can use tmp file method 
-      Process.run(command: "coverage xml --data-infile #{filename} -o /tmp/coverage.xml")
+#      Process.run(command: "coverage xml --data-file #{filename} -o /tmp/coverage.xml")
       parser = CoberturaParser.new(@base_path)
-      parser.parse("tmp/coverage.xml")
+      parser.parse("/tmp/coverage.xml")
 
       # else
       # bring back all the sql parser I deleted

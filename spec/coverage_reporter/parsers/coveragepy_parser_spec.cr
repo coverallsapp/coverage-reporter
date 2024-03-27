@@ -15,9 +15,13 @@ Spectator.describe CoverageReporter::CoveragepyParser do
     let(filename) { "spec/fixtures/python/.coverage" }
 
     it "reads the coverage" do
-      result = subject.parse(filename)
+      reports = subject.parse(filename)
+      result = reports
 
-      expect(result.size).to eq 20
+      pp reports
+#      reports.map{|r| puts r.name}
+
+      expect(result.size).to eq 25
       expect(result.map(&.to_h.transform_keys(&.to_s)))
         .to eq YAML.parse(File.read("#{__DIR__}/coveragepy_results.yml"))
     end
