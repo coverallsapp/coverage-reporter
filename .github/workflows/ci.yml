@@ -27,6 +27,9 @@ jobs:
     - name: Install dependencies
       run: shards install ${{ startsWith(runner.os, 'Windows') && '--skip-postinstall --skip-executables' || '' }}
 
+    - name: Install coverage.py
+      run: "pip install --upgrade pip && pip install coverage && pip install pytest"
+
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 
@@ -57,8 +60,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install kcov
+    - name: Install coverage.py
+      run: "pip install --upgrade pip && pip install coverage && pip install pytest"
     - name: Generate coverage
-      run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/
+      run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/ --coverage-dir ${{ github.workspace }}/coverage
     - name: Report coverage
       env:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
