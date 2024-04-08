@@ -15,6 +15,8 @@ Spectator.describe CoverageReporter::Api::Webhook do
       "X-Coveralls-Reporter"         => "coverage-reporter",
       "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
       "X-Coveralls-Source"           => "cli",
+      "Accept"                       => "*/*",
+      "User-Agent"                   => "Crystal #{Crystal::VERSION}",
     }
   end
 
