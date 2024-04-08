@@ -500,7 +500,7 @@ Spectator.describe CoverageReporter::Config do
       before_each do
         ENV["CF_BRANCH"] = "cf-branch"
         ENV["CF_BUILD_ID"] = "cf-job-id"
-        ENV["CF_PULL_REQUEST_ID"] = "cf-pr"
+        ENV["CF_PULL_REQUEST_NUMBER"] = "cf-pr"
         ENV["CF_BRANCH"] = "cf-branch"
         ENV["CF_REVISION"] = "cf-commit"
       end
