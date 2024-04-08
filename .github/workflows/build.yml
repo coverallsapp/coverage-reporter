@@ -36,7 +36,7 @@ jobs:
         run: |
           cd dist
           $vsbase = vswhere.exe -products * -property installationPath
-          & "$vsbase\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64\dumpbin.exe" /dependents coveralls.exe
+          & "$vsbase\VC\Tools\MSVC\17.9.34723.18\bin\HostX64\x64\dumpbin.exe" /dependents coveralls.exe
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
