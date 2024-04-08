@@ -9,8 +9,9 @@ Spectator.describe CoverageReporter::JacocoParser do
     it "finds all jacoco files" do
       expect(Dir[subject.globs]).to contain(
         "spec/fixtures/jacoco/jacoco-oneline-report.xml",
-        "spec/fixtures/jacoco/jacoco-report-multiple-packages.xml",
-        "spec/fixtures/jacoco/jacoco-report.xml",
+        Path.new("spec", "fixtures", "jacoco", "jacoco-oneline-report.xml").to_s,
+        Path.new("spec", "fixtures", "jacoco", "jacoco-report-multiple-packages.xml").to_s,
+        Path.new("spec", "fixtures", "jacoco", "jacoco-report.xml").to_s,
       )
     end
   end
@@ -54,7 +55,7 @@ Spectator.describe CoverageReporter::JacocoParser do
       it "joins with base_path" do
         reports = subject.parse(filename)
 
-        expect(reports[0].name).to match /^src\/main\/java\/com\/jacocodemo\//
+        expect(reports[0].name).to eq Path.new("src", "main", "java", "com", "jacocodemo", "examples", "MessageBuilder.java").to_s
       end
     end
 
@@ -67,9 +68,9 @@ Spectator.describe CoverageReporter::JacocoParser do
 
         expect(reports.size).to eq 3
         expect(reports.map(&.name)).to eq [
-          "spec/fixtures/jacoco/sources/jacoco-project-1/com/proj1/MessageBuilder.java",
-          "spec/fixtures/jacoco/sources/jacoco-project-1/com/proj1/Info.java",
-          "spec/fixtures/jacoco/sources/jacoco-project-2/com/proj2/MessageService.java",
+          Path.new("spec", "fixtures", "jacoco", "sources", "jacoco-project-1", "com", "proj1", "MessageBuilder.java").to_s,
+          Path.new("spec", "fixtures", "jacoco", "sources", "jacoco-project-1", "com", "proj1", "Info.java").to_s,
+          Path.new("spec", "fixtures", "jacoco", "sources", "jacoco-project-2", "com", "proj2", "MessageService.java").to_s,
         ]
       end
     end
