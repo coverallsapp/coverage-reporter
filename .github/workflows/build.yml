@@ -35,8 +35,18 @@ jobs:
       - name: Prepare distribution archive
         run: |
           cd dist
-          $vsbase = vswhere.exe -products * -property installationPath
-          & "$vsbase\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64\dumpbin.exe" /dependents coveralls.exe
+          $vsbase = vswhere.exe -products * -property installationPath -latest
+          if (-not $vsbase) {
+            Write-Error "Visual Studio installation not found"
+            exit 1
+          }
+          $dumpbinPath = Join-Path $vsbase "VC\Tools\MSVC\*\bin\HostX64\x64\dumpbin.exe"
+          $resolvedDumpbin = Get-Item $dumpbinPath | Select-Object -First 1
+          if (-not $resolvedDumpbin) {
+            Write-Error "dumpbin.exe not found"
+            exit 1
+          }
+          & $resolvedDumpbin /dependents coveralls.exe
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
