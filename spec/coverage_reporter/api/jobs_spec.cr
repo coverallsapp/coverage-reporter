@@ -75,7 +75,7 @@ Spectator.describe CoverageReporter::Api::Jobs do
 
   after_each do
     WebMock.reset
-    ENV.delete("COVERALLS_RUN_AT")
+    ENV.clear
   end
 
   it "calls the /jobs endpoint" do
