@@ -11,5 +11,3 @@
 /docs/
 /insecure_private_keys
 /lib/
-.coverage
-coverage.xml
