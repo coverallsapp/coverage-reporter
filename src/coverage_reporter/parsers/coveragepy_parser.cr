@@ -18,9 +18,11 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
+      error = IO::Memory.new
       process_status = Process.run(
         command: "coverage --version",
-        shell: true
+        shell: true,
+        error: error
       )
 
       if process_status.success?
@@ -30,6 +32,7 @@ module CoverageReporter
           end
         end
       else
+        Log.debug error.to_s
         false
       end
     rescue Exception
