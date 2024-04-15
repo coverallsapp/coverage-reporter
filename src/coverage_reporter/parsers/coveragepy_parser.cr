@@ -18,21 +18,27 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
-      error = IO::Memory.new
-      process_status = Process.run(
-        command: "coverage --version",
-        shell: true,
-        error: error
-      )
+      valid = File.open(filename) do |f|
+        f.read_at(0, 15) do |io|
+          io.gets.try(&.downcase) == "sqlite format 3"
+        end
+      end
 
-      if process_status.success?
-        File.open(filename) do |f|
-          f.read_at(0, 15) do |io|
-            io.gets.try(&.downcase) == "sqlite format 3"
-          end
+      if valid
+        error = IO::Memory.new
+        process_status = Process.run(
+          command: "coverage --version",
+          shell: true,
+          error: error
+        )
+
+        if process_status.success?
+          true
+        else
+          Log.debug error.to_s
+          false
         end
       else
-        Log.debug error.to_s
         false
       end
     rescue Exception
