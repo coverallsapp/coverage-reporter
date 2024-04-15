@@ -17,11 +17,20 @@ module CoverageReporter
       ]
     end
 
-    def matches?(filename : String) : Bool
-      File.open(filename) do |f|
-        f.read_at(0, 15) do |io|
-          io.gets.try(&.downcase) == "sqlite format 3"
+    def matches?(filename : String, executable : String = "coverage") : Bool
+      process_status = Process.run(
+        command: "#{executable} --version",
+        shell: true
+      )
+
+      if process_status.success?
+        File.open(filename) do |f|
+          f.read_at(0, 15) do |io|
+            io.gets.try(&.downcase) == "sqlite format 3"
+          end
         end
+      else
+        false
       end
     rescue Exception
       false

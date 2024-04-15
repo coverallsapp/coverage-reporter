@@ -28,6 +28,10 @@ Spectator.describe CoverageReporter::CoveragepyParser do
       expect(subject.matches?("spec/fixtures/python/.coverage-non-existing")).to eq false
       expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq false
     end
+
+    it "is false if coverage program is not installed" do
+      expect(subject.matches?("spec/fixtures/python/.coverage", "fake-coverage-program")).to be_falsey
+    end
   end
 
   describe "#parse" do
