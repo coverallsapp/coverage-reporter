@@ -154,23 +154,12 @@ With values used for `--format` option:
 - [x] Gcov - `gcov`
 - [x] Golang coverage format - `golang`
 - [x] Coveralls JSON format - `coveralls`
-- [x] Pytest-Cov ([:test_tube: beta](#pytest-cov-test_tube-beta)) - `python`
+- [x] Pytest-Cov - `python`
 - [x] Clover XML as available via PHPUnit - `clover`
 
 You can add a report parser to this project by following [these instructions](./doc/development.md#add-coverage-format-support).
 
 **Bounty**: One or more months of free service at Coveralls.io. <a target="_blank" href="mailto:support@coveralls.io?subject=Please tell me more about contributing to the Universal Coverage Reporter">Contact us</a> to learn more.
-
-#### Pytest-Cov (:test_tube: beta)
-
-Since `.coverage` stores only covered lines coverage-reporter needs to parse Python code to get uncovered lines. Parsing is done in a pretty naive way, so the results might be different from actual especially for complicated and non-trivial code.
-
-If coverage results are incorrect consider exporting `.coverage` to XML:
-
-```bash
-coverage xml # creates coverage.xml
-coveralls -f coverage.xml
-```
 
 ### Supported CI Services
 
