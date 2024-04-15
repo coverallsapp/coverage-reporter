@@ -18,29 +18,13 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
-      valid = File.open(filename) do |f|
+      valid_file_exists = File.open(filename) do |f|
         f.read_at(0, 15) do |io|
           io.gets.try(&.downcase) == "sqlite format 3"
         end
       end
 
-      if valid
-        error = IO::Memory.new
-        process_status = Process.run(
-          command: "coverage --version",
-          shell: true,
-          error: error
-        )
-
-        if process_status.success?
-          true
-        else
-          Log.debug error.to_s
-          false
-        end
-      else
-        false
-      end
+      check_for_coverage_executable(valid_file_exists)
     rescue Exception
       false
     end
@@ -63,6 +47,24 @@ module CoverageReporter
       begin
         tmpfile && tmpfile.delete
       rescue File::Error
+      end
+    end
+
+    private def check_for_coverage_executable(valid_file_exists : Bool)
+      return false unless valid_file_exists
+
+      error = IO::Memory.new
+      process_status = Process.run(
+        command: "coverage --version",
+        shell: true,
+        error: error
+      )
+
+      if process_status.success?
+        true
+      else
+        Log.debug error.to_s
+        false
       end
     end
   end
