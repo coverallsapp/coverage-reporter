@@ -17,9 +17,9 @@ module CoverageReporter
       ]
     end
 
-    def matches?(filename : String, executable : String = "coverage") : Bool
+    def matches?(filename : String) : Bool
       process_status = Process.run(
-        command: "#{executable} --version",
+        command: "coverage --version",
         shell: true
       )
 

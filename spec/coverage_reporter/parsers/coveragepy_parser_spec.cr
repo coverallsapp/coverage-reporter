@@ -29,8 +29,11 @@ Spectator.describe CoverageReporter::CoveragepyParser do
       expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq false
     end
 
-    it "is false if coverage program is not installed" do
-      expect(subject.matches?("spec/fixtures/python/.coverage", "fake-coverage-program")).to be_falsey
+    it "does not match if coverage program is not installed" do
+      path = ENV["PATH"]
+      ENV.delete("PATH")
+      expect(subject.matches?("spec/fixtures/python/.coverage")).to be_falsey
+      ENV["PATH"] = path
     end
   end
 
