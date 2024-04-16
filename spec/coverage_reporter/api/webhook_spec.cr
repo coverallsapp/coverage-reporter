@@ -15,12 +15,6 @@ Spectator.describe CoverageReporter::Api::Webhook do
       "X-Coveralls-Reporter"         => "coverage-reporter",
       "X-Coveralls-Reporter-Version" => CoverageReporter::VERSION,
       "X-Coveralls-Source"           => "cli",
-      "X-Coveralls-CI"               => "github",
-      "Accept"                       => "*/*",
-      "User-Agent"                   => "Crystal #{Crystal::VERSION}",
-      "Connection"                   => "close",
-      "Content-Length"               => "651",
-      "Host"                         => "coveralls.io",
     }
   end
 
