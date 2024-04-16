@@ -36,7 +36,7 @@ Spectator.describe CoverageReporter::Parser do
         end
       end
 
-      context "when coverage format forced" do
+      context "when coverage format forced (lcov)" do
         let(coverage_format) { "lcov" }
 
         it "returns report only for specified format" do
@@ -63,6 +63,54 @@ Spectator.describe CoverageReporter::Parser do
             reports = subject.parse
 
             expect(reports.size).to eq 0
+          end
+        end
+      end
+
+      context "when coverage format forced (python)" do
+        before_all do
+          error = IO::Memory.new
+          output = IO::Memory.new
+          process_status = Process.run(
+            command: "coverage run -m pytest",
+            chdir: "spec/fixtures/python",
+            shell: true,
+            error: error,
+            output: output
+          )
+          unless process_status.success?
+            raise "Failed: #{error}\n#{output}"
+          end
+        end
+
+        after_all do
+          File.delete("spec/fixtures/python/.coverage")
+        end
+
+        let(coverage_format) { "python" }
+
+        context "when a file is specified and coverage is installed" do
+          let(coverage_files) { ["spec/fixtures/python/.coverage"] }
+          let(base_path) { "spec/fixtures/python" }
+
+          it "returns report only for specified file" do
+            reports = subject.parse
+
+            expect(reports.size).to eq 4
+          end
+        end
+
+        context "when a file is specified and coverage is not installed" do
+          let(coverage_files) { ["spec/fixtures/python/.coverage"] }
+          let(base_path) { "spec/fixtures/lcov" }
+
+          it "returns report only for specified file" do
+            path = ENV["PATH"]
+            ENV.delete("PATH")
+
+            expect { subject.parse }.to raise_error(CoverageReporter::CoveragepyParser::ParserError)
+
+            ENV["PATH"] = path
           end
         end
       end
