@@ -24,7 +24,7 @@ module CoverageReporter
         end
       end
 
-      check_for_coverage_executable(valid_file_exists)
+      valid_file_exists && check_for_coverage_executable
     rescue Exception
       false
     end
@@ -50,9 +50,7 @@ module CoverageReporter
       end
     end
 
-    private def check_for_coverage_executable(valid_file_exists : Bool)
-      return false unless valid_file_exists
-
+    private def check_for_coverage_executable
       error = IO::Memory.new
       process_status = Process.run(
         command: "coverage --version",
