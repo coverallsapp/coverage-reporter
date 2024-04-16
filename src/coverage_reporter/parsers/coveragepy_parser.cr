@@ -63,7 +63,7 @@ module CoverageReporter
       if process_status.success?
         true
       else
-        Log.debug error.to_s
+        Log.debug("☝️ Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
         false
       end
     end
