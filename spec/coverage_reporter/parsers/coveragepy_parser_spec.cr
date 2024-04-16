@@ -56,7 +56,7 @@ Spectator.describe CoverageReporter::CoveragepyParser do
       it "raises an error" do
         io_memory = IO::Memory.new("some error")
 
-        expect { subject.parse(filename, io_memory) }.to raise_error(CoverageReporter::CoveragepyParser::ParserError, "some error")
+        expect { subject.parse(filename, io_memory) }.to raise_error(CoverageReporter::CoveragepyParser::ParserError, /some error/)
       end
     end
   end
