@@ -72,7 +72,7 @@ To use the #{self.class.name} format, do one of the following:
       if process_status.success?
         true
       else
-        Log.debug("☝️ Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
+        Log.debug("⚠️  Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
         false
       end
     end
