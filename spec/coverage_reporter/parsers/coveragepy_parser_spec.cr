@@ -3,25 +3,6 @@ require "../../spec_helper"
 Spectator.describe CoverageReporter::CoveragepyParser do
   subject { described_class.new(nil) }
 
-  before_all do
-    error = IO::Memory.new
-    output = IO::Memory.new
-    process_status = Process.run(
-      command: "coverage run -m pytest",
-      chdir: "spec/fixtures/python",
-      shell: true,
-      error: error,
-      output: output
-    )
-    unless process_status.success?
-      raise "Failed: #{error}\n#{output}"
-    end
-  end
-
-  after_all do
-    File.delete("spec/fixtures/python/.coverage")
-  end
-
   describe "#matches?" do
     it "matches only SQLite3 db file" do
       expect(subject.matches?("spec/fixtures/python/.coverage")).to eq true

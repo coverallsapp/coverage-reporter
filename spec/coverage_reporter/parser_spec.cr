@@ -68,25 +68,6 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "when coverage format forced (python)" do
-        before_all do
-          error = IO::Memory.new
-          output = IO::Memory.new
-          process_status = Process.run(
-            command: "coverage run -m pytest",
-            chdir: "spec/fixtures/python",
-            shell: true,
-            error: error,
-            output: output
-          )
-          unless process_status.success?
-            raise "Failed: #{error}\n#{output}"
-          end
-        end
-
-        after_all do
-          File.delete("spec/fixtures/python/.coverage")
-        end
-
         let(coverage_format) { "python" }
 
         context "when a file is specified and coverage is installed" do
