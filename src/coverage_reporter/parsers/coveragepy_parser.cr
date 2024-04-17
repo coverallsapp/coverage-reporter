@@ -42,7 +42,7 @@ module CoverageReporter
         parser.parse(tmpfile.path)
       else
         error_message =
-          %Q|There was an error processing #{filename}: #{error.to_s}
+          %Q|There was an error processing #{filename}: #{error}
 
 To use the #{self.class.name} format, do one of the following:
 1. Make sure that the coverage executable is available in the
