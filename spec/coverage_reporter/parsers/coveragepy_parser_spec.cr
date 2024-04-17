@@ -13,7 +13,9 @@ Spectator.describe CoverageReporter::CoveragepyParser do
     it "does not match if coverage program is not installed" do
       path = ENV["PATH"]
       ENV.delete("PATH")
+
       expect(subject.matches?("spec/fixtures/python/.coverage")).to be_falsey
+
       ENV["PATH"] = path
     end
   end
