@@ -9,6 +9,6 @@ Spectator.configure do |config|
   config.randomize
 
   config.before_suite do
-    CoverageReporter::Log.set(CoverageReporter::Log::Level::Suppress)
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Debug)
   end
 end
