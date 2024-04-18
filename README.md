@@ -255,6 +255,8 @@ Brief description: new coverage report support
 $ git push origin master --follow-tags
 ```
 
+[After the release is available][github-releases], see [Homebrew
+release](#homebrew-release) instructions.
 #### Manual
 
 1. Bump version in [`src/coverage_reporter.cr`](./src/coverage_reporter.cr) and [`shard.yml`](./shard.yml)
@@ -262,4 +264,15 @@ $ git push origin master --follow-tags
 3. Create a tag `git tag --annotate vX.X.X` with the same annotation as commit message
 4. Push with a tag `git push origin master --follow-tags`
 
-GitHub release will be created automatically.
+GitHub release will be created automatically. [After the release is
+available][github-releases], see [Homebrew release](#homebrew-release)
+instructions.
+
+[github-releases]: https://github.com/coverallsapp/coverage-reporter/releases
+#### Homebrew release
+
+In the [homebrew-coveralls repo][homebrew], a new PR will automatically get
+created. Once the `brew test-bot` checks have passed, label the PR with the
+`pr-pull` tag in order to make the release available through Homebrew.
+
+[homebrew]: https://github.com/coverallsapp/homebrew-coveralls
