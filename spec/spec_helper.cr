@@ -9,7 +9,25 @@ Spectator.configure do |config|
   config.randomize
 
   config.before_suite do
-    ENV.clear
     CoverageReporter::Log.set(CoverageReporter::Log::Level::Suppress)
+  end
+
+  config.before_suite do
+    error = IO::Memory.new
+    output = IO::Memory.new
+    process_status = Process.run(
+      command: "coverage run -m pytest",
+      chdir: "spec/fixtures/python",
+      shell: true,
+      error: error,
+      output: output
+    )
+    unless process_status.success?
+      raise "Failed: #{error}\n#{output}"
+    end
+  end
+
+  config.after_suite do
+    File.delete("spec/fixtures/python/.coverage")
   end
 end

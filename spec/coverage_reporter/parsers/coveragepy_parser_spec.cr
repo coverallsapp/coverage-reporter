@@ -9,17 +9,38 @@ Spectator.describe CoverageReporter::CoveragepyParser do
       expect(subject.matches?("spec/fixtures/python/.coverage-non-existing")).to eq false
       expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq false
     end
+
+    it "does not match if coverage program is not installed" do
+      path = ENV["PATH"]
+      ENV.delete("PATH")
+
+      expect(subject.matches?("spec/fixtures/python/.coverage")).to be_falsey
+
+      ENV["PATH"] = path
+    end
   end
 
   describe "#parse" do
     let(filename) { "spec/fixtures/python/.coverage" }
 
-    it "reads the coverage" do
-      result = subject.parse(filename)
+    context "with valid coverage file" do
+      it "reads the coverage" do
+        reports = subject.parse(filename)
 
-      expect(result.size).to eq 20
-      expect(result.map(&.to_h.transform_keys(&.to_s)))
-        .to eq YAML.parse(File.read("#{__DIR__}/coveragepy_results.yml"))
+        expect(reports.size).to eq 4
+        expect(reports.map(&.to_h.transform_keys(&.to_s)))
+          .to eq YAML.parse(File.read("#{__DIR__}/coveragepy_results.yml"))
+      end
+    end
+
+    context "with invalid coverage file" do
+      let(filename) { "spec/fixtures/simplecov/with-only-lines.resultset.json" }
+
+      it "raises an error" do
+        io_memory = IO::Memory.new("some error")
+
+        expect { subject.parse(filename, io_memory) }.to raise_error(CoverageReporter::CoveragepyParser::ParserError, /some error/)
+      end
     end
   end
 end

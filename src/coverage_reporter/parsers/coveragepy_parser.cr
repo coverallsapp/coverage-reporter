@@ -3,15 +3,12 @@ require "sqlite3"
 
 module CoverageReporter
   class CoveragepyParser < BaseParser
+    class ParserError < RuntimeError
+    end
+
     def self.name
       "python"
     end
-
-    QUERY = <<-SQL
-    SELECT file.path, line_bits.numbits
-      FROM line_bits
-    INNER JOIN file ON (line_bits.file_id = file.id)
-    SQL
 
     def globs : Array(String)
       [
@@ -21,123 +18,63 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
-      File.open(filename) do |f|
+      valid_file_exists = File.open(filename) do |f|
         f.read_at(0, 15) do |io|
           io.gets.try(&.downcase) == "sqlite format 3"
         end
       end
+
+      valid_file_exists && check_for_coverage_executable
     rescue Exception
       false
     end
 
-    def parse(filename : String) : Array(FileReport)
-      lines = {} of String => Array(Hits)
+    def parse(filename : String, error : Process::Stdio = IO::Memory.new) : Array(FileReport)
+      tmpfile = File.tempfile("coverage.xml")
+      process_status = Process.run(
+        command: "coverage xml --data-file #{filename} -o #{tmpfile.path}",
+        shell: true,
+        error: error
+      )
 
-      DB.open "sqlite3://#{filename}" do |db|
-        db.query(QUERY) do |rs|
-          rs.each do
-            name = rs.read(String)
-            numbits = rs.read(Slice(UInt8))
-            nums = [] of Hits
-            numbits.each_with_index do |byte, byte_i|
-              8.times do |bit_i|
-                if byte & (1 << bit_i) != 0
-                  nums << (byte_i * 8 + bit_i).to_u64
-                end
-              end
-            end
-            lines[name] = nums
-          end
-        end
+      if process_status.success?
+        parser = CoberturaParser.new(@base_path)
+        parser.parse(tmpfile.path)
+      else
+        error_message =
+          %Q|There was an error processing #{filename}: #{error}
+
+To use the #{self.class.name} format, do one of the following:
+1. Make sure that the coverage executable is available in the
+   runner environment, or
+2. Convert the .coverage file to a coverage.xml file by running
+   `coverage xml`. Then pass the input option `format: cobertura`
+   (for Coveralls GitHub Action or orb), or pass `--format=cobertura`
+   if using the coverage reporter alone.
+|
+        raise ParserError.new(error_message)
       end
-
-      lines.map do |name, hits|
-        coverage = get_coverage(name, hits)
-
-        file_report(
-          name: name,
-          coverage: coverage,
-        )
+    ensure
+      begin
+        tmpfile && tmpfile.delete
+      rescue File::Error
       end
     end
 
-    private def get_coverage(name : String, hits : Array(Hits)) : Array(Hits?)
-      coverage = {} of Line => Hits?
+    private def check_for_coverage_executable
+      error = IO::Memory.new
+      process_status = Process.run(
+        command: "coverage --version",
+        shell: true,
+        error: error
+      )
 
-      line_no = 1.to_u64
-      under_def = false
-      docstring = false
-      brackets = 0
-
-      File.each_line(name, chomp: true) do |line|
-        code = line.strip
-
-        if code.ends_with?(/\(|\{|\[/)
-          brackets += code.count("({[")
-          brackets -= code.count(")}]")
-        end
-
-        if !docstring && code.starts_with?("\"\"\"")
-          if under_def || hits.find { |i| i == line_no }
-            docstring = true
-            coverage[line_no] = nil
-            next
-          end
-        end
-
-        # docstring
-        if docstring
-          if code.ends_with?("\"\"\"")
-            docstring = false
-          end
-
-          coverage[line_no] = nil
-          next
-        end
-
-        # comment
-        if code.starts_with?("#")
-          coverage[line_no] = nil
-          next
-        end
-
-        # a hit
-        if hits.find { |i| i == line_no }
-          coverage[line_no] = 1
-          next
-        end
-
-        # inside brackets
-        if brackets > 0
-          coverage[line_no] = nil
-          next
-        end
-
-        # empty string
-        if code.empty?
-          coverage[line_no] = nil
-          next
-        end
-
-        coverage[line_no] = 0
-      ensure
-        line_no += 1
-
-        if code
-          if brackets > 0 && code.ends_with?(/\)|\}|\]/)
-            brackets += code.count("({[")
-            brackets -= code.count(")}]")
-          end
-
-          under_def = code.starts_with?("def ") || code.starts_with?("class ")
-        end
+      if process_status.success?
+        true
+      else
+        Log.debug("⚠️  Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
+        false
       end
-
-      coverage.keys.sort!.map { |k| coverage[k] }
-    rescue File::NotFoundError
-      Log.error("Couldn't open file #{name}")
-
-      [] of Hits?
     end
   end
 end

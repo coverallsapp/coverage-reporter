@@ -51,7 +51,7 @@ Spectator.describe CoverageReporter::Reporter do
         ENV["COVERALLS_ENDPOINT"] = "https://example.com"
       end
 
-      after_each { ENV.clear }
+      after_each { ENV.delete("COVERALLS_ENDPOINT") }
 
       it "doesn't raise an error" do
         expect { subject.report }.not_to raise_error
@@ -65,7 +65,7 @@ Spectator.describe CoverageReporter::Reporter do
         ENV["COVERALLS_DEVELOPMENT"] = "1"
       end
 
-      after_each { ENV.clear }
+      after_each { ENV.delete("COVERALLS_DEVELOPMENT") }
 
       it "doesn't raise an error" do
         expect { subject.report }.not_to raise_error
@@ -118,7 +118,7 @@ Spectator.describe CoverageReporter::Reporter do
         ENV["COVERALLS_ENDPOINT"] = "https://example.com"
       end
 
-      after_each { ENV.clear }
+      after_each { ENV.delete("COVERALLS_ENDPOINT") }
 
       it "doesn't raise an error" do
         expect { subject.parallel_done }.not_to raise_error
