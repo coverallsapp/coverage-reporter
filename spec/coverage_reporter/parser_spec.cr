@@ -84,9 +84,9 @@ Spectator.describe CoverageReporter::Parser do
 
         context "when a file is specified and coverage is not installed" do
           let(coverage_files) { ["spec/fixtures/python/.coverage"] }
-          let(base_path) { "spec/fixtures/lcov" }
+          let(base_path) { "spec/fixtures/python" }
 
-          it "returns report only for specified file" do
+          it "raises error" do
             path = ENV["PATH"]
             ENV.delete("PATH")
 
