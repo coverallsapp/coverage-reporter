@@ -18,6 +18,15 @@ Spectator.describe CoverageReporter::CoveragepyParser do
 
       ENV["PATH"] = path
     end
+
+    it "raises error if format is forced but coverage program is not installed" do
+      path = ENV["PATH"]
+      ENV.delete("PATH")
+
+      expect { subject.matches?("spec/fixtures/python/.coverage", true) }.to raise_error(CoverageReporter::CoveragepyParser::ParserError)
+
+      ENV["PATH"] = path
+    end
   end
 
   describe "#parse" do
