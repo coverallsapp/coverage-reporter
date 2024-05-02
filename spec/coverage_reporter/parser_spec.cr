@@ -47,7 +47,7 @@ Spectator.describe CoverageReporter::Parser do
         end
 
         context "when a file is specified" do
-          let(coverage_files) { ["spec/fixtures/lcov/for-base-path-lcov"] }
+          let(coverage_files) { ["spec/fixtures/lcov/for-base-path.lcov"] }
           let(base_path) { "spec/fixtures/lcov" }
 
           it "returns report only for specified file" do
