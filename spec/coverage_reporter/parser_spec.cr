@@ -38,7 +38,6 @@ Spectator.describe CoverageReporter::Parser do
 
       context "when coverage format forced (lcov)" do
         let(coverage_format) { "lcov" }
-        let(coverage_files) { nil }
 
         it "returns report only for specified format" do
           reports = subject.parse
@@ -143,6 +142,7 @@ Spectator.describe CoverageReporter::Parser do
           "spec/fixtures/lcov/test.lcov",
           "spec/fixtures/lcov/test-current-folder.lcov",
           "spec/fixtures/lcov/empty.lcov",
+          "spec/fixtures/lcov/for-base-path.lcov",
           "spec/fixtures/simplecov/.resultset.json",
           "spec/fixtures/clover/clover.xml",
           "spec/fixtures/cobertura/cobertura.xml",
