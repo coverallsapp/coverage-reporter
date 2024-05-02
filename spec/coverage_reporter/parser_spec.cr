@@ -144,7 +144,6 @@ Spectator.describe CoverageReporter::Parser do
           "spec/fixtures/simplecov/.resultset.json",
           "spec/fixtures/clover/clover.xml",
           "spec/fixtures/cobertura/cobertura.xml",
-          "spec/fixtures/python/coverage.xml",
           "spec/fixtures/cobertura/cobertura-coverage.xml",
           "spec/fixtures/jacoco/jacoco-oneline-report.xml",
           "spec/fixtures/jacoco/jacoco-report-multiple-packages.xml",
@@ -164,7 +163,6 @@ Spectator.describe CoverageReporter::Parser do
 
         expect(files).to match_array [
           "spec/fixtures/cobertura/cobertura.xml",
-          "spec/fixtures/python/coverage.xml",
           "spec/fixtures/cobertura/cobertura-coverage.xml",
         ]
       end
