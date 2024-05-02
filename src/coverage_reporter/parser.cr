@@ -49,16 +49,16 @@ module CoverageReporter
     end
 
     def initialize(@coverage_files : Array(String) | Nil, @coverage_format : String?, @base_path : String?)
-      @parsers = if @coverage_format
-                   Log.info("✏️ Forced coverage format: #{@coverage_format}")
-                   parser_class = PARSERS.find { |klass| klass.name == @coverage_format }
+      @parsers = if coverage_format
+                   Log.info("✏️ Forced coverage format: #{coverage_format}")
+                   parser_class = PARSERS.find { |klass| klass.name == coverage_format }
                    if parser_class
                      [parser_class.new(base_path, true)]
                    else
                      raise InvalidCoverageFormat.new(coverage_format)
                    end
                  else
-                   PARSERS.map(&.new(@base_path)).to_a
+                   PARSERS.map(&.new(base_path)).to_a
                  end
     end
 
