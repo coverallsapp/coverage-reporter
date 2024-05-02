@@ -111,8 +111,6 @@ Spectator.describe CoverageReporter::Parser do
         it "returns reports for all files" do
           reports = subject.parse
 
-          puts reports.inspect
-
           expect(reports.size).to be > 2
         end
       end
@@ -153,7 +151,7 @@ Spectator.describe CoverageReporter::Parser do
           "spec/fixtures/jacoco/jacoco-report.xml",
           "spec/fixtures/gcov/main.c.gcov",
           "spec/fixtures/python/.coverage",
-          "spec/fixtures/coveralls/coveralls.json"
+          "spec/fixtures/coveralls/coveralls.json",
         ]
       end
     end

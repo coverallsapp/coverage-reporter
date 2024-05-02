@@ -24,7 +24,7 @@ Spectator.describe CoverageReporter::CoveragepyParser do
     context "when format is forced" do
       subject { described_class.new(nil, true) }
 
-      it "raises error if format is forced but coverage program is not installed" do
+      it "raises error if coverage program is not installed" do
         path = ENV["PATH"]
         ENV.delete("PATH")
 

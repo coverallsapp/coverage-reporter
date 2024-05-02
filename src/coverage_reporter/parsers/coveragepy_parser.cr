@@ -16,7 +16,8 @@ module CoverageReporter
         "**/*/.coverage",
       ]
     end
-    def matches?(filename : String ) : Bool
+
+    def matches?(filename : String) : Bool
       valid_file_exists = File.open(filename) do |f|
         f.read_at(0, 15) do |io|
           io.gets.try(&.downcase) == "sqlite format 3"
@@ -75,7 +76,7 @@ module CoverageReporter
     end
 
     private def missing_coverage_executable_message
-          %Q|To use the #{self.class.name} format, do one of the following:
+      %Q|To use the #{self.class.name} format, do one of the following:
 1. Make sure that the coverage executable is available in the
    runner environment, or
 2. Convert the .coverage file to a coverage.xml file by running
