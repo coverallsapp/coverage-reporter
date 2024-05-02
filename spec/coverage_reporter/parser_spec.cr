@@ -116,7 +116,7 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "when coveragepy is not installed" do
-        it "returns reports for all files" do
+        it "returns reports for all files (no error is raised)" do
           path = ENV["PATH"]
           ENV.delete("PATH")
 
