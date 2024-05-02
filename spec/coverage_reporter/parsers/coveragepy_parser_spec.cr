@@ -4,28 +4,34 @@ Spectator.describe CoverageReporter::CoveragepyParser do
   subject { described_class.new(nil) }
 
   describe "#matches?" do
-    it "matches only SQLite3 db file" do
-      expect(subject.matches?("spec/fixtures/python/.coverage")).to eq true
-      expect(subject.matches?("spec/fixtures/python/.coverage-non-existing")).to eq false
-      expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq false
+    context "when format is not forced" do
+      it "matches only SQLite3 db file" do
+        expect(subject.matches?("spec/fixtures/python/.coverage")).to eq true
+        expect(subject.matches?("spec/fixtures/python/.coverage-non-existing")).to eq false
+        expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq false
+      end
+
+      it "does not match if coverage program is not installed" do
+        path = ENV["PATH"]
+        ENV.delete("PATH")
+
+        expect(subject.matches?("spec/fixtures/python/.coverage")).to be_falsey
+
+        ENV["PATH"] = path
+      end
     end
 
-    it "does not match if coverage program is not installed" do
-      path = ENV["PATH"]
-      ENV.delete("PATH")
+    context "when format is forced" do
+      subject { described_class.new(nil, true) }
 
-      expect(subject.matches?("spec/fixtures/python/.coverage")).to be_falsey
+      it "raises error if format is forced but coverage program is not installed" do
+        path = ENV["PATH"]
+        ENV.delete("PATH")
 
-      ENV["PATH"] = path
-    end
+        expect { subject.matches?("spec/fixtures/python/.coverage") }.to raise_error(CoverageReporter::CoveragepyParser::ParserError)
 
-    it "raises error if format is forced but coverage program is not installed" do
-      path = ENV["PATH"]
-      ENV.delete("PATH")
-
-      expect { subject.matches?("spec/fixtures/python/.coverage", true) }.to raise_error(CoverageReporter::CoveragepyParser::ParserError)
-
-      ENV["PATH"] = path
+        ENV["PATH"] = path
+      end
     end
   end
 

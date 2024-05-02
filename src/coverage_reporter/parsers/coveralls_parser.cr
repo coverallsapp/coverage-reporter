@@ -17,9 +17,6 @@ module CoverageReporter
       property source_files : Array(SourceFiles)
     end
 
-    def initialize(@base_path : String?)
-    end
-
     def globs : Array(String)
       [
         "coveralls.json",

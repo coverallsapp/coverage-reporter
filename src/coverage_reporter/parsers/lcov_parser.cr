@@ -13,10 +13,6 @@ module CoverageReporter
     BRANCH_COVERAGE_RE = Regex.new("\\ABRDA:(\\d+),(\\d+),(\\d+),(\\d+|-)", Regex::CompileOptions::MATCH_INVALID_UTF)
     END_RE             = Regex.new("\\Aend_of_record", Regex::CompileOptions::MATCH_INVALID_UTF)
 
-    # Use *base_path* to join with paths found in reports.
-    def initialize(@base_path : String?)
-    end
-
     def globs : Array(String)
       [
         "*.lcov",

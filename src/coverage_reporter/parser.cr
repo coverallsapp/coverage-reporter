@@ -53,7 +53,7 @@ module CoverageReporter
                    Log.info("✏️ Forced coverage format: #{@coverage_format}")
                    parser_class = PARSERS.find { |klass| klass.name == @coverage_format }
                    if parser_class
-                     [parser_class.new(base_path)]
+                     [parser_class.new(base_path, true)]
                    else
                      raise InvalidCoverageFormat.new(coverage_format)
                    end

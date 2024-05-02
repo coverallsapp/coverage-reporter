@@ -16,14 +16,14 @@ module CoverageReporter
         "**/*/.coverage",
       ]
     end
-    def matches?(filename : String, forced : Bool = false) : Bool
+    def matches?(filename : String ) : Bool
       valid_file_exists = File.open(filename) do |f|
         f.read_at(0, 15) do |io|
           io.gets.try(&.downcase) == "sqlite format 3"
         end
       end
 
-      valid_file_exists && check_for_coverage_executable(forced)
+      valid_file_exists && check_for_coverage_executable
     rescue error : ParserError
       raise error
     rescue Exception
@@ -53,7 +53,7 @@ module CoverageReporter
       end
     end
 
-    private def check_for_coverage_executable(forced : Bool = false)
+    private def check_for_coverage_executable
       error = IO::Memory.new
       process_status = Process.run(
         command: "coverage --version",
@@ -64,7 +64,7 @@ module CoverageReporter
       if process_status.success?
         true
       else
-        if forced
+        if @forced
           raise ParserError.new(missing_coverage_executable_message)
         else
           Log.debug("⚠️  Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")

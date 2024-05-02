@@ -7,11 +7,6 @@ module CoverageReporter
       coverage : Hash(Line, Hits?),
       branches : Hash(Line, Array(Hits))
 
-    # NOTE: Provide the base path for the sources. You can check "filename" in
-    #       coverage report and see what part is missing to get a valid source path.
-    def initialize(@base_path : String?)
-    end
-
     def globs : Array(String)
       [
         "**/*/cobertura.xml",
