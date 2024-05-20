@@ -49,7 +49,17 @@ module CoverageReporter
     end
 
     def initialize(@coverage_files : Array(String) | Nil, @coverage_format : String?, @base_path : String?)
-      @parsers = PARSERS.map(&.new(@base_path)).to_a
+      @parsers = if coverage_format
+                   Log.info("✏️ Forced coverage format: #{coverage_format}")
+                   parser_class = PARSERS.find { |klass| klass.name == coverage_format }
+                   if parser_class
+                     [parser_class.new(base_path, true)]
+                   else
+                     raise InvalidCoverageFormat.new(coverage_format)
+                   end
+                 else
+                   PARSERS.map(&.new(base_path)).to_a
+                 end
     end
 
     # Returns coverage report files that can be parsed by utility.
@@ -79,22 +89,6 @@ module CoverageReporter
     end
 
     def parse : SourceFiles
-      if coverage_format
-        Log.info("✏️ Forced coverage format: #{coverage_format}")
-        parser_class = PARSERS.find { |klass| klass.name == coverage_format }
-        if parser_class
-          parser = parser_class.new(base_path)
-          source_files = SourceFiles.new
-          files.each do |filename|
-            source_files.add(parser.parse(filename), filename)
-          end
-
-          return source_files
-        else
-          raise InvalidCoverageFormat.new(coverage_format)
-        end
-      end
-
       source_files = SourceFiles.new
       files.each do |filename|
         source_files.add(parse_file(filename), filename)

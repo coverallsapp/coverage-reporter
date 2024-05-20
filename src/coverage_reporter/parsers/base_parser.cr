@@ -45,7 +45,7 @@ module CoverageReporter
     #
     # *base_path* can be used to join with all paths in coverage report in order
     # to properly reference a file.
-    def initialize(@base_path : String? = nil)
+    def initialize(@base_path : String? = nil, @forced : Bool = false)
     end
 
     # Creates a `FileReport` instance. Use this method instead of explicit

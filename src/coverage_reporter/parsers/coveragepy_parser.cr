@@ -25,6 +25,8 @@ module CoverageReporter
       end
 
       valid_file_exists && check_for_coverage_executable
+    rescue error : ParserError
+      raise error
     rescue Exception
       false
     end
@@ -41,17 +43,8 @@ module CoverageReporter
         parser = CoberturaParser.new(@base_path)
         parser.parse(tmpfile.path)
       else
-        error_message =
-          %Q|There was an error processing #{filename}: #{error}
+        error_message = "There was an error processing #{filename}: #{error}\n\n#{missing_coverage_executable_message}"
 
-To use the #{self.class.name} format, do one of the following:
-1. Make sure that the coverage executable is available in the
-   runner environment, or
-2. Convert the .coverage file to a coverage.xml file by running
-   `coverage xml`. Then pass the input option `format: cobertura`
-   (for Coveralls GitHub Action or orb), or pass `--format=cobertura`
-   if using the coverage reporter alone.
-|
         raise ParserError.new(error_message)
       end
     ensure
@@ -72,9 +65,25 @@ To use the #{self.class.name} format, do one of the following:
       if process_status.success?
         true
       else
-        Log.debug("⚠️  Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
-        false
+        if @forced
+          raise ParserError.new(missing_coverage_executable_message)
+        else
+          Log.debug("⚠️  Detected coverage format: #{self.class.name}, but error with coverage executable: #{error}")
+          Log.debug(missing_coverage_executable_message)
+          false
+        end
       end
+    end
+
+    private def missing_coverage_executable_message
+      %Q|To use the #{self.class.name} format, do one of the following:
+1. Make sure that the coverage executable is available in the
+   runner environment, or
+2. Convert the .coverage file to a coverage.xml file by running
+   `coverage xml`. Then pass the input option `format: cobertura`
+   (for Coveralls GitHub Action or orb), or pass `--format=cobertura`
+   if using the coverage reporter alone.
+|
     end
   end
 end

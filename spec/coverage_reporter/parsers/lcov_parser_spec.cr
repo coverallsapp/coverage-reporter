@@ -61,7 +61,7 @@ Spectator.describe CoverageReporter::LcovParser do
     end
 
     context "with base path" do
-      let(filename) { "spec/fixtures/lcov/for-base-path-lcov" }
+      let(filename) { "spec/fixtures/lcov/for-base-path.lcov" }
       let(base_path) { "spec/fixtures/lcov" }
 
       it "parses correctly" do
