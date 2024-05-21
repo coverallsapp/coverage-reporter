@@ -16,7 +16,7 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
-      filename.ends_with?(".gcov")
+      true
     end
 
     def parse(filename : String) : Array(FileReport)

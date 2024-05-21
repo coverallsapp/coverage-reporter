@@ -12,8 +12,8 @@ Spectator.describe CoverageReporter::SimplecovParser do
   end
 
   describe "#matches?" do
-    it "matches correct filenames" do
-      expect(subject.matches?(".resultset.jsonb")).to eq false
+    it "is always true" do
+      expect(subject.matches?(".resultset.jsonb")).to eq true
       expect(subject.matches?(".resultset.json")).to eq true
       expect(subject.matches?("path/to/.resultset.json")).to eq true
       expect(subject.matches?("path/to/file.resultset.json")).to eq true
