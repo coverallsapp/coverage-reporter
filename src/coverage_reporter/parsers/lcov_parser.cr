@@ -23,7 +23,7 @@ module CoverageReporter
     end
 
     def matches?(filename : String) : Bool
-      true
+      filename.ends_with?(".lcov") || filename.ends_with?("lcov.info")
     end
 
     def parse(filename : String) : Array(FileReport)

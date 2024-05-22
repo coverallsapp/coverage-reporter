@@ -17,10 +17,10 @@ Spectator.describe CoverageReporter::LcovParser do
   end
 
   describe "#matches?" do
-    it "is always true" do
+    it "matches correct filenames" do
       expect(subject.matches?("somefile.lcov")).to eq true
       expect(subject.matches?("long/path/to/file.lcov")).to eq true
-      expect(subject.matches?("long/path/to/file.lco")).to eq true
+      expect(subject.matches?("long/path/to/file.lco")).to eq false
 
       expect(subject.matches?("lcov.info")).to eq true
       expect(subject.matches?("long/path/to/lcov.info")).to eq true
