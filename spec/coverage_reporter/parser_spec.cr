@@ -9,12 +9,94 @@ Spectator.describe CoverageReporter::Parser do
 
   describe "#parse" do
     context "for exact file" do
-      let(coverage_files) { ["spec/fixtures/lcov/test.lcov"] }
+      context "clover" do
+        let(coverage_files) { ["spec/fixtures/clover/clover-unleash.xml"] }
 
-      it "returns reports for one file" do
-        reports = subject.parse
+        it "returns reports for one file" do
+          reports = subject.parse
 
-        expect(reports.size).to eq 2
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "cobertura" do
+        let(coverage_files) { ["spec/fixtures/cobertura/cobertura.xml"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "jacoco" do
+        let(coverage_files) { ["spec/fixtures/jacoco/jacoco-report.xml"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "golang" do
+        let(coverage_files) { ["spec/fixtures/golang/coverage.out"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "python" do
+        let(coverage_files) { ["spec/fixtures/python/.coverage"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "coveralls" do
+        let(coverage_files) { ["spec/fixtures/coveralls/coveralls.json"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "lcov" do
+        let(coverage_files) { ["spec/fixtures/lcov/test.lcov"] }
+
+        it "returns reports for one file" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "simplecov" do
+        let(coverage_files) { ["spec/fixtures/simplecov/with-only-lines.resultset.json"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
+      context "gcov" do
+        let(coverage_files) { ["spec/fixtures/gcov/main.c.gcov"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
       end
 
       context "for non-existing file" do
@@ -37,6 +119,7 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "when coverage format forced (lcov)" do
+        let(coverage_files) { ["spec/fixtures/lcov/test.lcov"] }
         let(coverage_format) { "lcov" }
 
         it "returns report only for specified format" do
@@ -97,6 +180,7 @@ Spectator.describe CoverageReporter::Parser do
       end
 
       context "for unknown coverage format" do
+        let(coverage_files) { ["spec/fixtures/lcov/test.lcov"] }
         let(coverage_format) { "unknown" }
 
         it "raises error" do

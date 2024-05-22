@@ -14,11 +14,14 @@ Spectator.describe CoverageReporter::GcovParser do
   end
 
   describe "#matches?" do
-    it "matches only .gcov files" do
+    it "is true except for lcov and simplecov extensions" do
       expect(subject.matches?(".gcov")).to eq true
       expect(subject.matches?("main.c.gcov")).to eq true
       expect(subject.matches?("some-path/file.gcov")).to eq true
+
       expect(subject.matches?("main.c.lcov")).to eq false
+      expect(subject.matches?("lcov.info")).to eq false
+      expect(subject.matches?("path/to/file.resultset.json")).to be false
     end
   end
 

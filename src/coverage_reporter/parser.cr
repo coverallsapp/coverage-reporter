@@ -16,15 +16,15 @@ module CoverageReporter
     # A list of available parsers.
     # See `CoverageReporter::BaseParser` for details.
     PARSERS = {
-      LcovParser,
-      SimplecovParser,
       CloverParser,
       CoberturaParser,
       JacocoParser,
-      GcovParser,
       GolangParser,
       CoveragepyParser,
       CoverallsParser,
+      LcovParser,
+      SimplecovParser,
+      GcovParser,
     }
 
     class NotFound < BaseException
