@@ -18,7 +18,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.9
+        crystal: 1.13.1
     - name: Install dependencies
       run: shards install
     - name: Install coverage.py
@@ -34,7 +34,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.9
+        crystal: 1.13.1
     - name: Install dependencies
       run: shards install
     - name: Run linter
@@ -47,7 +47,7 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.9
+        crystal: 1.13.1
     - run: make build
     - name: Install kcov
       run: |
