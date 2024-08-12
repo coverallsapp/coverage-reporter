@@ -21,7 +21,7 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.9
+          crystal: 1.13.1
 
       - name: Build SQLite3 static library
         run: "scripts/sqlite3-static.ps1"
@@ -72,7 +72,7 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.9
+          crystal: 1.13.1
 
       - name: Build (Linux)
         run: make release_linux
