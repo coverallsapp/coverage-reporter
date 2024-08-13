@@ -82,6 +82,11 @@ jobs:
             --output type=local,dest=dist/ \
             -t coveralls/coverage-reporter .
 
+      - name: (Debug) Inspect dist directory contents
+        run: |
+          echo "Listing contents of dist directory:"
+          ls -R dist
+
       - name: Rename and prepare artifacts
         run: |
           cd dist
