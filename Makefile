@@ -24,9 +24,11 @@ release: release_linux
 .ONESHELL:
 new_version:
 	@read -p "New version: " version; \
-	@read -p "Brief description: " description; \
+	read -p "Brief description: " description; \
+	echo "Version: $$version"; \
+	echo "Description: $$description"; \
 	sed -i '' "s/version:.*/version: $${version}/" shard.yml; \
-	sed -i '' "s/VERSION = .*/VERSION = \"$${version}\"/" src/coverage_reporter.cr; \
+	sed -i '' "s/VERSION = .*/VERSION = \"$$version\"/" src/coverage_reporter.cr; \
 	git add shard.yml src/coverage_reporter.cr; \
 	git commit --message "$${version}: $${description}"; \
 	git tag --annotate v$${version} --message "$${version}: $${description}"; \
