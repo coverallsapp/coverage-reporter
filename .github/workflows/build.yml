@@ -87,6 +87,11 @@ jobs:
           echo "Listing contents of dist directory:"
           ls -R dist
 
+      - name: (Debug) Search for coveralls binary in dist directory
+        run: |
+          echo "Searching for coveralls binary in dist directory:"
+          find dist -type f -name 'coveralls' -exec ls -l {} \;
+
       - name: Rename and prepare artifacts
         run: |
           cd dist
