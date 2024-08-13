@@ -69,26 +69,53 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Crystal
-        uses: crystal-lang/install-crystal@v1
-        with:
-          crystal: 1.13.1
+      - name: Set up Docker BuildX
+        run: |
+          docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+          docker buildx create --use
 
-      - name: Build (Linux)
-        run: make release_linux
+      - name: Build multi-architecture binaries
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --build-arg CRYSTAL_VERSION=1.13.1 \
+            --output type=local,dest=dist/ \
+            -t coveralls/coverage-reporter .
 
-      - name: Upload binary
+      - name: Rename and prepare artifacts
+        run: |
+          cd dist
+          mv coveralls-linux-amd64 coveralls-x86_64
+          mv coveralls-linux-arm64 coveralls-aarch64
+          tar -czf coveralls-x86_64.tar.gz coveralls-x86_64
+          tar -czf coveralls-aarch64.tar.gz coveralls-aarch64
+          
+      - name: Upload binaries and archives
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-linux
-          path: dist/coveralls
+          name: coveralls-x86_64
+          path: dist/coveralls-x86_64
           if-no-files-found: error
 
-      - name: Upload tar.gz
+      - name: Upload tar.gz archives
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-linux.tar.gz
-          path: dist/coveralls-linux.tar.gz
+          name: coveralls-x86_64.tar.gz
+          path: dist/coveralls-x86_64.tar.gz
+          if-no-files-found: error
+
+      - name: Upload ARM binaries and archives
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-aarch64
+          path: dist/coveralls-aarch64
+          if-no-files-found: error
+
+      - name: Upload ARM tar.gz archives
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-aarch64.tar.gz
+          path: dist/coveralls-aarch64.tar.gz
           if-no-files-found: error
 
   release:
@@ -113,7 +140,8 @@ jobs:
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
-          mv coveralls coveralls-linux
+          mv coveralls-x86_64 coveralls-linux-x86_64
+          mv coveralls-aarch64 coveralls-linux-aarch64
           mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
 
@@ -124,8 +152,10 @@ jobs:
         run: >
           cd release/;
           gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux-x86_64'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
+          'coveralls-linux-aarch64#coveralls-linux-aarch64'
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
@@ -142,4 +172,3 @@ jobs:
           tap: coverallsapp/coveralls
           formula: coveralls
           token: ${{ secrets.HOMEBREW_TOKEN }}
-
