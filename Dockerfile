@@ -17,8 +17,10 @@ RUN apt-get update && apt-get install -y \
     wget
 
 # Install Crystal
-RUN wget https://github.com/crystal-lang/crystal/releases/download/1.13.1/crystal-1.13.1-1-linux-x86_64.deb \
-    && dpkg -i crystal-1.13.1-1-linux-x86_64.deb \
+RUN wget https://github.com/crystal-lang/crystal/releases/download/1.13.1/crystal-1.13.1-1-linux-x86_64.tar.gz \
+    && tar -xzf crystal-1.13.1-1-linux-x86_64.tar.gz \
+    && mv crystal-1.13.1-1 /usr/local/crystal \
+    && ln -s /usr/local/crystal/bin/crystal /usr/local/bin/crystal \
     && apt-get install -f
 
 # Set the working directory
