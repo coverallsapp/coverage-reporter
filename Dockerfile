@@ -1,7 +1,7 @@
 # Stage 1: Install Crystal and Build x86_64 Binary
 FROM debian:buster AS builder-x86_64
 
-# Install dependencies
+# Install dependencies and Crystal
 RUN apt-get update && apt-get install -y \
     build-essential \
     libssl-dev \
@@ -14,14 +14,14 @@ RUN apt-get update && apt-get install -y \
     g++ \
     make \
     musl-tools \
-    wget
-
-# Install Crystal
-RUN wget https://github.com/crystal-lang/crystal/releases/download/1.13.1/crystal-1.13.1-1-linux-x86_64.tar.gz \
-    && tar -xzf crystal-1.13.1-1-linux-x86_64.tar.gz \
-    && mv crystal-1.13.1-1 /usr/local/crystal \
-    && ln -s /usr/local/crystal/bin/crystal /usr/local/bin/crystal \
-    && apt-get install -f
+    wget \
+    gnupg2 \
+    apt-transport-https \
+    ca-certificates \
+    && curl -fsSL https://keybase.io/crystal/pgp_keys.asc | apt-key add - \
+    && echo "deb https://dist.crystal-lang.org/apt crystal main" > /etc/apt/sources.list.d/crystal.list \
+    && apt-get update \
+    && apt-get install -y crystal
 
 # Set the working directory
 WORKDIR /app
@@ -35,7 +35,7 @@ RUN shards install && crystal build src/cli.cr --release --static --target x86_6
 # Stage 2: Install Crystal and Build aarch64 Binary
 FROM debian:buster AS builder-aarch64
 
-# Install dependencies
+# Install dependencies and Crystal
 RUN apt-get update && apt-get install -y \
     build-essential \
     libssl-dev \
@@ -48,14 +48,14 @@ RUN apt-get update && apt-get install -y \
     g++-aarch64-linux-gnu \
     make \
     musl-tools \
-    wget
-
-# Install Crystal (manually)
-RUN wget https://github.com/crystal-lang/crystal/releases/download/1.13.1/crystal-1.13.1-1-linux-x86_64.tar.gz \
-    && tar -xzf crystal-1.13.1-1-linux-x86_64.tar.gz \
-    && mv crystal-1.13.1-1 /usr/local/crystal \
-    && ln -s /usr/local/crystal/bin/crystal /usr/local/bin/crystal \
-    && apt-get install -f
+    wget \
+    gnupg2 \
+    apt-transport-https \
+    ca-certificates \
+    && curl -fsSL https://keybase.io/crystal/pgp_keys.asc | apt-key add - \
+    && echo "deb https://dist.crystal-lang.org/apt crystal main" > /etc/apt/sources.list.d/crystal.list \
+    && apt-get update \
+    && apt-get install -y crystal
 
 # Set the working directory
 WORKDIR /app
