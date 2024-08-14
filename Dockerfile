@@ -5,7 +5,7 @@ FROM 84codes/crystal:latest AS builder-x86_64
 WORKDIR /app
 
 # Install required packages
-RUN apk add --no-cache libyaml-dev
+RUN apk add --no-cache libyaml-dev musl-dev
 
 # Copy the source code
 COPY . .
