@@ -12,6 +12,7 @@ permissions:
   contents: write
 
 jobs:
+  # Build the Windows binary
   build-windows:
     runs-on: windows-2022
     steps:
@@ -63,6 +64,7 @@ jobs:
           path: dist/coveralls-windows.zip
           if-no-files-found: error
 
+  # Build the Linux binaries for multiple architectures
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -94,39 +96,56 @@ jobs:
       - name: Rename and prepare artifacts
         run: |
           cd dist
-          mv linux_amd64/app/coveralls coveralls-x86_64
-          mv linux_arm64/app/coveralls coveralls-aarch64
-          tar -czf coveralls-x86_64.tar.gz coveralls-x86_64
-          tar -czf coveralls-aarch64.tar.gz coveralls-aarch64
+          mv linux_amd64/app/coveralls-linux-x86_64 coveralls-linux-x86_64
+          mv linux_arm64/app/coveralls-linux-aarch64 coveralls-linux-aarch64
+          cp coveralls-linux-x86_64 coveralls-linux # Create the "generic" linux binary for backwards compatibility with github-action and orb
+          tar -czf coveralls-linux.tar.gz coveralls-linux
+          tar -czf coveralls-linux-x86_64.tar.gz coveralls-linux-x86_64
+          tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
           
-      - name: Upload binaries and archives
+      - name: Upload generic linux binary (x86_64)
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-x86_64
-          path: dist/coveralls-x86_64
+          name: coveralls-linux
+          path: dist/coveralls-linux
           if-no-files-found: error
 
-      - name: Upload tar.gz archives
+      - name: Upload generic linux (x86_64) tar.gz archive
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-x86_64.tar.gz
-          path: dist/coveralls-x86_64.tar.gz
+          name: coveralls-linux.tar.gz
+          path: dist/coveralls-linux.tar.gz
           if-no-files-found: error
 
-      - name: Upload ARM binaries and archives
+      - name: Upload x86_64-specific binary
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-aarch64
-          path: dist/coveralls-aarch64
+          name: coveralls-linux-x86_64
+          path: dist/coveralls-linux-x86_64
           if-no-files-found: error
 
-      - name: Upload ARM tar.gz archives
+      - name: Upload x86_64-specific tar.gz archive
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-aarch64.tar.gz
-          path: dist/coveralls-aarch64.tar.gz
+          name: coveralls-linux-x86_64.tar.gz
+          path: dist/coveralls-linux-x86_64.tar.gz
           if-no-files-found: error
 
+      - name: Upload aarch64 binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-linux-aarch64
+          path: dist/coveralls-linux-aarch64
+          if-no-files-found: error
+
+      - name: Upload aarch64 tar.gz archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-linux-aarch64.tar.gz
+          path: dist/coveralls-linux-aarch64.tar.gz
+          if-no-files-found: error
+
+  # Create a GitHub release and attach built artifacts
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
@@ -140,7 +159,8 @@ jobs:
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - uses: actions/download-artifact@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
         with:
           path: artifacts/
 
@@ -149,18 +169,21 @@ jobs:
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
-          mv coveralls-x86_64 coveralls-linux-x86_64
-          mv coveralls-aarch64 coveralls-linux-aarch64
-          mv coveralls.exe coveralls-windows.exe
+          mv coveralls-linux coveralls-linux  # Include the generic linux binary for backwards compatibility with github-action and orb
+          mv coveralls-linux-x86_64 coveralls-linux-x86_64
+          mv coveralls-linux-aarch64 coveralls-linux-aarch64
+          mv coveralls-windows.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
 
-      - name: Create Github release
+      - name: Create GitHub release
         env:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
         run: >
           cd release/;
           gh release create ${TAG}
+          'coveralls-linux#coveralls-linux'  # Upload generic linux binary for backawrds compatibility with github-action and orb
+          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'  # Upload generic linux tar.gz archive for backwards compatibility with github-action and orb
           'coveralls-linux-x86_64#coveralls-linux-x86_64'
           'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
           'coveralls-linux-aarch64#coveralls-linux-aarch64'
@@ -170,6 +193,7 @@ jobs:
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
+  # Update the Homebrew formula for MacOS releases
   homebrew:
     runs-on: ubuntu-latest
     needs: [release]
