@@ -4,6 +4,9 @@ FROM 84codes/crystal:latest AS builder-x86_64
 # Set the working directory
 WORKDIR /app
 
+# Install required packages
+RUN apk add --no-cache libyaml-dev
+
 # Copy the source code
 COPY . .
 
@@ -15,6 +18,9 @@ FROM 84codes/crystal:latest AS builder-aarch64
 
 # Set the working directory
 WORKDIR /app
+
+# Install required packages
+RUN apk add --no-cache libyaml-dev
 
 # Copy the source code
 COPY . .
