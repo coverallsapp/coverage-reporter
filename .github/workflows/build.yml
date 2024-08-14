@@ -94,8 +94,8 @@ jobs:
       - name: Rename and prepare artifacts
         run: |
           cd dist
-          mv linux/amd64/coveralls coveralls-x86_64
-          mv linux/arm64/coveralls coveralls-aarch64
+          mv linux_amd64/app/coveralls coveralls-x86_64
+          mv linux_arm64/app/coveralls coveralls-aarch64
           tar -czf coveralls-x86_64.tar.gz coveralls-x86_64
           tar -czf coveralls-aarch64.tar.gz coveralls-aarch64
           
