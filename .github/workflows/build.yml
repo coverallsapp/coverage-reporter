@@ -78,9 +78,8 @@ jobs:
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
-            --build-arg CRYSTAL_VERSION=1.13.1 \
             --output type=local,dest=dist/ \
-            -t coveralls/coverage-reporter .
+            --target builder .
 
       - name: (Debug) Inspect dist directory contents
         run: |

@@ -1,13 +1,20 @@
-# Use a Debian-based image
-FROM debian:buster-slim
+# Stage 1: Build the binary
+FROM crystallang/crystal:1.13.1-alpine AS builder
 
-# Install necessary dependencies and Crystal
-ARG CRYSTAL_VERSION=1.13.1
-RUN apt-get update && apt-get install -y \
-    curl \
-    xz-utils libxml2-dev sqlite3 libsqlite3-dev \
-    gcc g++ \
-    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu musl-tools \
-    && curl -L https://github.com/crystal-lang/crystal/releases/download/${CRYSTAL_VERSION}/crystal-${CRYSTAL_VERSION}-1-linux-x86_64.tar.gz | tar -xz -C /usr/local \
-    && ln -s /usr/local/crystal-${CRYSTAL_VERSION}-1/bin/crystal /usr/local/bin/crystal \
-    && apt-get clean \
+# Install necessary build tools and dependencies
+RUN apk add --no-cache build-base
+
+# Copy source code into the container
+WORKDIR /app
+COPY . .
+
+# Install dependencies and build the binary
+RUN shards install && crystal build src/cli.cr --release --static --target x86_64-linux-musl -o /app/coveralls
+
+# Stage 2: Final image with just the binary
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/coveralls /app/coveralls
+
+# Run the binary
+ENTRYPOINT ["/app/coveralls"]
