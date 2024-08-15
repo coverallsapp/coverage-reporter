@@ -5,7 +5,7 @@ FROM 84codes/crystal:master-ubuntu-22.04 as builder-x86_64
 WORKDIR /app
 
 # Install required packages
-RUN apt-get update && apt-get install -y libyaml-dev build-essential
+RUN apt-get update && apt-get install -y libyaml-dev liblzma-dev build-essential
 
 # Copy the source code
 COPY . .
@@ -20,7 +20,7 @@ FROM 84codes/crystal:master-ubuntu-22.04 as builder-aarch64
 WORKDIR /app
 
 # Install required packages
-RUN apt-get update && apt-get install -y libyaml-dev gcc-aarch64-linux-gnu build-essential
+RUN apt-get update && apt-get install -y libyaml-dev liblzma-dev gcc-aarch64-linux-gnu build-essential
 
 # Copy the source code
 COPY . .
