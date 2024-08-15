@@ -22,8 +22,13 @@ WORKDIR /app
 # Check disk space usage
 RUN df -h
 
-# Update and upgrade system packages, then install required packages (separate lines for less memory use)
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y
+# Update the package list
+RUN apt-get update
+
+# Install libc-bin separately to reduce memory usage during installation
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libc-bin
+
+# Install the remaining packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libyaml-dev liblzma-dev gcc-aarch64-linux-gnu build-essential
 
 # Copy the source code
