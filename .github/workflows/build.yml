@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -51,14 +51,14 @@ jobs:
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
 
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-22.04-2xlarge
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker BuildX
         run: |
@@ -104,42 +104,42 @@ jobs:
           tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
           
       - name: Upload generic linux binary (x86_64)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux
           path: dist/coveralls-linux
           if-no-files-found: error
 
       - name: Upload generic linux (x86_64) tar.gz archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux.tar.gz
           path: dist/coveralls-linux.tar.gz
           if-no-files-found: error
 
       - name: Upload x86_64-specific binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux-x86_64
           path: dist/coveralls-linux-x86_64
           if-no-files-found: error
 
       - name: Upload x86_64-specific tar.gz archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux-x86_64.tar.gz
           path: dist/coveralls-linux-x86_64.tar.gz
           if-no-files-found: error
 
       - name: Upload aarch64 binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux-aarch64
           path: dist/coveralls-linux-aarch64
           if-no-files-found: error
 
       - name: Upload aarch64 tar.gz archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux-aarch64.tar.gz
           path: dist/coveralls-linux-aarch64.tar.gz
@@ -152,7 +152,7 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -160,7 +160,7 @@ jobs:
         run: git fetch --force --tags
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
@@ -200,7 +200,7 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v3
+        uses: dawidd6/action-homebrew-bump-formula@v4
         with:
           tap: coverallsapp/coveralls
           formula: coveralls
