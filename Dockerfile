@@ -19,8 +19,9 @@ FROM 84codes/crystal:master-ubuntu-22.04 as builder-aarch64
 # Set the working directory
 WORKDIR /app
 
-# Update and upgrade system packages, then install required packages
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libyaml-dev liblzma-dev gcc-aarch64-linux-gnu build-essential
+# Update and upgrade system packages, then install required packages (separate lines for less memory use)
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y libyaml-dev liblzma-dev gcc-aarch64-linux-gnu build-essential
 
 # Copy the source code
 COPY . .
