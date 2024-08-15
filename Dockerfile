@@ -5,7 +5,7 @@ FROM 84codes/crystal:master-ubuntu-22.04 as builder-x86_64
 WORKDIR /app
 
 # Update and upgrade system packages, then install required packages
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libyaml-dev liblzma-dev build-essential
+RUN apt-get update && apt-get install -y libyaml-dev liblzma-dev build-essential
 
 # Copy the source code
 COPY . .
