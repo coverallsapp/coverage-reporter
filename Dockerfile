@@ -22,17 +22,17 @@ WORKDIR /app
 # Check disk space usage
 RUN df -h
 
+## Update the package list (hold for solution below)
+#RUN apt-get update
+
+## Install libc-bin separately to reduce memory usage during installation (hold for solution below)
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libc-bin
+
 # Try this solution to segfault error installing libc-bin
 # From: https://stackoverflow.com/questions/78105004/docker-build-fails-because-unable-to-install-libc-bin
 RUN rm /var/lib/dpkg/info/libc-bin.*
 RUN apt-get clean
 RUN apt-get update
-RUN apt-get install libc-bin
-
-## Update the package list (hold for above solution)
-#RUN apt-get update
-
-# Install libc-bin separately to reduce memory usage during installation
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libc-bin
 
 # Install the remaining packages
