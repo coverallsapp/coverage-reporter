@@ -30,10 +30,28 @@ RUN df -h
 
 # Try this solution to segfault error installing libc-bin
 # From: https://stackoverflow.com/questions/78105004/docker-build-fails-because-unable-to-install-libc-bin
-RUN rm /var/lib/dpkg/info/libc-bin.*
-RUN apt-get clean
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libc-bin
+#RUN rm /var/lib/dpkg/info/libc-bin.*
+#RUN apt-get clean
+#RUN apt-get update
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libc-bin
+
+# Try this solution to segfault error installing libc-bin
+# From: https://www.grepper.com/answers/426226/installed+libc-bin+package+post-installation+script+subprocess+returned+error+exit+status+134
+# Update and install necessary packages
+RUN apt-get update && apt-get install -y curl gnupg
+# Handle libc-bin package separately to fix segmentation fault issues
+# Move the libc-bin metadata files out of the way
+RUN mv /var/lib/dpkg/info/libc-bin.* /tmp/
+# Forcefully remove the libc-bin package
+RUN dpkg --remove --force-remove-reinstreq libc-bin
+# Purge the libc-bin package completely
+RUN dpkg --purge libc-bin
+# Clean up and update the package list
+RUN apt-get clean && apt-get update
+# Reinstall the libc-bin package
+RUN apt-get install -y libc-bin
+# Move the libc-bin metadata files back to their original location
+RUN mv /tmp/libc-bin.* /var/lib/dpkg/info/
 
 # Install the remaining packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libyaml-dev liblzma-dev gcc-aarch64-linux-gnu build-essential
