@@ -14,10 +14,14 @@ RUN shards install --ignore-crystal-version \
 FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-aarch64
 WORKDIR /app
 COPY --from=builder-x86_64 /app /app
+
+# Remove problematic dependencies for aarch64 and clean the lib directory
 RUN sed -i '/ameba/d' shard.yml \
     && sed -i '/crystal-kcov/d' shard.yml \
-    && rm -rf lib/ameba lib/crystal-kcov \
-    && shards install --ignore-crystal-version \
+    && rm -rf lib/* \
+
+# Reinstall dependencies form scratch without problematic ones and build the binary
+RUN shards install --ignore-crystal-version \
     && mkdir -p /app/bin \
     && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls-linux-aarch64
 
