@@ -92,12 +92,17 @@ jobs:
             --target aarch64_binary \
             --output type=local,dest=./dist .
 
+      - name: (Debug) Check contents of dist directory
+        run: |
+          echo "Contents of dist directory:"
+          ls -lh ./dist/
+          echo "Detailed contents of dist directory:"
+          find ./dist/ -type f -exec ls -lh {} \;
+
       - name: Rename and prepare artifacts
         run: |
           cd dist
           cp coveralls-linux-x86_64 coveralls-linux  # Create the "generic" linux binary for backward compatibility
-          mv coveralls-linux-x86_64 coveralls-linux-x86_64  # Retain the architecture-specific name
-          mv coveralls-linux-aarch64 coveralls-linux-aarch64
           tar -czf coveralls-linux.tar.gz coveralls-linux
           tar -czf coveralls-linux-x86_64.tar.gz coveralls-linux-x86_64
           tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
@@ -168,10 +173,6 @@ jobs:
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
-          mv coveralls-linux coveralls-linux  # Include the generic linux binary for backwards compatibility with github-action and orb
-          mv coveralls-linux-x86_64 coveralls-linux-x86_64
-          mv coveralls-linux-aarch64 coveralls-linux-aarch64
-          mv coveralls-windows.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
 
       - name: Create GitHub release
