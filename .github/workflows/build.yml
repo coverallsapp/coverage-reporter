@@ -76,33 +76,32 @@ jobs:
           docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
           docker buildx create --use
 
-      - name: Build multi-architecture binaries
+      - name: Build x86_64 binary
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \
+            --platform linux/amd64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
-            --output type=local,dest=dist/ .
+            --target x86_64_binary \
+            --output type=local,dest=./dist .
 
-      - name: (Debug) Inspect dist directory contents
+      - name: Build aarch64 binary
         run: |
-          echo "Listing contents of dist directory:"
-          ls -R dist
-
-      - name: (Debug) Search for coveralls binary in dist directory
-        run: |
-          echo "Searching for coveralls binary in dist directory:"
-          find dist -type f -name 'coveralls' -exec ls -l {} \;
+          docker buildx build \
+            --platform linux/arm64 \
+            --build-arg CRYSTAL_VERSION=1.13.1 \
+            --target aarch64_binary \
+            --output type=local,dest=./dist .
 
       - name: Rename and prepare artifacts
         run: |
           cd dist
-          mv linux_amd64/app/coveralls-linux-x86_64 coveralls-linux-x86_64
-          mv linux_arm64/app/coveralls-linux-aarch64 coveralls-linux-aarch64
-          cp coveralls-linux-x86_64 coveralls-linux # Create the "generic" linux binary for backwards compatibility with github-action and orb
+          cp coveralls-linux-x86_64 coveralls-linux  # Create the "generic" linux binary for backward compatibility
+          mv coveralls-linux-x86_64 coveralls-linux-x86_64  # Retain the architecture-specific name
+          mv coveralls-linux-aarch64 coveralls-linux-aarch64
           tar -czf coveralls-linux.tar.gz coveralls-linux
           tar -czf coveralls-linux-x86_64.tar.gz coveralls-linux-x86_64
           tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
-          
+
       - name: Upload generic linux binary (x86_64)
         uses: actions/upload-artifact@v4
         with:
