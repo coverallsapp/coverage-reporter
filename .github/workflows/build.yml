@@ -79,6 +79,7 @@ jobs:
       - name: Build x86_64 binary
         run: |
           docker buildx build \
+            --no-cache \
             --platform linux/amd64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target x86_64_binary \
@@ -87,6 +88,7 @@ jobs:
       - name: Build aarch64 binary
         run: |
           docker buildx build \
+            --no-cache \
             --platform linux/arm64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target aarch64_binary \
