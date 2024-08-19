@@ -173,6 +173,7 @@ jobs:
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
+          mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
 
       - name: Create GitHub release
