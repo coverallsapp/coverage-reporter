@@ -19,8 +19,12 @@ COPY --from=builder-x86_64 /app /app
 RUN sed -i '/ameba/d' shard.yml \
     && sed -i '/crystal-kcov/d' shard.yml \
     && rm -rf lib/* \
+    && rm -rf .shards
 
-# Reinstall dependencies form scratch without problematic ones and build the binary
+# (Debug) Add a step to verify the content of shard.yml after modification
+RUN cat shard.yml
+
+# Reinstall dependencies from scratch without problematic ones and build the binary
 RUN shards install --ignore-crystal-version \
     && mkdir -p /app/bin \
     && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls-linux-aarch64
