@@ -12,11 +12,12 @@ permissions:
   contents: write
 
 jobs:
+  # Build the Windows binary
   build-windows:
     runs-on: windows-2022
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -50,61 +51,122 @@ jobs:
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
 
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
           if-no-files-found: error
 
+  # Build the Linux binaries for multiple architectures
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Crystal
-        uses: crystal-lang/install-crystal@v1
-        with:
-          crystal: 1.13.1
+      - name: Set up Docker BuildX
+        run: |
+          docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+          docker buildx create --use
 
-      - name: Build (Linux)
-        run: make release_linux
+      - name: Build x86_64 binary
+        run: |
+          docker buildx build \
+            --no-cache \
+            --platform linux/amd64 \
+            --build-arg CRYSTAL_VERSION=1.13.1 \
+            --target x86_64_binary \
+            --output type=local,dest=./dist .
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v3
+      - name: Build aarch64 binary
+        run: |
+          docker buildx build \
+            --no-cache \
+            --platform linux/arm64 \
+            --build-arg CRYSTAL_VERSION=1.13.1 \
+            --target aarch64_binary \
+            --output type=local,dest=./dist .
+
+      - name: (Debug) Check contents of dist directory
+        run: |
+          echo "Contents of dist directory:"
+          ls -lh ./dist/
+          echo "Detailed contents of dist directory:"
+          find ./dist/ -type f -exec ls -lh {} \;
+
+      - name: Rename and prepare artifacts
+        run: |
+          cd dist
+          cp coveralls-linux-x86_64 coveralls-linux  # Create the "generic" linux binary for backward compatibility
+          tar -czf coveralls-linux.tar.gz coveralls-linux
+          tar -czf coveralls-linux-x86_64.tar.gz coveralls-linux-x86_64
+          tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
+
+      - name: Upload generic linux binary (x86_64)
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux
-          path: dist/coveralls
+          path: dist/coveralls-linux
           if-no-files-found: error
 
-      - name: Upload tar.gz
-        uses: actions/upload-artifact@v3
+      - name: Upload generic linux (x86_64) tar.gz archive
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux.tar.gz
           path: dist/coveralls-linux.tar.gz
           if-no-files-found: error
 
+      - name: Upload x86_64-specific binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-x86_64
+          path: dist/coveralls-linux-x86_64
+          if-no-files-found: error
+
+      - name: Upload x86_64-specific tar.gz archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-x86_64.tar.gz
+          path: dist/coveralls-linux-x86_64.tar.gz
+          if-no-files-found: error
+
+      - name: Upload aarch64 binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-aarch64
+          path: dist/coveralls-linux-aarch64
+          if-no-files-found: error
+
+      - name: Upload aarch64 tar.gz archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-aarch64.tar.gz
+          path: dist/coveralls-linux-aarch64.tar.gz
+          if-no-files-found: error
+
+  # Create a GitHub release and attach built artifacts
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - uses: actions/download-artifact@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
@@ -113,33 +175,36 @@ jobs:
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
-          mv coveralls coveralls-linux
           mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
 
-      - name: Create Github release
+      - name: Create GitHub release
         env:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
         run: >
           cd release/;
           gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux#coveralls-linux'  # Upload generic linux binary for backawrds compatibility with github-action and orb
+          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'  # Upload generic linux tar.gz archive for backwards compatibility with github-action and orb
+          'coveralls-linux-x86_64#coveralls-linux-x86_64'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
+          'coveralls-linux-aarch64#coveralls-linux-aarch64'
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
+  # Update the Homebrew formula for MacOS releases
   homebrew:
     runs-on: ubuntu-latest
     needs: [release]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v3
+        uses: dawidd6/action-homebrew-bump-formula@v4
         with:
           tap: coverallsapp/coveralls
           formula: coveralls
           token: ${{ secrets.HOMEBREW_TOKEN }}
-
