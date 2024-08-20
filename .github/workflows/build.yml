@@ -94,13 +94,6 @@ jobs:
             --target aarch64_binary \
             --output type=local,dest=./dist .
 
-      - name: (Debug) Check contents of dist directory
-        run: |
-          echo "Contents of dist directory:"
-          ls -lh ./dist/
-          echo "Detailed contents of dist directory:"
-          find ./dist/ -type f -exec ls -lh {} \;
-
       - name: Rename and prepare artifacts
         run: |
           cd dist
@@ -184,16 +177,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >
           cd release/;
-          gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'  # Upload generic linux binary for backawrds compatibility with github-action and orb
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'  # Upload generic linux tar.gz archive for backwards compatibility with github-action and orb
-          'coveralls-linux-x86_64#coveralls-linux-x86_64'
-          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
-          'coveralls-linux-aarch64#coveralls-linux-aarch64'
-          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
-          'coveralls-windows.exe#coveralls-windows.exe'
-          'coveralls-windows.zip#coveralls-windows.zip'
-          'coveralls-checksums.txt#coveralls-checksums.txt'
+          gh release create ${TAG} \
+          "coveralls-linux#coveralls-linux" \
+          "coveralls-linux.tar.gz#coveralls-linux.tar.gz" \
+          "coveralls-linux-x86_64#coveralls-linux-x86_64" \
+          "coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz" \
+          "coveralls-linux-aarch64#coveralls-linux-aarch64" \
+          "coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz" \
+          "coveralls-windows.exe#coveralls-windows.exe" \
+          "coveralls-windows.zip#coveralls-windows.zip" \
+          "coveralls-checksums.txt#coveralls-checksums.txt" \
           --generate-notes
 
   # Update the Homebrew formula for MacOS releases
@@ -203,7 +196,7 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v4
+        uses: dawidd6/action-homebrew-bump-formula@v3
         with:
           tap: coverallsapp/coveralls
           formula: coveralls
