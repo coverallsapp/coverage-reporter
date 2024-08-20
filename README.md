@@ -251,9 +251,9 @@ Cutting new releases.
 $ make new_version
 New version: 1.2.3
 Brief description: new coverage report support
-
-$ git push origin master --follow-tags
 ```
+
+**Note**: The `new_version` target takes care of the entire process of creating a new release, including tagging and pushing the release with `git push origin master --follow-tags`.
 
 [After the release is available][github-releases], see [Homebrew
 release](#homebrew-release) instructions.
