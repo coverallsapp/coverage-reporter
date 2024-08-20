@@ -6,7 +6,10 @@ ARG BASE_IMAGE_TAG=ubuntu-22.04
 FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-x86_64
 WORKDIR /app
 RUN git clone https://github.com/coverallsapp/coverage-reporter.git .
-RUN shards install --ignore-crystal-version \
+# Install only the necessary dependencies, skipping ameba and kcov
+RUN sed -i '/ameba/d' shard.yml \
+    && sed -i '/crystal-kcov/d' shard.yml \
+    && shards install --ignore-crystal-version \
     && mkdir -p /app/bin \
     && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls-linux-x86_64
 
@@ -15,17 +18,12 @@ FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-aarch64
 WORKDIR /app
 COPY --from=builder-x86_64 /app /app
 
-# Remove problematic dependencies for aarch64 and clean the lib directory
+# Install dependencies. Ensure ameba and kcov are not present
 RUN sed -i '/ameba/d' shard.yml \
     && sed -i '/crystal-kcov/d' shard.yml \
     && rm -rf lib/* \
-    && rm -rf .shards
-
-# (Debug) Add a step to verify the content of shard.yml after modification
-RUN cat shard.yml
-
-# Reinstall dependencies from scratch without problematic ones and build the binary
-RUN shards install --ignore-crystal-version \
+    && rm -rf .shards \
+    && shards install --ignore-crystal-version \
     && mkdir -p /app/bin \
     && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls-linux-aarch64
 
