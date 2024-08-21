@@ -163,6 +163,13 @@ jobs:
         with:
           path: artifacts/
 
+      - name: (Debug) List Contents of Artifacts Directory
+        run: |
+          echo "Listing contents of artifacts/ directory:"
+          ls -lah artifacts/
+          echo "Verifying files in artifacts/ directory:"
+          find artifacts/ -type f
+
       - name: Prepare files for release
         run: |
           mkdir release/
@@ -170,6 +177,13 @@ jobs:
           cd release/
           mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
+          
+      - name: (Debug) List Contents Release Directory
+        run: |
+          echo "Listing contents of release/ directory:"
+          ls -lah release/
+          echo "Verifying files in release/ directory:"
+          find release/ -type f
 
       - name: Create GitHub release
         env:
