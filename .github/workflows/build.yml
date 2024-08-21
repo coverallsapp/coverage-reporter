@@ -191,16 +191,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >
           cd release/;
-          gh release create ${TAG} \
-          "coveralls-linux#coveralls-linux" \
-          "coveralls-linux.tar.gz#coveralls-linux.tar.gz" \
-          "coveralls-linux-x86_64#coveralls-linux-x86_64" \
-          "coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz" \
-          "coveralls-linux-aarch64#coveralls-linux-aarch64" \
-          "coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz" \
-          "coveralls-windows.exe#coveralls-windows.exe" \
-          "coveralls-windows.zip#coveralls-windows.zip" \
-          "coveralls-checksums.txt#coveralls-checksums.txt" \
+          gh release create ${TAG}
+          'coveralls-linux#coveralls-linux'
+          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux-x86_64'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
+          'coveralls-linux-aarch64#coveralls-linux-aarch64'
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
+          'coveralls-windows.exe#coveralls-windows.exe'
+          'coveralls-windows.zip#coveralls-windows.zi'p
+          'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
   # Update the Homebrew formula for MacOS releases
