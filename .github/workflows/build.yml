@@ -85,10 +85,10 @@ jobs:
             --target x86_64_binary \
             --output type=local,dest=./dist .
 
-      - name: (Debug) List contents of dist/x86_64
+      - name: (Debug) List contents of dist/
         run: |
           echo "Contents of dist/x86_64:"
-          ls -lah dist/x86_64/
+          ls -lah dist/
 
       - name: Build aarch64 binary
         run: |
@@ -99,10 +99,10 @@ jobs:
             --target aarch64_binary \
             --output type=local,dest=./dist .
 
-      - name: (Debug) List contents of dist/aarch64
+      - name: (Debug) List contents of dist/
         run: |
           echo "Contents of dist/aarch64:"
-          ls -lah dist/aarch64/
+          ls -lah dist/
 
       - name: Prepare artifacts for x86_64
         run: |
