@@ -10,8 +10,8 @@ RUN git clone https://github.com/coverallsapp/coverage-reporter.git .
 RUN sed -i '/ameba/d' shard.yml \
     && sed -i '/crystal-kcov/d' shard.yml \
     && shards install --ignore-crystal-version \
-    && mkdir -p /app/bin/x86_64 \
-    && crystal build --release src/coverage_reporter.cr -o /app/bin/x86_64/coveralls
+    && mkdir -p /app/bin \
+    && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls
 
 # Stage 2: Build for aarch64
 FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-aarch64
@@ -24,8 +24,8 @@ RUN sed -i '/ameba/d' shard.yml \
     && rm -rf lib/* \
     && rm -rf .shards \
     && shards install --ignore-crystal-version \
-    && mkdir -p /app/bin/aarch64 \
-    && crystal build --release src/coverage_reporter.cr -o /app/bin/aarch64/coveralls
+    && mkdir -p /app/bin \
+    && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls
 
 # Stage 3a: Export Binary for x86_64
 FROM scratch AS x86_64_binary
