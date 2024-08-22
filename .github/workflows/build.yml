@@ -83,7 +83,7 @@ jobs:
             --platform linux/amd64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target x86_64_binary \
-            --output type=local,dest=./dist/x86_64 .
+            --output type=local,dest=./dist .
 
       - name: (Debug) List contents of dist/x86_64
         run: |
@@ -97,7 +97,7 @@ jobs:
             --platform linux/arm64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target aarch64_binary \
-            --output type=local,dest=./dist/aarch64 .
+            --output type=local,dest=./dist .
 
       - name: (Debug) List contents of dist/aarch64
         run: |

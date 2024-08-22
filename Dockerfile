@@ -29,8 +29,8 @@ RUN sed -i '/ameba/d' shard.yml \
 
 # Stage 3a: Export Binary for x86_64
 FROM scratch AS x86_64_binary
-COPY --from=builder-x86_64 /app/bin/x86_64/coveralls /x86_64/coveralls
+COPY --from=builder-x86_64 /app/bin/coveralls /coveralls
 
 # Stage 3b: Export Binary for aarch64
 FROM scratch AS aarch64_binary
-COPY --from=builder-aarch64 /app/bin/aarch64/coveralls /aarch64/coveralls
+COPY --from=builder-aarch64 /app/bin/coveralls /coveralls
