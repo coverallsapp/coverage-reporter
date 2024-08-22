@@ -83,7 +83,7 @@ jobs:
             --platform linux/amd64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target x86_64_binary \
-            --output type=local,dest=./dist .
+            --output type=local,dest=./dist/x86_64 .
 
       - name: Build aarch64 binary
         run: |
@@ -92,15 +92,24 @@ jobs:
             --platform linux/arm64 \
             --build-arg CRYSTAL_VERSION=1.13.1 \
             --target aarch64_binary \
-            --output type=local,dest=./dist .
+            --output type=local,dest=./dist/aarch64 .
 
-      - name: Rename and prepare artifacts
+      - name: Prepare artifacts for x86_64
         run: |
-          cd dist
-          cp coveralls-linux-x86_64 coveralls-linux  # Create the "generic" linux binary for backward compatibility
-          tar -czf coveralls-linux.tar.gz coveralls-linux
-          tar -czf coveralls-linux-x86_64.tar.gz coveralls-linux-x86_64
-          tar -czf coveralls-linux-aarch64.tar.gz coveralls-linux-aarch64
+          # Create tarball for x86_64
+          tar -czf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
+          # Create generic tarball for backward compatibility
+          tar -czf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
+          # Create binaries for upload
+          cp dist/x86_64/coveralls dist/coveralls-linux
+          cp dist/x86_64/coveralls dist/coveralls-linux-x86_64
+
+      - name: Prepare artifacts for aarch64
+        run: |
+          # Create tarball for aarch64
+          tar -czf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
+          # Create binary for upload
+          cp dist/aarch64/coveralls dist/coveralls-linux-aarch64
 
       - name: Upload generic linux binary (x86_64)
         uses: actions/upload-artifact@v4
@@ -178,7 +187,7 @@ jobs:
           mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
           
-      - name: (Debug) List Contents Release Directory
+      - name: (Debug) List Contents of Release Directory
         run: |
           echo "Listing contents of release/ directory:"
           ls -lah release/
@@ -199,7 +208,7 @@ jobs:
           'coveralls-linux-aarch64#coveralls-linux-aarch64'
           'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
-          'coveralls-windows.zip#coveralls-windows.zi'p
+          'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
@@ -215,3 +224,4 @@ jobs:
           tap: coverallsapp/coveralls
           formula: coveralls
           token: ${{ secrets.HOMEBREW_TOKEN }}
+          force: true
