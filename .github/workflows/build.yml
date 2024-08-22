@@ -85,6 +85,11 @@ jobs:
             --target x86_64_binary \
             --output type=local,dest=./dist/x86_64 .
 
+      - name: (Debug) List contents of dist/x86_64
+        run: |
+          echo "Contents of dist/x86_64:"
+          ls -lah dist/x86_64/
+
       - name: Build aarch64 binary
         run: |
           docker buildx build \
@@ -94,22 +99,39 @@ jobs:
             --target aarch64_binary \
             --output type=local,dest=./dist/aarch64 .
 
+      - name: (Debug) List contents of dist/aarch64
+        run: |
+          echo "Contents of dist/aarch64:"
+          ls -lah dist/aarch64/
+
       - name: Prepare artifacts for x86_64
         run: |
-          # Create tarball for x86_64
-          tar -czf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
-          # Create generic tarball for backward compatibility
-          tar -czf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
-          # Create binaries for upload
-          cp dist/x86_64/coveralls dist/coveralls-linux
-          cp dist/x86_64/coveralls dist/coveralls-linux-x86_64
+          # Ensure the directory exists
+          if [ -d "dist/x86_64" ]; then
+            # Create tarball for x86_64
+            tar -czf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
+            # Create generic tarball for backward compatibility
+            tar -czf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
+            # Create binaries for upload
+            cp dist/x86_64/coveralls dist/coveralls-linux
+            cp dist/x86_64/coveralls dist/coveralls-linux-x86_64
+          else
+            echo "dist/x86_64 directory does not exist!"
+            exit 1
+          fi
 
       - name: Prepare artifacts for aarch64
         run: |
-          # Create tarball for aarch64
-          tar -czf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
-          # Create binary for upload
-          cp dist/aarch64/coveralls dist/coveralls-linux-aarch64
+          # Ensure the directory exists
+          if [ -d "dist/aarch64" ]; then
+            # Create tarball for aarch64
+            tar -czf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
+            # Create binary for upload
+            cp dist/aarch64/coveralls dist/coveralls-linux-aarch64
+          else
+            echo "dist/aarch64 directory does not exist!"
+            exit 1
+          fi
 
       - name: Upload generic linux binary (x86_64)
         uses: actions/upload-artifact@v4
