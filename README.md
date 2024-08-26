@@ -31,7 +31,13 @@ curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 To install the `x86_64`-specific binary:
 
 ```bash
-curl -L https://coveralls.io/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
+curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/<release_version>/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
+```
+
+Example:
+
+```bash
+curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/v0.6.14/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
 ```
 
 #### For aarch64 Architecture
@@ -39,7 +45,13 @@ curl -L https://coveralls.io/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/loc
 To install the `aarch64` binary:
 
 ```bash
-curl -L https://coveralls.io/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
+curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/<release_version>/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
+```
+
+Example:
+
+```bash
+curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/v0.6.14/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
 ```
 
 **Note**: You can omit the `-C /usr/local/bin` argument to keep the binary in the current directory.
