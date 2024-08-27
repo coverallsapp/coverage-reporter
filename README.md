@@ -18,40 +18,10 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 
 ### Linux
 
-#### For x86_64 Architecture
-
-You can choose to download and install from either the generic Linux archive or the `x86_64`-specific archive.
-
 To install the generic Linux binary (which is for `x86_64`):
 
 ```bash
 curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
-```
-
-To install the `x86_64`-specific binary:
-
-```bash
-curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/<release_version>/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
-```
-
-Example:
-
-```bash
-curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/v0.6.14/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
-```
-
-#### For aarch64 Architecture
-
-To install the `aarch64` binary:
-
-```bash
-curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/<release_version>/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
-```
-
-Example:
-
-```bash
-curl -L https://github.com/coverallsapp/coverage-reporter/releases/download/v0.6.14/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
 ```
 
 **Note**: You can omit the `-C /usr/local/bin` argument to keep the binary in the current directory.
