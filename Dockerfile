@@ -6,26 +6,21 @@ ARG BASE_IMAGE_TAG=ubuntu-22.04
 FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-x86_64
 WORKDIR /app
 RUN git clone https://github.com/coverallsapp/coverage-reporter.git .
-# Install only the necessary dependencies, skipping ameba and kcov
-RUN sed -i '/ameba/d' shard.yml \
-    && sed -i '/crystal-kcov/d' shard.yml \
-    && shards install --ignore-crystal-version \
+# Install production dependencies and build the binary
+RUN shards install --production --ignore-crystal-version \
     && mkdir -p /app/bin \
-    && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls
+    && shards build coveralls --production --release --static --no-debug --progress -o /app/bin/coveralls \
+    && strip /app/bin/coveralls  # Reduce binary size
 
 # Stage 2: Build for aarch64
 FROM 84codes/crystal:${CRYSTAL_VERSION}-${BASE_IMAGE_TAG} AS builder-aarch64
 WORKDIR /app
 COPY --from=builder-x86_64 /app /app
-
-# Install dependencies. Ensure ameba and kcov are not present
-RUN sed -i '/ameba/d' shard.yml \
-    && sed -i '/crystal-kcov/d' shard.yml \
-    && rm -rf lib/* \
-    && rm -rf .shards \
-    && shards install --ignore-crystal-version \
+# Install production dependencies and build the binary
+RUN shards install --production --ignore-crystal-version \
     && mkdir -p /app/bin \
-    && crystal build --release src/coverage_reporter.cr -o /app/bin/coveralls
+    && shards build coveralls --production --release --static --no-debug --progress -o /app/bin/coveralls \
+    && strip /app/bin/coveralls  # Reduce binary size
 
 # Stage 3a: Export Binary for x86_64
 FROM scratch AS x86_64_binary
