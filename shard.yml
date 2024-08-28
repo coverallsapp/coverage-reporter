@@ -1,4 +1,3 @@
-# Running make new_version will update the version number in this file
 name: coverage-reporter
 version: 0.6.14
 crystal: ">= 1.7.2"
