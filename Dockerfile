@@ -8,8 +8,7 @@ WORKDIR /app
 RUN git clone https://github.com/coverallsapp/coverage-reporter.git .
 # Install production dependencies and build the binary
 RUN shards install --production --ignore-crystal-version \
-    && mkdir -p /app/bin \
-    && shards build coveralls --production --release --static --no-debug --progress -o /app/bin/coveralls \
+    && shards build coveralls --production --release --static --no-debug --progress \
     && strip /app/bin/coveralls  # Reduce binary size
 
 # Stage 2: Build for aarch64
@@ -18,8 +17,7 @@ WORKDIR /app
 COPY --from=builder-x86_64 /app /app
 # Install production dependencies and build the binary
 RUN shards install --production --ignore-crystal-version \
-    && mkdir -p /app/bin \
-    && shards build coveralls --production --release --static --no-debug --progress -o /app/bin/coveralls \
+    && shards build coveralls --production --release --static --no-debug --progress \
     && strip /app/bin/coveralls  # Reduce binary size
 
 # Stage 3a: Export Binary for x86_64
