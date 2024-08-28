@@ -12,12 +12,11 @@ permissions:
   contents: write
 
 jobs:
-  # Build the Windows binary
   build-windows:
     runs-on: windows-2022
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -51,172 +50,74 @@ jobs:
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
 
       - name: Upload zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
           if-no-files-found: error
 
-  # Build the Linux binaries for multiple architectures
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up Docker BuildX
-        run: |
-          docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-          docker buildx create --use
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: 1.13.1
 
-      - name: Build x86_64 binary
-        run: |
-          docker buildx build \
-            --no-cache \
-            --platform linux/amd64 \
-            --build-arg CRYSTAL_VERSION=1.13.1 \
-            --target x86_64_binary \
-            --output type=local,dest=./dist/x86_64 .
+      - name: Build (Linux)
+        run: make release_linux
 
-      - name: (Debug) List contents of dist/x86_64
-        run: |
-          echo "Contents of dist/x86_64:"
-          ls -lah dist/x86_64/
-
-      - name: Build aarch64 binary
-        run: |
-          docker buildx build \
-            --no-cache \
-            --platform linux/arm64 \
-            --build-arg CRYSTAL_VERSION=1.13.1 \
-            --target aarch64_binary \
-            --output type=local,dest=./dist/aarch64 .
-
-      - name: (Debug) List contents of dist/aarch64
-        run: |
-          echo "Contents of dist/aarch64:"
-          ls -lah dist/aarch64/
-
-      - name: Prepare artifacts for x86_64
-        run: |
-          # Ensure the directory exists
-          if [ -d "dist/x86_64" ]; then
-            # Create tarball for x86_64
-            tar -czf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
-            # Create generic tarball for backward compatibility
-            tar -czf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
-            # Create binaries for upload
-            cp dist/x86_64/coveralls dist/coveralls-linux
-            cp dist/x86_64/coveralls dist/coveralls-linux-x86_64
-          else
-            echo "dist/x86_64 directory does not exist!"
-            exit 1
-          fi
-
-      - name: Prepare artifacts for aarch64
-        run: |
-          # Ensure the directory exists
-          if [ -d "dist/aarch64" ]; then
-            # Create tarball for aarch64
-            tar -czf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
-            # Create binary for upload
-            cp dist/aarch64/coveralls dist/coveralls-linux-aarch64
-          else
-            echo "dist/aarch64 directory does not exist!"
-            exit 1
-          fi
-
-      - name: Upload generic linux binary (x86_64)
-        uses: actions/upload-artifact@v4
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
         with:
           name: coveralls-linux
-          path: dist/coveralls-linux
+          path: dist/coveralls
           if-no-files-found: error
 
-      - name: Upload generic linux (x86_64) tar.gz archive
-        uses: actions/upload-artifact@v4
+      - name: Upload tar.gz
+        uses: actions/upload-artifact@v3
         with:
           name: coveralls-linux.tar.gz
           path: dist/coveralls-linux.tar.gz
           if-no-files-found: error
 
-      - name: Upload x86_64-specific binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-x86_64
-          path: dist/coveralls-linux-x86_64
-          if-no-files-found: error
-
-      - name: Upload x86_64-specific tar.gz archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-x86_64.tar.gz
-          path: dist/coveralls-linux-x86_64.tar.gz
-          if-no-files-found: error
-
-      - name: Upload aarch64 binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-aarch64
-          path: dist/coveralls-linux-aarch64
-          if-no-files-found: error
-
-      - name: Upload aarch64 tar.gz archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-aarch64.tar.gz
-          path: dist/coveralls-linux-aarch64.tar.gz
-          if-no-files-found: error
-
-  # Create a GitHub release and attach built artifacts
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v3
         with:
           path: artifacts/
-
-      - name: (Debug) List Contents of Artifacts Directory
-        run: |
-          echo "Listing contents of artifacts/ directory:"
-          ls -lah artifacts/
-          echo "Verifying files in artifacts/ directory:"
-          find artifacts/ -type f
 
       - name: Prepare files for release
         run: |
           mkdir release/
           find artifacts/ -type f -exec cp \{} release/ \;
           cd release/
+          mv coveralls coveralls-linux
           mv coveralls.exe coveralls-windows.exe
           sha256sum * > coveralls-checksums.txt
-          
-      - name: (Debug) List Contents of Release Directory
-        run: |
-          echo "Listing contents of release/ directory:"
-          ls -lah release/
-          echo "Verifying files in release/ directory:"
-          find release/ -type f
 
-      - name: Create GitHub release
+      - name: Create Github release
         env:
           TAG: ${{ github.ref }}
           GH_TOKEN: ${{ github.token }}
@@ -225,16 +126,11 @@ jobs:
           gh release create ${TAG}
           'coveralls-linux#coveralls-linux'
           'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
-          'coveralls-linux-x86_64#coveralls-linux-x86_64'
-          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
-          'coveralls-linux-aarch64#coveralls-linux-aarch64'
-          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
           --generate-notes
 
-  # Update the Homebrew formula for MacOS releases
   homebrew:
     runs-on: ubuntu-latest
     needs: [release]
@@ -246,4 +142,3 @@ jobs:
           tap: coverallsapp/coveralls
           formula: coveralls
           token: ${{ secrets.HOMEBREW_TOKEN }}
-          force: true
