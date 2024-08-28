@@ -1,0 +1,2 @@
+mode: atomic
+example.com/mypackge/main.go:47.20,58.2 1 1

@@ -7,6 +7,8 @@ Spectator.describe CoverageReporter::GolangParser do
     it "matches correct filenames" do
       expect(subject.matches?("spec/fixtures/golang/coverage.out")).to eq true
       expect(subject.matches?("spec/fixtures/golang/coverage-dashes.out")).to eq true
+      expect(subject.matches?("spec/fixtures/golang/coverage-two-slashes.out")).to eq true
+      expect(subject.matches?("spec/fixtures/golang/coverage-one-slash.out")).to eq true
       expect(subject.matches?("spec/fixtures/test.lcov")).to eq false
       expect(subject.matches?("some-non-existing-file.out")).to eq false
     end
