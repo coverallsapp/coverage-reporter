@@ -8,7 +8,7 @@ WORKDIR /app
 # Clone the coverage-reporter repository
 RUN git clone https://github.com/coverallsapp/coverage-reporter.git .
 # Install liblzma-dev and other dependencies
-RUN apt-get update && apt-get install -y liblzma-dev
+RUN apt-get update && apt-get install -y liblzma-dev libicu-dev
 # Install production dependencies and build the binary
 RUN shards install --production --ignore-crystal-version \
     && shards build coveralls --production --release --static --no-debug --progress \
@@ -20,7 +20,7 @@ WORKDIR /app
 # Copy source code from the x86_64 build
 COPY --from=builder-x86_64 /app /app
 # Install liblzma-dev and other dependencies
-RUN apt-get update && apt-get install -y liblzma-dev
+RUN apt-get update && apt-get install -y liblzma-dev libicu-dev
 # Install production dependencies and build the binary
 RUN shards install --production --ignore-crystal-version \
     && shards build coveralls --production --release --static --no-debug --progress \

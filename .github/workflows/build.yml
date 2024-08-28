@@ -109,9 +109,9 @@ jobs:
           # Ensure the directory exists
           if [ -d "dist/x86_64" ]; then
             # Create tarball for x86_64
-            tar -czf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
+            tar -cvzf dist/coveralls-linux-x86_64.tar.gz -C dist/x86_64 coveralls
             # Create generic tarball for backward compatibility
-            tar -czf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
+            tar -cvzf dist/coveralls-linux.tar.gz -C dist/x86_64 coveralls
             # Create binaries for upload
             cp dist/x86_64/coveralls dist/coveralls-linux
             cp dist/x86_64/coveralls dist/coveralls-linux-x86_64
@@ -125,7 +125,7 @@ jobs:
           # Ensure the directory exists
           if [ -d "dist/aarch64" ]; then
             # Create tarball for aarch64
-            tar -czf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
+            tar -cvzf dist/coveralls-linux-aarch64.tar.gz -C dist/aarch64 coveralls
             # Create binary for upload
             cp dist/aarch64/coveralls dist/coveralls-linux-aarch64
           else
