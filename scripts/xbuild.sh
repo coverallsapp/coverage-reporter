@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Uncomment this line for verbose output (Keep at top of file)
+set -x
+
 set -eu
 
 # Set the list of supported target platforms
@@ -108,7 +111,7 @@ esac
 echo "Linking with: $libs"
 
 # link the object_file with the supplied libraries
-link_output=$(zig cc -target $link_platform "$object_file" -o "$executable_name" $link_paths $libs)
+link_output=$(zig cc -target $link_platform "$object_file" -o "$executable_name" $link_paths $libs -Wno-deprecated-non-prototype)
 
 if [ $? -ne 0 ]; then
   echo "Link failed."

@@ -1,6 +1,7 @@
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.12 AS base
+# Base image from luislavena's hydrofoil-crystal image
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.13 AS base
 
-# install cross-compiler (Zig)
+# install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
     --mount=type=tmpfs,target=/tmp \
     set -eux -o pipefail; \
@@ -44,17 +45,24 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
     zig cc --version
 
 # ---
-# Alpine Linux
+# Alpine Linux libraries for multi-arch cross-compilation
+
 # Set the library path to include both /lib and /opt/multiarch-libs
-ENV LIBRARY_PATH="/lib:/opt/multiarch-libs/aarch64-linux-musl/lib"
+ENV LIBRARY_PATH="/lib:/opt/multiarch-libs/aarch64-linux-musl/lib:/opt/multiarch-libs/x86_64-linux-musl/lib"
 
-# Create the target directory for the symlink if it doesn't exist, then create the symlink
-RUN mkdir -p /opt/multiarch-libs/aarch64-linux-musl/lib && ln -s /lib/libz.a /opt/multiarch-libs/aarch64-linux-musl/lib/libz.a
+# Create the target directories for both aarch64 and x86_64 and symlink the required libraries
+#RUN mkdir -p /opt/multiarch-libs/aarch64-linux-musl/lib && \
+#    ln -s /lib/libz.a /opt/multiarch-libs/aarch64-linux-musl/lib/libz.a
 
-# Set the include path for header files
-ENV CFLAGS="-I/opt/multiarch-libs/aarch64-linux-musl/include"
+# Create the target directories for both aarch64 and x86_64
+RUN mkdir -p /opt/multiarch-libs/aarch64-linux-musl/lib && \
+    mkdir -p /opt/multiarch-libs/x86_64-linux-musl/lib
 
-# install multi-arch libraries
+# Set the include paths for header files for both architectures
+ENV CFLAGS="-I/opt/multiarch-libs/aarch64-linux-musl/include -I/opt/multiarch-libs/x86_64-linux-musl/include"
+ENV LDFLAGS="-L/opt/multiarch-libs/aarch64-linux-musl/lib -L/opt/multiarch-libs/x86_64-linux-musl/lib"
+
+# Install multi-arch libraries
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
     --mount=type=tmpfs,target=/tmp \
     set -eux -o pipefail; \
@@ -90,6 +98,18 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
                 xz-dev \
                 xz-static \
             ; \
+            # Copy the correct libz.a for each architecture \
+            # This is required because `libz.a` does not otherwise \
+            # get installed for `aarh64` and `x86_64` \
+            # just for `aarch64-apple-darwin`
+            if [ "$target_arch" = "aarch64" ]; then \
+                cp $target_path/lib/libz.a /opt/multiarch-libs/aarch64-linux-musl/lib/; \
+            elif [ "$target_arch" = "x86_64" ]; then \
+                cp $target_path/lib/libz.a /opt/multiarch-libs/x86_64-linux-musl/lib/; \
+            fi; \
+            # Verify the installed libz.a for each $target_arch
+            echo "DEBUG: Checking installed libz.a for $target_arch"; \
+            ls -al /tmp/$target_arch-apk-chroot/lib/libz.a; \
             # Debug: List the contents of $target_path/usr/lib/
             echo "DEBUG: Listing contents of $target_path/usr/lib/"; \
             pkg_path="/opt/multiarch-libs/$target_arch-linux-musl"; \
@@ -99,6 +119,7 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
             cp $target_path/usr/lib/*.a $pkg_path/lib/; \
             cp $target_path/usr/lib/pkgconfig/*.pc $pkg_path/lib/pkgconfig/; \
             # Debug: List the contents of /opt/multiarch-libs/$target_arch-linux-musl/
+            echo "DEBUG: Installed libraries for $target_arch"; \
             echo "DEBUG: Listing contents of $pkg_path"; \
             ls -al $pkg_path/lib/; \
         done; \
@@ -107,7 +128,7 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
 # ---
 # macOS
 
-# install macOS dependencies in separate target
+# macOS dependencies are installed in separate target
 FROM base AS macos-packages
 COPY ./scripts/homebrew-downloader.cr /homebrew-downloader.cr
 

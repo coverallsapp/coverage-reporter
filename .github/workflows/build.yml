@@ -21,7 +21,7 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.13.1
+          crystal: 1.13.2
 
       - name: Build SQLite3 static library
         run: "scripts/sqlite3-static.ps1"
@@ -66,29 +66,28 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.13.1
+          crystal: 1.13.2
 
-      - name: Build (Linux)
-        run: make release_linux
+      - name: Build Cross-Compilation Container
+        run: make build-xbuild-container
 
-      - name: Upload binary
+      - name: Build Cross-Compiled Linux Binaries
+        run: make compile-and-strip-all
+
+      - name: Package Linux Binaries
+        run: make package
+
+      - name: Upload Linux Binaries
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-linux
-          path: dist/coveralls
-          if-no-files-found: error
-
-      - name: Upload tar.gz
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux.tar.gz
-          path: dist/coveralls-linux.tar.gz
+          name: linux-binaries
+          path: dist/
           if-no-files-found: error
 
   release:
@@ -104,7 +103,8 @@ jobs:
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - uses: actions/download-artifact@v3
+      - name: Download binaries
+        uses: actions/download-artifact@v3
         with:
           path: artifacts/
 
@@ -124,8 +124,12 @@ jobs:
         run: >
           cd release/;
           gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux-x86_64' \
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz' \
+          'coveralls-linux-aarch64#coveralls-linux-aarch64' \
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz' \
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
