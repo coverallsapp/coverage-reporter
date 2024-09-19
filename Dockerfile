@@ -50,10 +50,6 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
 # Set the library path to include both /lib and /opt/multiarch-libs
 ENV LIBRARY_PATH="/lib:/opt/multiarch-libs/aarch64-linux-musl/lib:/opt/multiarch-libs/x86_64-linux-musl/lib"
 
-# Create the target directories for both aarch64 and x86_64 and symlink the required libraries
-#RUN mkdir -p /opt/multiarch-libs/aarch64-linux-musl/lib && \
-#    ln -s /lib/libz.a /opt/multiarch-libs/aarch64-linux-musl/lib/libz.a
-
 # Create the target directories for both aarch64 and x86_64
 RUN mkdir -p /opt/multiarch-libs/aarch64-linux-musl/lib && \
     mkdir -p /opt/multiarch-libs/x86_64-linux-musl/lib
