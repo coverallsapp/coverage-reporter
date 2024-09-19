@@ -13,20 +13,20 @@ DIST_DIR := dist
 # install gnu-tar with `brew install gnu-tar`as it supports the --transform option
 TAR := $(shell if [ $(shell uname) = Darwin ]; then echo gtar; else echo tar; fi)
 
-# Build targets for ci.yml (build and test app)
-.PHONY: build-app
-build-app:
+# Targets for ci.yml (build and test app)
+.PHONY: build
+build:
 	shards build coveralls --progress --error-trace
 
-.PHONY: test-app
-test-app:
+.PHONY: test
+test:
 	crystal spec --order random --error-on-warnings
 
-.PHONY: lint-app
-lint-app:
+.PHONY: lint
+lint:
 	bin/ameba
 
-# Build targets for build.yml (cross-compile linux binaries for release)
+# Targets for build.yml (cross-compile linux binaries for release)
 .PHONY: build-xbuild-container
 build-xbuild-container: $(DOCKERFILE)
 	docker build -t ${IMAGE_NAME}:${VERSION} -f ${DOCKERFILE} .
@@ -88,3 +88,17 @@ ubuntu-amd64:
 .PHONY: ubuntu-aarch64
 ubuntu-aarch64:
 	docker run -it --rm --platform linux/aarch64 -v .:/app -w /app ubuntu:22.04 bash -i
+
+# Creates and pushes new tag with annotation for new release
+.ONESHELL:
+new_version:
+	@read -p "New version: " version; \
+	read -p "Brief description: " description; \
+	echo "Version: $$version"; \
+	echo "Description: $$description"; \
+	sed -i '' "s/version:.*/version: $${version}/" shard.yml; \
+	sed -i '' "s/VERSION = .*/VERSION = \"$$version\"/" src/coverage_reporter.cr; \
+	git add shard.yml src/coverage_reporter.cr; \
+	git commit --message "$${version}: $${description}"; \
+	git tag --annotate v$${version} --message "$${version}: $${description}"; \
+	git push origin master --follow-tags
