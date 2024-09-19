@@ -111,7 +111,7 @@ esac
 echo "Linking with: $libs"
 
 # link the object_file with the supplied libraries
-link_output=$(zig cc -target "$link_platform" -Wno-deprecated-non-prototype "$object_file" -o "$executable_name" "$link_paths" "$libs")
+link_output=$(zig cc -target "$link_platform" -Wno-deprecated-non-prototype "$object_file" -o "$executable_name" $link_paths $libs)
 
 if [ $? -ne 0 ]; then
   echo "Link failed."
