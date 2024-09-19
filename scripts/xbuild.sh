@@ -69,7 +69,7 @@ build_output=$(PKG_CONFIG_LIBDIR="$pkg_config_libdir" $build_cmd "$filename" -o 
 # check if build succeeded before proceeding
 if [ $? -ne 0 ]; then
   echo "Build failed:"
-  echo $build_output
+  echo "$build_output"
   exit 1
 fi
 
@@ -111,11 +111,11 @@ esac
 echo "Linking with: $libs"
 
 # link the object_file with the supplied libraries
-link_output=$(zig cc -target $link_platform -Wno-deprecated-non-prototype "$object_file" -o "$executable_name" $link_paths $libs)
+link_output=$(zig cc -target "$link_platform" -Wno-deprecated-non-prototype "$object_file" -o "$executable_name" "$link_paths" "$libs")
 
 if [ $? -ne 0 ]; then
   echo "Link failed."
-  echo $link_output
+  echo "$link_output"
   exit 1
 fi
 
