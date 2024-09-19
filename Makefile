@@ -48,14 +48,15 @@ compile-aarch64:
 
 .PHONY: strip-aarch64
 strip-aarch64: $(BINARY_AARCH64)
-	#docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} strip $(BINARY_AARCH64)
-	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_AARCH64) $(BINARY_AARCH64)-stripped
-	mv $(BINARY_AARCH64)-stripped $(BINARY_AARCH64)
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} /bin/sh -c \
+		"zig objcopy --strip-all $(BINARY_AARCH64) $(BINARY_AARCH64)-stripped && \
+		mv $(BINARY_AARCH64)-stripped $(BINARY_AARCH64)"
 
 .PHONY: strip-x86_64
 strip-x86_64: $(BINARY_X86_64)
-	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_X86_64) $(BINARY_X86_64)-stripped
-	mv $(BINARY_X86_64)-stripped $(BINARY_X86_64)
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} /bin/sh -c \
+		"zig objcopy --strip-all $(BINARY_X86_64) $(BINARY_X86_64)-stripped && \
+		mv $(BINARY_X86_64)-stripped $(BINARY_X86_64)"
 
 .PHONY: compile-and-strip-all
 compile-and-strip-all: compile-aarch64 compile-x86_64 strip-aarch64 strip-x86_64
