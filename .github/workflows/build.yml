@@ -89,8 +89,8 @@ jobs:
       - name: Upload linux binaries
         uses: actions/upload-artifact@v3
         with:
-          name: linux-binaries
-          path: dist/
+          name: coveralls-linux-binaries
+          path: dist/*
           if-no-files-found: error
 
   release:
