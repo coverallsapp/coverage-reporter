@@ -66,7 +66,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Install Crystal
@@ -74,16 +74,19 @@ jobs:
         with:
           crystal: 1.13.2
 
-      - name: Build Cross-Compilation Container
+      - name: Install shards dependencies
+        run: shards install --production
+
+      - name: Build cross-compilation container
         run: make build-xbuild-container
 
-      - name: Build Cross-Compiled Linux Binaries
+      - name: Build cross-compiled linux binaries
         run: make compile-and-strip-all
 
-      - name: Package Linux Binaries
+      - name: Package linux binaries
         run: make package
 
-      - name: Upload Linux Binaries
+      - name: Upload linux binaries
         uses: actions/upload-artifact@v3
         with:
           name: linux-binaries
