@@ -12,11 +12,18 @@ BINARY_X86_64 := build/x86_64-linux-musl/coveralls-linux-x86_64
 BINARY_LINUX := build/x86_64-linux-musl/coveralls-linux
 
 DIST_DIR := dist
-# Developers, if you intend to run these targets on on macOS,
-# install gnu-tar with `brew install gnu-tar`as it supports the --transform option
+
+# DEV NOTE:
+# If you intend to run these targets on on MacOS, you'll want to install `gnu-tar` with `brew install gnu-tar`,
+# since it supports the `--transform` option we use with `tar` below in our `package` target.
+# Otherwise, on MacOS systems, this script will use `gtar` instead of `tar` and, if not installed,
+# you can expect it to fail with a related error.
 TAR := $(shell if [ $(shell uname) = Darwin ]; then echo gtar; else echo tar; fi)
 
-# Targets for ci.yml (build and test app)
+# ---
+# Targets for `ci.yml` (standard CI: build & test app)
+# ---
+
 .PHONY: build
 build:
 	shards build coveralls --progress --error-trace
@@ -29,7 +36,10 @@ test:
 lint:
 	bin/ameba
 
-# Targets for build.yml (cross-compile linux binaries for release)
+# ---
+# Targets for `build.yml` (build binaries for releases: `build-linux` job)
+# ---
+
 .PHONY: build-xbuild-container
 build-xbuild-container: $(DOCKERFILE)
 	docker build -t ${IMAGE_NAME}:${VERSION} -f ${DOCKERFILE} .
@@ -42,6 +52,11 @@ run-xbuild-container: $(DOCKERFILE)
 compile-x86_64:
 	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-x86_64 x86_64-linux-musl
 
+# NOTE:
+# There is a known, unavoidable warning that will appear in STDOUT when cross-compiling for `aarch64`.
+# It's due to the version of `clang` used by `zig`. The warning is harmless and can be ignored.
+# We're supposed to be able to suppress the warning with the `-Wno-deprecated-non-prototype` flag,
+# but unfortunately, it doesn't work as expected. ZigLang tracking issue here: https://github.com/ziglang/zig/issues/13385
 .PHONY: compile-aarch64
 compile-aarch64:
 	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-aarch64 aarch64-linux-musl
@@ -74,7 +89,10 @@ package: $(DIST_DIR)
 	  $(TAR) -czf $(DIST_DIR)/coveralls-$$arch.tar.gz -C $(DIST_DIR) --transform="s/coveralls-$$arch/coveralls/" coveralls-$$arch; \
 	done
 
+# ---
 # Test containers for different architectures
+# ---
+
 # Ubuntu 22.04 (amd64)
 .PHONY: ubuntu-amd64
 ubuntu-amd64:
@@ -84,6 +102,10 @@ ubuntu-amd64:
 .PHONY: ubuntu-aarch64
 ubuntu-aarch64:
 	docker run -it --rm -u $(UUID):$(GUID) --platform linux/aarch64 -v .:/app -w /app ubuntu:22.04 bash -i
+
+# ---
+# Used for releasing new versions
+# ---
 
 # Creates and pushes new tag with annotation for new release
 .ONESHELL:

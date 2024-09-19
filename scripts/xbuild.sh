@@ -111,6 +111,10 @@ esac
 echo "Linking with: $libs"
 
 # link the object_file with the supplied libraries
+# NOTE:
+# There is an unavoidable warning that appears in STDOUT when compiling for `aarch64`.
+# The warning is harmless and can be ignored.
+# See our comment above the `compile-aarch64` target in the Makefile for more info.
 link_output=$(zig cc -target "$link_platform" -Wno-deprecated-non-prototype "$object_file" -o "$executable_name" $link_paths $libs)
 
 if [ $? -ne 0 ]; then

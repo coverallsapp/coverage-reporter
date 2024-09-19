@@ -1,3 +1,19 @@
+# ---
+# Special thanks to luislavena for this approach to cross-compiling Crystal apps with Zig.
+# Source: https://forum.crystal-lang.org/t/cross-compiling-crystal-applications-part-1/6956
+# Repo: https://github.com/luislavena/crystal-xbuild-container
+# Background Crystal Lang Docs on:
+# - Cross-Compilation: https://crystal-lang.org/reference/1.13/syntax_and_semantics/cross-compilation.html
+# - Static Linking: https://crystal-lang.org/reference/1.13/guides/static_linking.html
+#
+# NOTE:
+# We've modified the original approach here as necessary for coverage-reporter:
+# - Installed additional dependencies for our target architectures
+# - Made a few tweaks to address recurring issues with our target architectures
+# - Populated our Makefile with convenience targets for our use case
+# - Leveraging those targets to extended this approach to our CI/CD for releases
+# ---
+
 # Base image from luislavena's hydrofoil-crystal image
 FROM ghcr.io/luislavena/hydrofoil-crystal:1.13 AS base
 
@@ -46,6 +62,10 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
 
 # ---
 # Alpine Linux libraries for multi-arch cross-compilation
+#
+# NOTE:
+# We are cross-compiling for `x86_64` and `aarch64` at this time.
+# ---
 
 # Set the library path to include both /lib and /opt/multiarch-libs
 ENV LIBRARY_PATH="/lib:/opt/multiarch-libs/aarch64-linux-musl/lib:/opt/multiarch-libs/x86_64-linux-musl/lib"
@@ -104,10 +124,10 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
                 cp $target_path/lib/libz.a /opt/multiarch-libs/x86_64-linux-musl/lib/; \
             fi; \
             # Verify the installed libz.a for each $target_arch
-            echo "DEBUG: Checking installed libz.a for $target_arch"; \
+            # echo "DEBUG: Checking installed libz.a for $target_arch"; \
             ls -al /tmp/$target_arch-apk-chroot/lib/libz.a; \
             # Debug: List the contents of $target_path/usr/lib/
-            echo "DEBUG: Listing contents of $target_path/usr/lib/"; \
+            # echo "DEBUG: Listing contents of $target_path/usr/lib/"; \
             pkg_path="/opt/multiarch-libs/$target_arch-linux-musl"; \
             ls -al $target_path/usr/lib/; \
             mkdir -p $pkg_path/lib/pkgconfig; \
@@ -115,16 +135,26 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
             cp $target_path/usr/lib/*.a $pkg_path/lib/; \
             cp $target_path/usr/lib/pkgconfig/*.pc $pkg_path/lib/pkgconfig/; \
             # Debug: List the contents of /opt/multiarch-libs/$target_arch-linux-musl/
-            echo "DEBUG: Installed libraries for $target_arch"; \
-            echo "DEBUG: Listing contents of $pkg_path"; \
+            # echo "DEBUG: Installed libraries for $target_arch"; \
+            # echo "DEBUG: Listing contents of $pkg_path"; \
             ls -al $pkg_path/lib/; \
         done; \
     }
 
 # ---
-# macOS
+# MacOS
+#
+# NOTE:
+# We are not using this script to cross-compile for MacOS at this time
+# (you'll notice we have no accompanying target in our Makefile for a MacOS build).
+# Instead, we're continuing to leverage our Homebrew formula ("bottle") here: https://github.com/coverallsapp/homebrew-coveralls
+# (which our `build.yml` workflow updates using the `homebrew-bump-formula` GitHub Action).
+#
+# That said, we're continuing to build the MacOS dependencies here in case we decide to
+# switch to this method for cross-compiling MacOS binaries in the future.
+# ---
 
-# macOS dependencies are installed in separate target
+# MacOS dependencies are installed in separate target
 FROM base AS macos-packages
 COPY ./scripts/homebrew-downloader.cr /homebrew-downloader.cr
 
@@ -150,11 +180,11 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
         ; \
     }
 
-# copy macOS dependencies back into `base`
+# Copy macOS dependencies back into `base`
 FROM base
 COPY --from=macos-packages /opt/multiarch-libs/aarch64-apple-darwin /opt/multiarch-libs/aarch64-apple-darwin
 
-# install macOS SDK
+# Install macOS SDK
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
     --mount=type=tmpfs,target=/tmp \
     set -eux -o pipefail; \
@@ -173,5 +203,5 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
         ln -nfs /opt/multiarch-libs/MacOSX${MACOS_SDK_VERSION}.sdk /opt/multiarch-libs/MacOSX${MACOS_SDK_MAJOR_VERSION}.sdk; \
     }
 
-# copy xbuild helper
+# Copy xbuild helper
 COPY ./scripts/xbuild.sh /usr/local/bin/xbuild
