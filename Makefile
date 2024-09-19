@@ -40,21 +40,21 @@ run-xbuild-container: $(DOCKERFILE)
 
 .PHONY: compile-x86_64
 compile-x86_64:
-	docker run --rm -u $(UUID):$(GUID) -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-x86_64 x86_64-linux-musl
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-x86_64 x86_64-linux-musl
 
 .PHONY: compile-aarch64
 compile-aarch64:
-	docker run --rm -u $(UUID):$(GUID) -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-aarch64 aarch64-linux-musl
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} xbuild src/cli.cr coveralls-linux-aarch64 aarch64-linux-musl
 
 .PHONY: strip-aarch64
 strip-aarch64: $(BINARY_AARCH64)
-	#docker run --rm -u $(UUID):$(GUID) -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} strip $(BINARY_AARCH64)
-	docker run --rm -u $(UUID):$(GUID) -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_AARCH64) $(BINARY_AARCH64)-stripped
+	#docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} strip $(BINARY_AARCH64)
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_AARCH64) $(BINARY_AARCH64)-stripped
 	mv $(BINARY_AARCH64)-stripped $(BINARY_AARCH64)
 
 .PHONY: strip-x86_64
 strip-x86_64: $(BINARY_X86_64)
-	docker run --rm -u $(UUID):$(GUID) -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_X86_64) $(BINARY_X86_64)-stripped
+	docker run --rm -v $(shell pwd):/app -w /app ${IMAGE_NAME}:${VERSION} zig objcopy --strip-all $(BINARY_X86_64) $(BINARY_X86_64)-stripped
 	mv $(BINARY_X86_64)-stripped $(BINARY_X86_64)
 
 .PHONY: compile-and-strip-all
