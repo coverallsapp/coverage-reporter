@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Uncomment this line for verbose output (Keep at top of file)
-set -x
+#set -x
 
 set -eu
 
