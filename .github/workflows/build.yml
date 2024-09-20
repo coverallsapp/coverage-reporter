@@ -66,6 +66,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      # Debug step to verify event context
+      - name: Print event context for build-linux
+        run: echo "${{ toJson(github.event) }}"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -142,6 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -187,6 +192,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    continue-on-error: true
     steps:
       - name: Update Homebrew formula
         uses: dawidd6/action-homebrew-bump-formula@v3

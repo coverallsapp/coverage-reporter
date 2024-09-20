@@ -19,6 +19,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Debug Step to Print Event Context
+      - name: Print event context
+        run: echo "${{ toJson(github.event) }}"
+
       - name: Download built artifacts (linux binaries)
         uses: actions/download-artifact@v3
         with:
