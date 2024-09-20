@@ -1,0 +1,49 @@
+name: Test Linux Multi-Arch Binaries After Build
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+
+jobs:
+  test_binaries:
+    name: Test Multi-Arch Binaries
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Built Artifacts (Binaries)
+        uses: actions/download-artifact@v3
+        with:
+          name: |
+            coveralls-linux-x86_64
+            coveralls-linux-aarch64
+          path: ./binaries
+
+      - name: Download Coverage Report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report  # Assuming this is the name of the artifact from the `ci.yml` run
+          path: ./coverage/
+
+      # Run the binary inside a Docker container with the correct architecture
+      - name: Test Binary in Architecture=Specific Docker Container
+        run: |
+          if [ "${{ matrix.arch }}" = "x86_64" ]; then
+            docker run --rm --platform linux/amd64 -v $(pwd):/app -w /app ubuntu:22.04 ./binaries/coveralls-linux-x86_64 ./coverage/coverage-report.json;
+          elif [ "${{ matrix.arch }}" = "aarch64" ]; then
+            docker run --rm --platform linux/arm64 -v $(pwd):/app -w /app ubuntu:22.04 ./binaries/coveralls-linux-aarch64 ./coverage/coverage-report.json;
+          fi
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+      # Optionally, you can include a test to check if the report was uploaded correctly
+      - name: Check Upload Status
+        run: curl -X GET "https://coveralls.io/repos/coverage-reporter/builds"
