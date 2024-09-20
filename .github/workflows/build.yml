@@ -21,7 +21,7 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.13.1
+          crystal: 1.13.2
 
       - name: Build SQLite3 static library
         run: "scripts/sqlite3-static.ps1"
@@ -72,24 +72,71 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
-          crystal: 1.13.1
+          crystal: 1.13.2
 
-      - name: Build (Linux)
-        run: make release_linux
+      - name: Install shards dependencies
+        run: shards install --production
 
-      - name: Upload binary
+      - name: Build cross-compilation container
+        run: make build-xbuild-container
+
+      - name: Build cross-compiled linux binaries
+        run: make compile-and-strip-all
+
+      - name: Package linux binaries
+        run: make package
+
+      - name: Upload linux binaries
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-linux
-          path: dist/coveralls
+          name: coveralls-linux-binaries
+          path: dist/*
           if-no-files-found: error
 
-      - name: Upload tar.gz
+      - name: Create Trigger File
+        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
+
+      - name: Upload Trigger Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: coveralls-linux.tar.gz
-          path: dist/coveralls-linux.tar.gz
-          if-no-files-found: error
+          name: test-binaries-trigger
+          path: test-binaries-trigger.txt
+
+#      - name: Upload coveralls-linux
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux
+#          path: dist/coveralls-linux
+#
+#      - name: Upload coveralls-linux.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux.tar.gz
+#          path: dist/coveralls-linux.tar.gz
+#
+#      - name: Upload coveralls-linux-x86_64
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-x86_64
+#          path: dist/coveralls-linux-x86_64
+#
+#      - name: Upload coveralls-linux-x86_64.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-x86_64.tar.gz
+#          path: dist/coveralls-linux-x86_64.tar.gz
+#
+#      - name: Upload coveralls-linux-aarch64
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-aarch64
+#          path: dist/coveralls-linux-aarch64
+#
+#      - name: Upload coveralls-linux-aarch64.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-aarch64.tar.gz
+#          path: dist/coveralls-linux-aarch64.tar.gz
 
   release:
     runs-on: ubuntu-latest
@@ -104,7 +151,8 @@ jobs:
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - uses: actions/download-artifact@v3
+      - name: Download binaries
+        uses: actions/download-artifact@v3
         with:
           path: artifacts/
 
@@ -124,8 +172,12 @@ jobs:
         run: >
           cd release/;
           gh release create ${TAG}
-          'coveralls-linux#coveralls-linux'
-          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux-x86_64' \
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz' \
+          'coveralls-linux-aarch64#coveralls-linux-aarch64' \
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz' \
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'

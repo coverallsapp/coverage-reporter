@@ -1,0 +1,42 @@
+name: Test Multi-Arch Linux Binaries After Build
+
+on:
+  workflow_dispatch:  # Trigger manually or on schedule
+
+jobs:
+  test_binaries:
+    name: Test Multi-Arch Binaries
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download built artifacts (linux binaries)
+        uses: actions/download-artifact@v3
+        with:
+          name: |
+            coveralls-linux-x86_64
+            coveralls-linux-aarch64
+          path: ./binaries/
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report  # Assuming this is the name of the artifact from the build.yml run
+          path: ./coverage/
+
+      # Run the binary inside a Docker container with the correct architecture
+      - name: Test Binary in Architecture-Specific Docker Container
+        run: |
+          if [ "${{ matrix.arch }}" = "x86_64" ]; then
+            make ubuntu-x86_64 && ./binaries/coveralls-linux-x86_64 report --measure --base-path src/coverage_reporter/;
+          elif [ "${{ matrix.arch }}" = "aarch64" ]; then
+            make ubuntu-aarch64 && ./binaries/coveralls-linux-aarch64 report --measure --base-path src/coverage_reporter/;
+          fi
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
