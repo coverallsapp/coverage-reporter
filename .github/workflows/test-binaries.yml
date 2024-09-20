@@ -1,7 +1,10 @@
 name: Test Multi-Arch Linux Binaries After Build
 
 on:
-  workflow_dispatch:  # Trigger manually or on schedule
+  workflow_run:
+    workflows: [ "Build" ]
+    types:
+      - completed
 
 jobs:
   test_binaries:
