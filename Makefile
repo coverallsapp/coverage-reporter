@@ -93,9 +93,9 @@ package: $(DIST_DIR)
 # Test containers for different architectures
 # ---
 
-# Ubuntu 22.04 (amd64)
-.PHONY: ubuntu-amd64
-ubuntu-amd64:
+# Ubuntu 22.04 (x86_64/amd64)
+.PHONY: ubuntu-x86_64
+ubuntu-x86_64:
 	docker run -it --rm -u $(UUID):$(GUID) --platform linux/amd64 -v .:/app -w /app ubuntu:22.04 bash -i
 
 # Ubuntu 22.04 (aarch64)

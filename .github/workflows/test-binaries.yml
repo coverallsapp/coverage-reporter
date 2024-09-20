@@ -34,11 +34,9 @@ jobs:
       - name: Test Binary in Architecture-Specific Docker Container
         run: |
           if [ "${{ matrix.arch }}" = "x86_64" ]; then
-            docker run --rm --platform linux/amd64 -v $(pwd):/app -w /app ubuntu:22.04 \
-              ./binaries/coveralls-linux-x86_64 report --measure --base-path src/coverage_reporter/;
+            make ubuntu-x86_64 && ./binaries/coveralls-linux-x86_64 report --measure --base-path src/coverage_reporter/;
           elif [ "${{ matrix.arch }}" = "aarch64" ]; then
-            docker run --rm --platform linux/arm64 -v $(pwd):/app -w /app ubuntu:22.04 \
-              ./binaries/coveralls-linux-aarch64 report --measure --base-path src/coverage_reporter/;
+            make ubuntu-aarch64 && ./binaries/coveralls-linux-aarch64 report --measure --base-path src/coverage_reporter/;
           fi
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
