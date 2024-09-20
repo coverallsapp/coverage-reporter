@@ -86,48 +86,57 @@ jobs:
       - name: Package linux binaries
         run: make package
 
-#      - name: Upload linux binaries
+      - name: Upload linux binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: coveralls-linux-binaries
+          path: dist/*
+          if-no-files-found: error
+
+      - name: Create Trigger File
+        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
+
+      - name: Upload Trigger Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-binaries-trigger
+          path: test-binaries-trigger.txt
+
+#      - name: Upload coveralls-linux
 #        uses: actions/upload-artifact@v3
 #        with:
-#          name: coveralls-linux-binaries
-#          path: dist/*
-#          if-no-files-found: error
-
-      - name: Upload coveralls-linux
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux
-          path: dist/coveralls-linux
-
-      - name: Upload coveralls-linux.tar.gz
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux.tar.gz
-          path: dist/coveralls-linux.tar.gz
-
-      - name: Upload coveralls-linux-x86_64
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux-x86_64
-          path: dist/coveralls-linux-x86_64
-
-      - name: Upload coveralls-linux-x86_64.tar.gz
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux-x86_64.tar.gz
-          path: dist/coveralls-linux-x86_64.tar.gz
-
-      - name: Upload coveralls-linux-aarch64
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux-aarch64
-          path: dist/coveralls-linux-aarch64
-
-      - name: Upload coveralls-linux-aarch64.tar.gz
-        uses: actions/upload-artifact@v3
-        with:
-          name: coveralls-linux-aarch64.tar.gz
-          path: dist/coveralls-linux-aarch64.tar.gz
+#          name: coveralls-linux
+#          path: dist/coveralls-linux
+#
+#      - name: Upload coveralls-linux.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux.tar.gz
+#          path: dist/coveralls-linux.tar.gz
+#
+#      - name: Upload coveralls-linux-x86_64
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-x86_64
+#          path: dist/coveralls-linux-x86_64
+#
+#      - name: Upload coveralls-linux-x86_64.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-x86_64.tar.gz
+#          path: dist/coveralls-linux-x86_64.tar.gz
+#
+#      - name: Upload coveralls-linux-aarch64
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-aarch64
+#          path: dist/coveralls-linux-aarch64
+#
+#      - name: Upload coveralls-linux-aarch64.tar.gz
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coveralls-linux-aarch64.tar.gz
+#          path: dist/coveralls-linux-aarch64.tar.gz
 
   release:
     runs-on: ubuntu-latest
