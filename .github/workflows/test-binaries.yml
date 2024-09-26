@@ -19,12 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # # Debug Step to Print Event Context
-      # - name: Print event context
-      #   env:
-      #     GITHUB_CONTEXT: ${{ toJson(github) }}
-      #   run: echo "$GITHUB_CONTEXT"
-
       # Debug step to list artifacts for the run
       - name: List available artifacts
         run: |
