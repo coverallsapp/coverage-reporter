@@ -25,14 +25,6 @@ jobs:
       #     GITHUB_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GITHUB_CONTEXT"
 
-      # Debug step to list available artifacts
-      - name: List available artifacts in dist/
-        run: ls -la dist/
-
-      # Debug step to list available artifacts
-      - name: List available artifacts in ./binaries/
-        run: ls -la ./binaries/
-
       - name: Download built artifacts (linux binaries)
         uses: actions/download-artifact@v4
         with:
@@ -42,10 +34,6 @@ jobs:
       # Debug step to list available artifacts
       - name: List available artifacts in ./binaries/
         run: ls -la ./binaries/
-
-      # Debug step to list available artifacts
-      - name: List available artifacts in dist/
-        run: ls -la dist/
 
       - name: Download coverage report
         uses: actions/download-artifact@v4
