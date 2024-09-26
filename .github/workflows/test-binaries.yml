@@ -1,8 +1,8 @@
-name: Test Multi-Arch Linux Binaries After Build
+name: test-binaries
 
 on:
   workflow_run:
-    workflows: [ "Build" ]
+    workflows: [build]
     types:
       - completed
 
@@ -19,13 +19,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Debug Step to Print Event Context
+      - name: Print event context
+        run: echo "${{ toJson(github.event) }}"
+
+      # Debug step to list available artifacts
+      - name: List available artifacts in dist/
+        run: ls -la dist/
+
+      # Debug step to list available artifacts
+      - name: List available artifacts in ./binaries/
+        run: ls -la ./binaries/
+
       - name: Download built artifacts (linux binaries)
         uses: actions/download-artifact@v3
         with:
-          name: |
-            coveralls-linux-x86_64
-            coveralls-linux-aarch64
+          name: coveralls-linux-binaries
           path: ./binaries/
+
+      # Debug step to list available artifacts
+      - name: List available artifacts in ./binaries/
+        run: ls -la ./binaries/
+
+      # Debug step to list available artifacts
+      - name: List available artifacts in dist/
+        run: ls -la dist/
 
       - name: Download coverage report
         uses: actions/download-artifact@v3

@@ -1,4 +1,4 @@
-name: Build
+name: build
 
 on:
   pull_request:
@@ -66,6 +66,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      # Debug step to verify event context
+      - name: Print event context for build-linux
+        run: echo "${{ toJson(github.event) }}"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -86,6 +90,10 @@ jobs:
       - name: Package linux binaries
         run: make package
 
+      # Debug step to verify what files are in the dist/ directory
+      - name: List files in dist/ directory
+        run: ls -la dist/
+
       - name: Upload linux binaries
         uses: actions/upload-artifact@v3
         with:
@@ -93,15 +101,15 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-      - name: Create Trigger File
-        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
-
-      - name: Upload Trigger Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-binaries-trigger
-          path: test-binaries-trigger.txt
-
+#      - name: Create Trigger File
+#        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
+#
+#      - name: Upload Trigger Artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: test-binaries-trigger
+#          path: test-binaries-trigger.txt
+#
 #      - name: Upload coveralls-linux
 #        uses: actions/upload-artifact@v3
 #        with:
@@ -138,10 +146,15 @@ jobs:
 #          name: coveralls-linux-aarch64.tar.gz
 #          path: dist/coveralls-linux-aarch64.tar.gz
 
+      # Debug step to verify what files are in the dist/ directory
+      - name: List files in dist/ directory
+        run: ls -la dist/
+
   release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -187,6 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    continue-on-error: true
     steps:
       - name: Update Homebrew formula
         uses: dawidd6/action-homebrew-bump-formula@v3
