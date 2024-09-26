@@ -101,15 +101,15 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-#      - name: Create Trigger File
-#        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
-#
-#      - name: Upload Trigger Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: test-binaries-trigger
-#          path: test-binaries-trigger.txt
-#
+      - name: Create Trigger File
+        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
+
+      - name: Upload Trigger Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-binaries-trigger
+          path: test-binaries-trigger.txt
+
 #      - name: Upload coveralls-linux
 #        uses: actions/upload-artifact@v3
 #        with:
