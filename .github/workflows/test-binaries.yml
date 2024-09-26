@@ -21,7 +21,9 @@ jobs:
 
       # Debug Step to Print Event Context
       - name: Print event context
-        run: echo "${{ toJson(github.event) }}"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
       # Debug step to list available artifacts
       - name: List available artifacts in dist/
