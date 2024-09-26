@@ -1,8 +1,8 @@
-name: "Test Trigger Workflow"
+name: test-trigger-workflow
 
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: [build]
     types:
       - completed
 

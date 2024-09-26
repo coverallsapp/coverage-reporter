@@ -1,8 +1,8 @@
-name: "Test Multi-Arch Linux Binaries After Build"
+name: test-binaries
 
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: [build]
     types:
       - completed
 
