@@ -21,7 +21,7 @@ jobs:
         with:
           name: coveralls-linux-binaries
           path: ./artifacts
-      - name: Verify binary
+      - name: Test binary
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
@@ -31,9 +31,6 @@ jobs:
 
   test-aarch64:
     runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        arch: [aarch64]
     steps:
       # Debug step to list artifacts for the run
       - name: List available artifacts
@@ -43,12 +40,14 @@ jobs:
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | jq '.artifacts[] | .name'
       - name: Set up QEMU for aarch64 emulation
         uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/arm64 # Or qemu-aarch64?
       - name: Download coveralls-linux-aarch64 binary
         uses: actions/download-artifact@v4
         with:
           name: coveralls-linux-binaries
           path: ./artifacts
-      - name: Verify binary
+      - name: Test binary
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
