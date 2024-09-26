@@ -68,7 +68,8 @@ jobs:
     steps:
       # Debug step to verify event context
       - name: Print event context for build-linux
-        run: echo "${{ toJson(github.event) }}"
+        run: |
+          echo "${{ toJson(github.event) }}"
 
       - name: Checkout code
         uses: actions/checkout@v3
