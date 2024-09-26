@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -50,14 +50,14 @@ jobs:
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
 
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
@@ -66,12 +66,13 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      # Debug step to verify event context
-      - name: Print event context for build-linux
-        run: echo "${{ toJson(github.event) }}"
+      # # Debug step to verify event context
+      # - name: Print event context for build-linux
+      #   run: |
+      #     echo "${{ toJson(github.event) }}"
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -95,53 +96,53 @@ jobs:
         run: ls -la dist/
 
       - name: Upload linux binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coveralls-linux-binaries
           path: dist/*
           if-no-files-found: error
 
-#      - name: Create Trigger File
-#        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
-#
-#      - name: Upload Trigger Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: test-binaries-trigger
-#          path: test-binaries-trigger.txt
-#
+      - name: Create Trigger File
+        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
+
+      - name: Upload Trigger Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-binaries-trigger
+          path: test-binaries-trigger.txt
+
 #      - name: Upload coveralls-linux
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux
 #          path: dist/coveralls-linux
 #
 #      - name: Upload coveralls-linux.tar.gz
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux.tar.gz
 #          path: dist/coveralls-linux.tar.gz
 #
 #      - name: Upload coveralls-linux-x86_64
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux-x86_64
 #          path: dist/coveralls-linux-x86_64
 #
 #      - name: Upload coveralls-linux-x86_64.tar.gz
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux-x86_64.tar.gz
 #          path: dist/coveralls-linux-x86_64.tar.gz
 #
 #      - name: Upload coveralls-linux-aarch64
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux-aarch64
 #          path: dist/coveralls-linux-aarch64
 #
 #      - name: Upload coveralls-linux-aarch64.tar.gz
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        with:
 #          name: coveralls-linux-aarch64.tar.gz
 #          path: dist/coveralls-linux-aarch64.tar.gz
@@ -157,7 +158,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -165,7 +166,7 @@ jobs:
         run: git fetch --force --tags
 
       - name: Download binaries
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
