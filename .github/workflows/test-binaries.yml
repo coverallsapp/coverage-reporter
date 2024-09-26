@@ -19,11 +19,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Debug Step to Print Event Context
-      - name: Print event context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      # # Debug Step to Print Event Context
+      # - name: Print event context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
 
       # Debug step to list available artifacts
       - name: List available artifacts in dist/
