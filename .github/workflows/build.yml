@@ -12,9 +12,6 @@ on:
     tags:
       - 'v*'
 
-permissions:
-  contents: write
-
 jobs:
   build-windows:
     runs-on: windows-2022
