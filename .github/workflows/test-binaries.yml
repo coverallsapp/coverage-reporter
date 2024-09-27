@@ -26,12 +26,26 @@ jobs:
           curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts" | jq '.artifacts[] | .name'
 
-      - name: Download built artifacts (linux binaries)
+      # - name: Download built artifacts (linux binaries)
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     run-id: ${{ github.event.workflow_run.id }}
+      #     name: coveralls-linux-binaries
+      #     path: ./binaries/
+
+      - name: Download built x86_64 binary
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          name: coveralls-linux-binaries
+          name: coveralls-linux-x86_64
           path: ./binaries/
+
+      - name: Download built aarch64 binary
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          name: coveralls-linux-aarch64
+          path: ./binaries/          
 
       # Debug step to list available artifacts
       - name: List available artifacts in ./binaries/

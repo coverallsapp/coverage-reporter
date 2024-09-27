@@ -20,7 +20,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          name: coveralls-linux-binaries
+          name: coveralls-linux-x86_64
           path: ./artifacts
       - name: Test binary
         env:
@@ -47,7 +47,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          name: coveralls-linux-binaries
+          name: coveralls-linux-aarch64
           path: ./artifacts
       - name: Test binary
         env:

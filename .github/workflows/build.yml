@@ -123,11 +123,11 @@ jobs:
 #          name: coveralls-linux.tar.gz
 #          path: dist/coveralls-linux.tar.gz
 #
-#      - name: Upload coveralls-linux-x86_64
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux-x86_64
-#          path: dist/coveralls-linux-x86_64
+      - name: Upload coveralls-linux-x86_64
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-x86_64
+          path: dist/coveralls-linux-x86_64
 #
 #      - name: Upload coveralls-linux-x86_64.tar.gz
 #        uses: actions/upload-artifact@v4
@@ -135,11 +135,11 @@ jobs:
 #          name: coveralls-linux-x86_64.tar.gz
 #          path: dist/coveralls-linux-x86_64.tar.gz
 #
-#      - name: Upload coveralls-linux-aarch64
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux-aarch64
-#          path: dist/coveralls-linux-aarch64
+      - name: Upload coveralls-linux-aarch64
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveralls-linux-aarch64
+          path: dist/coveralls-linux-aarch64
 #
 #      - name: Upload coveralls-linux-aarch64.tar.gz
 #        uses: actions/upload-artifact@v4
