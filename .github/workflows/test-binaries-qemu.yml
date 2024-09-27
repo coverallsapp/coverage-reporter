@@ -19,6 +19,7 @@ jobs:
       - name: Download coveralls-linux-x86_64 binary
         uses: actions/download-artifact@v4
         with:
+          run-id: ${{ github.event.workflow_run.id }}
           name: coveralls-linux-binaries
           path: ./artifacts
       - name: Test binary
@@ -37,7 +38,7 @@ jobs:
         run: |
           echo "Available artifacts:"
           curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | jq '.artifacts[] | .name'
+          "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts" | jq '.artifacts[] | .name'
       - name: Set up QEMU for aarch64 emulation
         uses: docker/setup-qemu-action@v3
         with:
@@ -45,6 +46,7 @@ jobs:
       - name: Download coveralls-linux-aarch64 binary
         uses: actions/download-artifact@v4
         with:
+          run-id: ${{ github.event.workflow_run.id }}
           name: coveralls-linux-binaries
           path: ./artifacts
       - name: Test binary
