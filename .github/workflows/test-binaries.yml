@@ -1,5 +1,9 @@
 name: test-binaries
 
+permissions:
+  contents: read
+  actions: read
+
 on:
   workflow_run:
     workflows: [build]
@@ -10,6 +14,8 @@ jobs:
   test_binaries:
     name: Test Multi-Arch Binaries
     runs-on: ubuntu-22.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     strategy:
       matrix:

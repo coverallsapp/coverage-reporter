@@ -1,5 +1,9 @@
 name: test-binaries-qemu
 
+permissions:
+  contents: read
+  actions: read
+
 on:
   workflow_run:
     workflows: [build]
@@ -9,6 +13,9 @@ on:
 jobs:
   test-x86_64:
     runs-on: ubuntu-22.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
       # Debug step to list artifacts for the run
       - name: List available artifacts
