@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "Available artifacts:"
           curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | jq '.artifacts[] | .name'
+          "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts" | jq '.artifacts[] | .name'
       - name: Download coveralls-linux-x86_64 binary
         uses: actions/download-artifact@v4
         with:
