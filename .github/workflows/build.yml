@@ -69,8 +69,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     outputs:
-      coveralls_x86_64: ${{ steps.build.outputs.coveralls_x86_64 }}
-      coveralls_aarch64: ${{ steps.build.outputs.coveralls_aarch64 }}
+      coveralls_x86_64: ${{ steps.package.outputs.coveralls_x86_64 }}
+      coveralls_aarch64: ${{ steps.package.outputs.coveralls_aarch64 }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -97,6 +97,7 @@ jobs:
         run: ls -la dist/
 
       - name: Package linux binaries
+        id: package
         run: |
           make package
           echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
@@ -131,6 +132,7 @@ jobs:
       - name: Test x86_64 binary
         run: |
           binary=${{ needs.build-linux.outputs.coveralls_x86_64 }}
+          echo $binary
           chmod +x $binary
           $binary --version
 
@@ -161,6 +163,7 @@ jobs:
       - name: Test aarch64 binary in QEMU
         run: |
           binary=${{ needs.build-linux.outputs.coveralls_aarch64 }}
+          echo $binary   
           chmod +x $binary
           sudo apt-get update
           sudo apt-get install -y qemu-user
