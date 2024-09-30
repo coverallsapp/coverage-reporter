@@ -68,14 +68,12 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
+    outputs:
+      x86_64_binary: ${{ steps.build.outputs.coveralls_x86_64 }}
+      aarch64_binary: ${{ steps.build.outputs.coveralls_aarch64 }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      # # Debug step to verify event context
-      # - name: Print event context for build-linux
-      #   run: |
-      #     echo "${{ toJson(github.event) }}"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -91,7 +89,10 @@ jobs:
         run: make build-xbuild-container
 
       - name: Build cross-compiled linux binaries
-        run: make compile-and-strip-all
+        run: |
+          make compile-and-strip-all
+          echo "::set-output name=coveralls_x86_64::dist/coveralls-linux-x86_64"
+          echo "::set-output name=coveralls_aarch64::dist/coveralls-linux-aarch64"
 
       - name: Package linux binaries
         run: make package
@@ -107,51 +108,6 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-      - name: Create Trigger File
-        run: echo "test-binaries-trigger" > test-binaries-trigger.txt
-
-      - name: Upload Trigger Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-binaries-trigger
-          path: test-binaries-trigger.txt
-
-#      - name: Upload coveralls-linux
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux
-#          path: dist/coveralls-linux
-#
-#      - name: Upload coveralls-linux.tar.gz
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux.tar.gz
-#          path: dist/coveralls-linux.tar.gz
-#
-      - name: Upload coveralls-linux-x86_64
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-x86_64
-          path: dist/coveralls-linux-x86_64
-#
-#      - name: Upload coveralls-linux-x86_64.tar.gz
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux-x86_64.tar.gz
-#          path: dist/coveralls-linux-x86_64.tar.gz
-#
-      - name: Upload coveralls-linux-aarch64
-        uses: actions/upload-artifact@v4
-        with:
-          name: coveralls-linux-aarch64
-          path: dist/coveralls-linux-aarch64
-#
-#      - name: Upload coveralls-linux-aarch64.tar.gz
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coveralls-linux-aarch64.tar.gz
-#          path: dist/coveralls-linux-aarch64.tar.gz
-
       # Debug step to verify what files are in the dist/ directory
       - name: List files in dist/ directory
         run: ls -la dist/
@@ -163,17 +119,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download x86_64 binary
-        uses: actions/download-artifact@v4
-        with:
-          name: coveralls-linux-x86_64
-          path: ./binaries/
+      # - name: Download x86_64 binary
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: coveralls-linux-x86_64
+      #     path: ./binaries/
       
-      - name: Set executable permissions for x86_64 binary
-        run: chmod +x ./binaries/coveralls-linux-x86_64
+      # - name: Set executable permissions for x86_64 binary
+      #   run: chmod +x ./binaries/coveralls-linux-x86_64
         
+      # - name: Test x86_64 binary
+      #   run: ./binaries/coveralls-linux-x86_64 --version
+
+      # Using output from build-linux job
       - name: Test x86_64 binary
-        run: ./binaries/coveralls-linux-x86_64 --version
+        run: |
+          binary=${{ needs.build-linux.outputs.x86_64_binary }}
+          chmod +x $binary
+          $binary --version
 
   test-linux-aarch64:
     runs-on: ubuntu-latest
@@ -182,20 +145,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download aarch64 binary
-        uses: actions/download-artifact@v4
-        with:
-          name: coveralls-linux-aarch64
-          path: ./binaries/
+      # - name: Download aarch64 binary
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: coveralls-linux-aarch64
+      #     path: ./binaries/
       
-      - name: Set executable permissions for aarch64 binary
-        run: chmod +x ./binaries/coveralls-linux-aarch64
+      # - name: Set executable permissions for aarch64 binary
+      #   run: chmod +x ./binaries/coveralls-linux-aarch64
 
       - name: Test aarch64 binary in QEMU
         run: |
+          binary=${{ needs.build-linux.outputs.aarch64_binary }}
+          chmod +x $binary
           sudo apt-get update
           sudo apt-get install -y qemu-user
-          qemu-aarch64 ./binaries/coveralls-linux-aarch64 --version
+          qemu-aarch64 $binary --version
 
   release:
     runs-on: ubuntu-latest
