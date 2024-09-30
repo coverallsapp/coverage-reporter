@@ -74,6 +74,21 @@ jobs:
       with:
         name: coverage-report
         path: coverage/
+        retention-days: 5 
+
+    - name: Create coverage summary
+      run: |
+        echo "Coverage Summary" > coverage_summary.txt
+        echo "Date: $(date)" >> coverage_summary.txt
+        echo "Commit: ${{ github.sha }}" >> coverage_summary.txt
+        # Add more relevant info from your coverage report
+
+    - name: Upload coverage summary
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-summary
+        path: coverage_summary.txt
+        retention-days: 5
 
     - name: List uploaded artifacts
       run: ls -la coverage/

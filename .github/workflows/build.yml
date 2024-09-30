@@ -138,14 +138,28 @@ jobs:
         run: |
           echo "Run ID: ${{ steps.get_run_id.outputs.run-id }}"
 
-      # Download the coverage report generated from ci.yml
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
+      - name: Download latest coverage summary
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: coverage-report
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: ci.yml
+          name: coverage-summary
           path: ./test/
-          run-id: ${{ steps.get_run_id.outputs.run-id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          search_artifacts: true
+          check_artifacts: true
+          if_no_artifact_found: warn
+
+      - name: Display coverage summary
+        run: cat ./test/coverage_summary.txt
+
+      # # Download the coverage report generated from ci.yml
+      # - name: Download coverage report
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: ./test/
+      #     run-id: ${{ steps.get_run_id.outputs.run-id }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Report coverage with x86_64 binary
       - name: Test reporting coverage with x86_64 binary
@@ -153,7 +167,6 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ github.token }}
         run: |
           binary=test/coveralls-linux-x86_64
-          cd coverage
           COVERALLS_SERVICE_NUMBER=${{ github.run_id }}-x86_64-test $binary report --measure --base-path src/coverage_reporter/
 
   test-linux-aarch64:
