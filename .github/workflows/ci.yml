@@ -77,4 +77,8 @@ jobs:
 
     - name: List uploaded artifacts
       run: ls -la coverage/
+
+    - name: Debug uploaded artifact
+      run: |
+        echo "Artifact URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/"
       

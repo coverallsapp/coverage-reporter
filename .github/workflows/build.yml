@@ -119,15 +119,27 @@ jobs:
           echo $binary
           chmod +x $binary
           $binary --version
+      
+      - name: Get latest successful run id for ci.yml
+        id: get_run_id
+        run: |
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/actions/workflows/ci.yml/runs?status=success&branch=master" \
+          | jq -r '.workflow_runs[0].id'
+
+      - name: Echo the run-id
+        run: |
+          echo "Run ID: ${{ steps.get_run_id.outputs.run-id }}"
 
       # Download the coverage report generated from ci.yml
       - name: Download coverage report
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           path: test/
+          repository: coverallsapp/coverage-reporter
+          run-id: ${{ steps.get_run_id.outputs.run-id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Report coverage with x86_64 binary
       - name: Test reporting coverage with x86_64 binary
