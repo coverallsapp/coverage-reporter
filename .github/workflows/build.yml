@@ -125,6 +125,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           path: test/
 
       # Report coverage with x86_64 binary
