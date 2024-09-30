@@ -68,9 +68,6 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    outputs:
-      coveralls_x86_64: ${{ steps.package.outputs.coveralls_x86_64 }}
-      coveralls_aarch64: ${{ steps.package.outputs.coveralls_aarch64 }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -91,21 +88,10 @@ jobs:
       - name: Build cross-compiled linux binaries
         id: build
         run: make compile-and-strip-all
-
-      # Debug step to verify what files are in the dist/ directory
-      - name: List files in dist/ directory
-        run: ls -la dist/
-
+      
       - name: Package linux binaries
         id: package
-        run: |
-          make package
-          echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
-          echo "coveralls_aarch64=dist/coveralls-linux-aarch64" >> $GITHUB_OUTPUT
-
-      # Debug step to verify what files are in the dist/ directory
-      - name: List files in dist/ directory
-        run: ls -la dist/
+        run: make package
 
       - name: Upload linux binaries
         uses: actions/upload-artifact@v4
@@ -121,8 +107,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Download the x86_64 binary
-      - name: Download coverage report
+      # Download x86_64 binary
+      - name: Download x86_64 binary
         uses: actions/download-artifact@v4
         with:
           name: coveralls-linux-binaries
@@ -143,7 +129,7 @@ jobs:
       #     name: coverage-report
       #     path: ./coverage/
 
-      # # Report coverage using the x86_64 binary
+      # # Report coverage with x86_64 binary
       # - name: Report coverage with x86_64 binary
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
@@ -159,8 +145,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Download the aarch64 binary
-      - name: Download coverage report
+      # Download aarch64 binary
+      - name: Download aarch64 binary
         uses: actions/download-artifact@v4
         with:
           name: coveralls-linux-binaries
@@ -183,7 +169,7 @@ jobs:
       #     name: coverage-report
       #     path: ./coverage/
 
-      # # Report coverage using the tested aarch64 binary
+      # # Report coverage with aarch64 binary
       # - name: Report coverage with aarch64 binary
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
