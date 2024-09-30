@@ -92,15 +92,19 @@ jobs:
         id: build
         run: make compile-and-strip-all
 
+      # Debug step to verify what files are in the dist/ directory
+      - name: List files in dist/ directory
+        run: ls -la dist/
+
       - name: Package linux binaries
         run: |
           make package
           echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
           echo "coveralls_aarch64=dist/coveralls-linux-aarch64" >> $GITHUB_OUTPUT
 
-      # # Debug step to verify what files are in the dist/ directory
-      # - name: List files in dist/ directory
-      #   run: ls -la dist/
+      # Debug step to verify what files are in the dist/ directory
+      - name: List files in dist/ directory
+        run: ls -la dist/
 
       - name: Upload linux binaries
         uses: actions/upload-artifact@v4
@@ -108,10 +112,6 @@ jobs:
           name: coveralls-linux-binaries
           path: dist/*
           if-no-files-found: error
-
-      # # Debug step to verify what files are in the dist/ directory
-      # - name: List files in dist/ directory
-      #   run: ls -la dist/
 
   test-linux-x86_64:
     runs-on: ubuntu-latest
