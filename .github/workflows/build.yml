@@ -107,36 +107,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Download x86_64 binary
       - name: Download x86_64 binary
         uses: actions/download-artifact@v4
         with:
           name: coveralls-linux-binaries
           path: test/
       
-      # Set executable permissions for x86_64 binary and check version
-      - name: Test x86_64 binary
+      - name: Smoke test x86_64 binary
         run: |
           binary=test/coveralls-linux-x86_64
           echo $binary
           chmod +x $binary
           $binary --version
 
-      # # Download the coverage report generated from ci.yml
-      # - name: Download coverage report
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: ./coverage/
+      # Download the coverage report generated from ci.yml
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: ./coverage/
 
-      # # Report coverage with x86_64 binary
-      # - name: Report coverage with x86_64 binary
-      #   env:
-      #     COVERALLS_REPO_TOKEN: ${{ github.token }}
-      #   run: |
-      #     binary=test/coveralls-linux-x86_64
-      #     cd coverage
-      #     $binary report --measure --base-path src/coverage_reporter/
+      # Report coverage with x86_64 binary
+      - name: Test reporting coverage with x86_64 binary
+        env:
+          COVERALLS_REPO_TOKEN: ${{ github.token }}
+        run: |
+          binary=test/coveralls-linux-x86_64
+          cd coverage
+          $binary report --measure --base-path src/coverage_reporter/
 
   test-linux-aarch64:
     runs-on: ubuntu-latest
@@ -145,15 +143,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Download aarch64 binary
       - name: Download aarch64 binary
         uses: actions/download-artifact@v4
         with:
           name: coveralls-linux-binaries
           path: test/
       
-      # Set executable permissions for aarch64 binary and check version
-      - name: Test aarch64 binary in QEMU
+      - name: Smoke test aarch64 binary in QEMU
         run: |
           binary=test/coveralls-linux-aarch64
           echo $binary   
