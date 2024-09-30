@@ -156,7 +156,42 @@ jobs:
       - name: List files in dist/ directory
         run: ls -la dist/
 
-  release:
+  test-linux-x86_64:
+    runs-on: ubuntu-latest
+    needs: build-linux
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download x86_64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: coveralls-linux-x86_64
+          path: ./binaries/
+
+      - name: Test x86_64 binary
+        run: ./binaries/coveralls-linux-x86_64 --version
+
+  test-linux-aarch64:
+    runs-on: ubuntu-latest
+    needs: build-linux
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download aarch64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: coveralls-linux-aarch64
+          path: ./binaries/
+
+      - name: Test aarch64 binary in QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user
+          qemu-aarch64 ./binaries/coveralls-linux-aarch64 --version
+
+        release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-linux]
     env:
