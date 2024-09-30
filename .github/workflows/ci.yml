@@ -74,3 +74,7 @@ jobs:
       with:
         name: coverage-report
         path: coverage/
+
+      - name: List uploaded artifacts
+      run: ls -la coverage/
+      
