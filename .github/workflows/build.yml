@@ -134,7 +134,7 @@ jobs:
         run: |
           binary=test/coveralls-linux-x86_64
           cd coverage
-          $binary report --measure --base-path src/coverage_reporter/
+          COVERALLS_SERVICE_NUMBER=${{ GITHUB_RUN_ID }}-x86_64-test $binary report --measure --base-path src/coverage_reporter/
 
   test-linux-aarch64:
     runs-on: ubuntu-latest
