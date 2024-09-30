@@ -43,14 +43,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          name: coveralls-linux-x86_64
+          name: coveralls-windows.exe
           path: ./binaries/
 
       - name: Download built aarch64 binary
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          name: coveralls-linux-aarch64
+          name: coveralls-windows.exe
           path: ./binaries/          
 
       # Debug step to list available artifacts

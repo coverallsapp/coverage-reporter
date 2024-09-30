@@ -69,8 +69,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     outputs:
-      x86_64_binary: ${{ steps.build.outputs.coveralls_x86_64 }}
-      aarch64_binary: ${{ steps.build.outputs.coveralls_aarch64 }}
+      coveralls_x86_64: ${{ steps.build.outputs.coveralls_x86_64 }}
+      coveralls_aarch64: ${{ steps.build.outputs.coveralls_aarch64 }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -130,7 +130,7 @@ jobs:
       # Set executable permissions for x86_64 binary and check version
       - name: Test x86_64 binary
         run: |
-          binary=${{ needs.build-linux.outputs.x86_64_binary }}
+          binary=${{ needs.build-linux.outputs.coveralls_x86_64 }}
           chmod +x $binary
           $binary --version
 
@@ -139,7 +139,7 @@ jobs:
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
       #   run: |
-      #     binary=${{ needs.build-linux.outputs.x86_64_binary }}
+      #     binary=${{ needs.build-linux.outputs.coveralls_x86_64 }}
       #     cd coverage
       #     $binary report --measure --base-path src/coverage_reporter/
 
@@ -160,7 +160,7 @@ jobs:
       # Set executable permissions for aarch64 binary and check version
       - name: Test aarch64 binary in QEMU
         run: |
-          binary=${{ needs.build-linux.outputs.aarch64_binary }}
+          binary=${{ needs.build-linux.outputs.coveralls_aarch64 }}
           chmod +x $binary
           sudo apt-get update
           sudo apt-get install -y qemu-user
@@ -171,7 +171,7 @@ jobs:
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
       #   run: |
-      #     binary=${{ needs.build-linux.outputs.aarch64_binary }}
+      #     binary=${{ needs.build-linux.outputs.coveralls_aarch64 }}
       #     cd coverage
       #     qemu-aarch64 $binary report --measure --base-path src/coverage_reporter/
 
