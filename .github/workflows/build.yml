@@ -121,27 +121,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Download the x86_64 binary
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coveralls-linux-binaries
+          path: test/
+      
+      # Set executable permissions for x86_64 binary and check version
+      - name: Test x86_64 binary
+        run: |
+          binary=test/coveralls-linux-x86_64
+          echo $binary
+          chmod +x $binary
+          $binary --version
+
       # # Download the coverage report generated from ci.yml
       # - name: Download coverage report
       #   uses: actions/download-artifact@v4
       #   with:
       #     name: coverage-report
       #     path: ./coverage/
-      
-      # Set executable permissions for x86_64 binary and check version
-      - name: Test x86_64 binary
-        run: |
-          binary=${{ needs.build-linux.outputs.coveralls_x86_64 }}
-          echo $binary
-          chmod +x $binary
-          $binary --version
 
       # # Report coverage using the x86_64 binary
       # - name: Report coverage with x86_64 binary
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
       #   run: |
-      #     binary=${{ needs.build-linux.outputs.coveralls_x86_64 }}
+      #     binary=test/coveralls-linux-x86_64
       #     cd coverage
       #     $binary report --measure --base-path src/coverage_reporter/
 
@@ -152,29 +159,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # # Download the coverage report generated from ci.yml
-      # - name: Download coverage report
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: ./coverage/
+      # Download the aarch64 binary
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coveralls-linux-binaries
+          path: test/
       
       # Set executable permissions for aarch64 binary and check version
       - name: Test aarch64 binary in QEMU
         run: |
-          binary=${{ needs.build-linux.outputs.coveralls_aarch64 }}
+          binary=test/coveralls-linux-aarch64
           echo $binary   
           chmod +x $binary
           sudo apt-get update
           sudo apt-get install -y qemu-user
           qemu-aarch64 $binary --version
 
+      # # Download the coverage report generated from ci.yml
+      # - name: Download coverage report
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: ./coverage/
+
       # # Report coverage using the tested aarch64 binary
       # - name: Report coverage with aarch64 binary
       #   env:
       #     COVERALLS_REPO_TOKEN: ${{ github.token }}
       #   run: |
-      #     binary=${{ needs.build-linux.outputs.coveralls_aarch64 }}
+      #     binary=test/coveralls-linux-aarch64
       #     cd coverage
       #     qemu-aarch64 $binary report --measure --base-path src/coverage_reporter/
 
