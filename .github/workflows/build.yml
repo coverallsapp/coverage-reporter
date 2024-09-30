@@ -90,13 +90,13 @@ jobs:
 
       - name: Build cross-compiled linux binaries
         id: build
-        run: |
-          make compile-and-strip-all
-          echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
-          echo "coveralls_aarch64=dist/coveralls-linux-aarch64" >> $GITHUB_OUTPUT
+        run: make compile-and-strip-all
 
       - name: Package linux binaries
-        run: make package
+        run: |
+          make package
+          echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
+          echo "coveralls_aarch64=dist/coveralls-linux-aarch64" >> $GITHUB_OUTPUT
 
       # # Debug step to verify what files are in the dist/ directory
       # - name: List files in dist/ directory
