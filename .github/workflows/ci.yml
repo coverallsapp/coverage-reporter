@@ -81,4 +81,10 @@ jobs:
     - name: Debug uploaded artifact
       run: |
         echo "Artifact URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/"
+    
+    - name: Display Workflow ID
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        "https://api.github.com/repos/${{ github.repository }}/actions/workflows" \
+        | jq '.workflows[] | select(.name == "ci") | .id'
       
