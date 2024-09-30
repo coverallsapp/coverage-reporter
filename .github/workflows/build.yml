@@ -168,7 +168,10 @@ jobs:
         with:
           name: coveralls-linux-x86_64
           path: ./binaries/
-
+      
+      - name: Set executable permissions for x86_64 binary
+        run: chmod +x ./binaries/coveralls-linux-x86_64
+        
       - name: Test x86_64 binary
         run: ./binaries/coveralls-linux-x86_64 --version
 
@@ -184,6 +187,9 @@ jobs:
         with:
           name: coveralls-linux-aarch64
           path: ./binaries/
+      
+      - name: Set executable permissions for aarch64 binary
+        run: chmod +x ./binaries/coveralls-linux-aarch64
 
       - name: Test aarch64 binary in QEMU
         run: |
