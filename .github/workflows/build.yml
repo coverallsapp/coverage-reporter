@@ -89,17 +89,18 @@ jobs:
         run: make build-xbuild-container
 
       - name: Build cross-compiled linux binaries
+        id: build
         run: |
           make compile-and-strip-all
-          echo "::set-output name=coveralls_x86_64::dist/coveralls-linux-x86_64"
-          echo "::set-output name=coveralls_aarch64::dist/coveralls-linux-aarch64"
+          echo "coveralls_x86_64=dist/coveralls-linux-x86_64" >> $GITHUB_OUTPUT
+          echo "coveralls_aarch64=dist/coveralls-linux-aarch64" >> $GITHUB_OUTPUT
 
       - name: Package linux binaries
         run: make package
 
-      # Debug step to verify what files are in the dist/ directory
-      - name: List files in dist/ directory
-        run: ls -la dist/
+      # # Debug step to verify what files are in the dist/ directory
+      # - name: List files in dist/ directory
+      #   run: ls -la dist/
 
       - name: Upload linux binaries
         uses: actions/upload-artifact@v4
@@ -108,9 +109,9 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-      # Debug step to verify what files are in the dist/ directory
-      - name: List files in dist/ directory
-        run: ls -la dist/
+      # # Debug step to verify what files are in the dist/ directory
+      # - name: List files in dist/ directory
+      #   run: ls -la dist/
 
   test-linux-x86_64:
     runs-on: ubuntu-latest
@@ -119,24 +120,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Download x86_64 binary
+      # # Download the coverage report generated from ci.yml
+      # - name: Download coverage report
       #   uses: actions/download-artifact@v4
       #   with:
-      #     name: coveralls-linux-x86_64
-      #     path: ./binaries/
+      #     name: coverage-report
+      #     path: ./coverage/
       
-      # - name: Set executable permissions for x86_64 binary
-      #   run: chmod +x ./binaries/coveralls-linux-x86_64
-        
-      # - name: Test x86_64 binary
-      #   run: ./binaries/coveralls-linux-x86_64 --version
-
-      # Using output from build-linux job
+      # Set executable permissions for x86_64 binary and check version
       - name: Test x86_64 binary
         run: |
           binary=${{ needs.build-linux.outputs.x86_64_binary }}
           chmod +x $binary
           $binary --version
+
+      # # Report coverage using the x86_64 binary
+      # - name: Report coverage with x86_64 binary
+      #   env:
+      #     COVERALLS_REPO_TOKEN: ${{ github.token }}
+      #   run: |
+      #     binary=${{ needs.build-linux.outputs.x86_64_binary }}
+      #     cd coverage
+      #     $binary report --measure --base-path src/coverage_reporter/
 
   test-linux-aarch64:
     runs-on: ubuntu-latest
@@ -145,15 +150,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Download aarch64 binary
+      # # Download the coverage report generated from ci.yml
+      # - name: Download coverage report
       #   uses: actions/download-artifact@v4
       #   with:
-      #     name: coveralls-linux-aarch64
-      #     path: ./binaries/
+      #     name: coverage-report
+      #     path: ./coverage/
       
-      # - name: Set executable permissions for aarch64 binary
-      #   run: chmod +x ./binaries/coveralls-linux-aarch64
-
+      # Set executable permissions for aarch64 binary and check version
       - name: Test aarch64 binary in QEMU
         run: |
           binary=${{ needs.build-linux.outputs.aarch64_binary }}
@@ -161,6 +165,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qemu-user
           qemu-aarch64 $binary --version
+
+      # # Report coverage using the tested aarch64 binary
+      # - name: Report coverage with aarch64 binary
+      #   env:
+      #     COVERALLS_REPO_TOKEN: ${{ github.token }}
+      #   run: |
+      #     binary=${{ needs.build-linux.outputs.aarch64_binary }}
+      #     cd coverage
+      #     qemu-aarch64 $binary report --measure --base-path src/coverage_reporter/
 
   release:
     runs-on: ubuntu-latest
