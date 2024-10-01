@@ -81,8 +81,4 @@ jobs:
         name: coverage-report
         path: ${{ env.COVERAGE_FILE }}
         retention-days: 5
-
-    - name: Debug uploaded artifact (REST API)
-      run: |
-        echo "Artifact URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/"
       

@@ -151,7 +151,7 @@ jobs:
           name: coveralls-linux-binaries
           path: test/
       
-      - name: Smoke test aarch64 binary in QEMU
+      - name: Smoke test aarch64 binary
         run: |
           binary=test/coveralls-linux-aarch64
           echo $binary   
