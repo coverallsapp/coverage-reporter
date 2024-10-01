@@ -120,23 +120,23 @@ jobs:
           chmod +x $binary
           $binary --version
       
-      - name: Get Workflow ID for ci.yml
-        id: get_workflow_id
-        run: |
-          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/workflows" \
-          | jq -r '.workflows[] | select(.path == ".github/workflows/ci.yml") | .id'   
+      # - name: Get Workflow ID for ci.yml
+      #   id: get_workflow_id
+      #   run: |
+      #     curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+      #     "https://api.github.com/repos/${{ github.repository }}/actions/workflows" \
+      #     | jq -r '.workflows[] | select(.path == ".github/workflows/ci.yml") | .id'   
 
-      - name: Get latest successful run id for ci.yml
-        id: get_run_id
-        run: |
-          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ steps.get_workflow_id.outputs.workflow-id }}/runs?status=success&branch=${{ github.head_ref }}" \
-          | jq -r '.workflow_runs[0].id'
+      # - name: Get latest successful run id for ci.yml
+      #   id: get_run_id
+      #   run: |
+      #     curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+      #     "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ steps.get_workflow_id.outputs.workflow-id }}/runs?status=success&branch=${{ github.head_ref }}" \
+      #     | jq -r '.workflow_runs[0].id'
 
-      - name: Echo the run-id
-        run: |
-          echo "Run ID: ${{ steps.get_run_id.outputs.run-id }}"
+      # - name: Echo the run-id
+      #   run: |
+      #     echo "Run ID: ${{ steps.get_run_id.outputs.run-id }}"
 
       - name: Download latest coverage summary
         uses: dawidd6/action-download-artifact@v3
@@ -144,40 +144,30 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
           name: coverage-summary
-          path: ./test/
+          path: ./coverage/
           search_artifacts: true
           check_artifacts: true
           if_no_artifact_found: warn
 
       - name: Display coverage summary
-        run: cat ./test/coverage_summary.txt
+        run: cat ./coverage/coverage_summary.txt
 
-      # # Download the coverage report generated from ci.yml
-      - name: Download latest coverage summary
+      # Download the coverage report generated from ci.yml
+      - name: Download latest coverage report for coverage-reporter from ci.yml
         uses: dawidd6/action-download-artifact@v3
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
           name: coverage-report
-          path: ./test/
+          path: ./coverage/
           search_artifacts: true
           check_artifacts: true
           if_no_artifact_found: warn
 
-      - name: List files in ./test/ directory
-        run: ls -al ./test/
+      - name: List files in ./coverage/ directory
+        run: ls -al ./coverage/
 
-      # # Download the coverage report generated from ci.yml
-      # - name: Download coverage report
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: ./test/
-      #     run-id: ${{ steps.get_run_id.outputs.run-id }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Report coverage with x86_64 binary
-      - name: Test reporting coverage with x86_64 binary
+      - name: Report coverage with x86_64 binary
         env:
           COVERALLS_REPO_TOKEN: ${{ github.token }}
         run: |
@@ -212,13 +202,25 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
           name: coverage-summary
-          path: ./test/
+          path: ./coverage/
           search_artifacts: true
           check_artifacts: true
           if_no_artifact_found: warn
 
       - name: Display coverage summary
-        run: cat ./test/coverage_summary.txt
+        run: cat ./coverage/coverage_summary.txt
+
+      # Download the coverage report generated from ci.yml
+      - name: Download latest coverage report for coverage-reporter from ci.yml
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: ci.yml
+          name: coverage-report
+          path: ./coverage/
+          search_artifacts: true
+          check_artifacts: true
+          if_no_artifact_found: warn
 
       - name: Report coverage with aarch64 binary
         env:
