@@ -64,7 +64,7 @@ jobs:
 
     - name: Capture and export coverage report file as variable
       run: |
-        COVERAGE_FILE=$(find ${{ github.workspace }}/coverage -name "*.*")
+        COVERAGE_FILE=$(find ${{ github.workspace }}/coverage -name "*.xml" | grep cobertura.xml)
         echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
 
     - name: Report coverage
