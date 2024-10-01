@@ -75,7 +75,7 @@ jobs:
         ../bin/coveralls report --measure --base-path src/coverage_reporter/
 
     - name: List contents of coverage/ directory
-      run: ls -la coverage/
+      run: ls -la ./coverage/
 
     - name: List contents of coverage/ directory
       run: ls -la ${{ github.workspace }}/coverage/
@@ -87,30 +87,33 @@ jobs:
         path: ${{ env.COVERAGE_FILE }}
         retention-days: 5
 
-    - name: Create coverage summary
-      run: |
-        echo "Coverage Summary" > coverage_summary.txt
-        echo "Date: $(date)" >> coverage_summary.txt
-        echo "Commit: ${{ github.sha }}" >> coverage_summary.txt
-        # Add more relevant info from your coverage report
+    # - name: Create coverage summary
+    #   run: |
+    #     echo "Coverage Summary" > coverage_summary.txt
+    #     echo "Date: $(date)" >> coverage_summary.txt
+    #     echo "Commit: ${{ github.sha }}" >> coverage_summary.txt
+    #     # Add more relevant info from your coverage report
 
-    - name: Upload coverage summary
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-summary
-        path: coverage_summary.txt
-        retention-days: 5
+    # - name: Upload coverage summary
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-summary
+    #     path: coverage_summary.txt
+    #     retention-days: 5
 
-    - name: List uploaded artifacts
-      run: ls -la coverage/
+    - name: List contents of coverage/ directory
+      run: ls -la ./coverage/
 
-    - name: Debug uploaded artifact
+    - name: List contents of coverage/ directory
+      run: ls -la ${{ github.workspace }}/coverage/
+
+    - name: Debug uploaded artifact (REST API)
       run: |
         echo "Artifact URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/"
     
-    - name: Display Workflow ID
-      run: |
-        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        "https://api.github.com/repos/${{ github.repository }}/actions/workflows" \
-        | jq '.workflows[] | select(.name == "ci") | .id'
+    # - name: Display Workflow ID
+    #   run: |
+    #     curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+    #     "https://api.github.com/repos/${{ github.repository }}/actions/workflows" \
+    #     | jq '.workflows[] | select(.name == "ci") | .id'
       

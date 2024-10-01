@@ -120,19 +120,19 @@ jobs:
           chmod +x $binary
           $binary --version
 
-      - name: Download latest coverage summary
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: ci.yml
-          name: coverage-summary
-          path: ./coverage/
-          search_artifacts: true
-          check_artifacts: true
-          if_no_artifact_found: warn
+      # - name: Download latest coverage summary
+      #   uses: dawidd6/action-download-artifact@v3
+      #   with:
+      #     github_token: ${{secrets.GITHUB_TOKEN}}
+      #     workflow: ci.yml
+      #     name: coverage-summary
+      #     path: ./coverage/
+      #     search_artifacts: true
+      #     check_artifacts: true
+      #     if_no_artifact_found: warn
 
-      - name: Display coverage summary
-        run: cat ./coverage/coverage_summary.txt
+      # - name: Display coverage summary
+      #   run: cat ./coverage/coverage_summary.txt
       
       - name: Download latest coverage report for coverage-reporter from ci.yml
         uses: dawidd6/action-download-artifact@v3
@@ -145,11 +145,11 @@ jobs:
           check_artifacts: true
           if_no_artifact_found: warn
 
-      - name: List files in ./test/ directory
-        run: ls -al ./test/
+      # - name: List files in ./test/ directory
+      #   run: ls -al ./test/
       
-      - name: List files in ./coverage/ directory
-        run: ls -al ./coverage/
+      # - name: List files in ./coverage/ directory
+      #   run: ls -al ./coverage/
 
       - name: Report coverage with x86_64 binary
         env:
@@ -179,20 +179,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qemu-user
           qemu-aarch64 $binary --version
-
-      # - name: Download latest coverage summary
-      #   uses: dawidd6/action-download-artifact@v3
-      #   with:
-      #     github_token: ${{secrets.GITHUB_TOKEN}}
-      #     workflow: ci.yml
-      #     name: coverage-summary
-      #     path: ./coverage/
-      #     search_artifacts: true
-      #     check_artifacts: true
-      #     if_no_artifact_found: warn
-
-      # - name: Display coverage summary
-      #   run: cat ./coverage/coverage_summary.txt
       
       - name: Download latest coverage report for coverage-reporter from ci.yml
         uses: dawidd6/action-download-artifact@v3
