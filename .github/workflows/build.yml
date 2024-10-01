@@ -104,8 +104,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
       - name: Download x86_64 binary
         uses: actions/download-artifact@v4
@@ -142,8 +142,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
       - name: Download aarch64 binary
         uses: actions/download-artifact@v4
