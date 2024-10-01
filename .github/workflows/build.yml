@@ -131,7 +131,7 @@ jobs:
         id: get_run_id
         run: |
           curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ steps.get_workflow_id.outputs.workflow-id }}/runs?status=success&branch=master" \
+          "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ steps.get_workflow_id.outputs.workflow-id }}/runs?status=success&branch=${{ github.head_ref }}" \
           | jq -r '.workflow_runs[0].id'
 
       - name: Echo the run-id
