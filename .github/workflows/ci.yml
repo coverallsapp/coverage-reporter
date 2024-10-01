@@ -68,3 +68,17 @@ jobs:
       run: |
         cd coverage
         ../bin/coveralls report --measure --base-path src/coverage_reporter/
+
+    - name: Capture and export coverage report file as env variable
+      run: |
+        COVERAGE_FILE=$(find ${{ github.workspace }}/coverage -name "*.xml" | grep cobertura.xml)
+        echo "Found coverage file(s): $COVERAGE_FILE"
+        echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: ${{ env.COVERAGE_FILE }}
+        retention-days: 5
+      
