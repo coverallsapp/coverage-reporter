@@ -69,6 +69,12 @@ jobs:
         cd coverage
         ../bin/coveralls report --measure --base-path src/coverage_reporter/
 
+    - name: List contents of coverage/ directory
+      run: ls -la coverage/
+
+    - name: List contents of coverage/ directory
+      run: ls -la ${{ github.workspace }}/coverage/
+
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:

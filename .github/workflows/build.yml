@@ -153,6 +153,21 @@ jobs:
         run: cat ./test/coverage_summary.txt
 
       # # Download the coverage report generated from ci.yml
+      - name: Download latest coverage summary
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: ci.yml
+          name: coverage-report
+          path: ./test/
+          search_artifacts: true
+          check_artifacts: true
+          if_no_artifact_found: warn
+
+      - name: List files in ./test/ directory
+        run: ls -al ./test/
+
+      # # Download the coverage report generated from ci.yml
       # - name: Download coverage report
       #   uses: actions/download-artifact@v4
       #   with:
@@ -211,21 +226,6 @@ jobs:
         run: |
           binary=test/coveralls-linux-aarch64
           COVERALLS_SERVICE_NUMBER=rc-aarch64-${{ github.run_id }} qemu-aarch64 $binary report --measure --base-path src/coverage_reporter/
-
-      # # Download the coverage report generated from ci.yml
-      - name: Download latest coverage summary
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: ci.yml
-          name: coverage-report
-          path: ./test/
-          search_artifacts: true
-          check_artifacts: true
-          if_no_artifact_found: warn
-
-      - name: List files in test/ directory
-        run: ls -al ./test/
 
       # # Report coverage with aarch64 binary
       # - name: Report coverage with aarch64 binary
