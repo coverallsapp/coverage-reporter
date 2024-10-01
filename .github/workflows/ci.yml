@@ -62,6 +62,11 @@ jobs:
     - name: Generate coverage
       run: bin/crkcov --kcov-args --exclude-pattern=/usr/include,/usr/lib,lib/,spec/ --coverage-dir ${{ github.workspace }}/coverage
 
+    - name: Capture and export coverage report file as variable
+      run: |
+        COVERAGE_FILE=$(find ${{ github.workspace }}/coverage -name "*.*")
+        echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
+
     - name: Report coverage
       env:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
@@ -79,8 +84,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: coverage/
-        retention-days: 5 
+        path: ${{ env.COVERAGE_FILE }}
+        retention-days: 5
 
     - name: Create coverage summary
       run: |
