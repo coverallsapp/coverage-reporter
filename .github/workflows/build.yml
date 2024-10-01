@@ -104,8 +104,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      # We don't technically need to download the coverage-reporter code here
+      # because in these tests we are downloading finished binaries and using them
+      # the same way customers do, but this is a convenient way to get all the 
+      # coverage reports in various formats from coverage-reporter's test fixtures
+      # into our environment, making sure the binaries are tested against all
+      # supported coverage report formats.
+      # Removing this step will test each binary only against the latest coverage report 
+      # for coverage-reporter itself, from the current CI run (in cobertura XML format).
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Download x86_64 binary
         uses: actions/download-artifact@v4
@@ -142,8 +150,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      # We don't technically need to download the coverage-reporter code here
+      # because in these tests we are downloading finished binaries and using them
+      # the same way customers do, but this is a convenient way to get all the 
+      # coverage reports in various formats from coverage-reporter's test fixtures
+      # into our environment, making sure the binaries are tested against all
+      # supported coverage report formats.
+      # Removing this step will test each binary only against the latest coverage report 
+      # for coverage-reporter itself, from the current CI run (in cobertura XML format).
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Download aarch64 binary
         uses: actions/download-artifact@v4
