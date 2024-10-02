@@ -218,9 +218,8 @@ jobs:
       - name: Extract and prepare files for release
         run: |
           mkdir release/
-          unzip artifacts/coveralls-linux-binaries.zip -d artifacts/
+          cp -r artifacts/coveralls-linux-binaries/* release/
           find artifacts/ -type f -exec cp \{} release/ \;
-          rm -f release/coveralls-linux-binaries.zip
           mv release/coveralls.exe release/coveralls-windows.exe
           sha256sum release/* > release/coveralls-checksums.txt
 
