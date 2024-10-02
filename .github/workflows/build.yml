@@ -223,6 +223,11 @@ jobs:
           mv release/coveralls.exe release/coveralls-windows.exe
           sha256sum release/* > release/coveralls-checksums.txt
 
+      - name: List files in release directory (debug)
+        run: |
+          echo "Listing files in release directory:"
+          ls -l release/
+
       - name: Create Github release
         env:
           TAG: ${{ github.ref }}
@@ -230,12 +235,12 @@ jobs:
         run: >
           cd release/;
           gh release create ${TAG}
-          'coveralls-linux-x86_64#coveralls-linux'
-          'coveralls-linux-x86_64.tar.gz#coveralls-linux.tar.gz'
-          'coveralls-linux-x86_64#coveralls-linux-x86_64' \
-          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz' \
-          'coveralls-linux-aarch64#coveralls-linux-aarch64' \
-          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz' \
+          'coveralls-linux#coveralls-linux'
+          'coveralls-linux.tar.gz#coveralls-linux.tar.gz'
+          'coveralls-linux-x86_64#coveralls-linux-x86_64'
+          'coveralls-linux-x86_64.tar.gz#coveralls-linux-x86_64.tar.gz'
+          'coveralls-linux-aarch64#coveralls-linux-aarch64'
+          'coveralls-linux-aarch64.tar.gz#coveralls-linux-aarch64.tar.gz'
           'coveralls-windows.exe#coveralls-windows.exe'
           'coveralls-windows.zip#coveralls-windows.zip'
           'coveralls-checksums.txt#coveralls-checksums.txt'
