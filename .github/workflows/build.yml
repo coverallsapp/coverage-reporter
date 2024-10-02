@@ -221,7 +221,7 @@ jobs:
           cp -r artifacts/coveralls-linux-binaries/* release/
           find artifacts/ -type f -exec cp \{} release/ \;
           mv release/coveralls.exe release/coveralls-windows.exe
-          sha256sum release/* > release/coveralls-checksums.txt
+          (cd release && sha256sum * > coveralls-checksums.txt)
 
       - name: List files in release directory (debug)
         run: |
