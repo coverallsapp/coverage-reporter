@@ -215,13 +215,14 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Prepare files for release
+      - name: Extract and prepare files for release
         run: |
           mkdir release/
+          unzip artifacts/coveralls-linux-binaries.zip -d artifacts/
           find artifacts/ -type f -exec cp \{} release/ \;
-          cd release/
-          mv coveralls.exe coveralls-windows.exe
-          sha256sum * > coveralls-checksums.txt
+          rm -f release/coveralls-linux-binaries.zip
+          mv release/coveralls.exe release/coveralls-windows.exe
+          sha256sum release/* > release/coveralls-checksums.txt
 
       - name: Create Github release
         env:
