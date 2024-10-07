@@ -18,13 +18,32 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 
 ### Linux
 
-To install the generic Linux binary (which is for `x86_64`):
+#### x86_64
+To install the generic Linux binary (`x86_64`):
 
 ```bash
 curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 ```
 
-**Note**: You can omit the `-C /usr/local/bin` argument to keep the binary in the current directory.
+Or you can use the architecture-specific filename for Linux on `x86_64`:
+
+```
+curl -L https://coveralls.io/coveralls-linux-x86_64.tar.gz | tar -xz -C /usr/local/bin
+```
+
+#### aarch64
+
+To install the binary for Linux on `aarch64`:
+
+```
+curl -L https://coveralls.io/coveralls-linux-aarch64.tar.gz | tar -xz -C /usr/local/bin
+```
+
+**Notes**:
+
+- **Use as normal after installation**: All `.tar.gz` archives in all releases, regardless of filename, will un-tar as a binary named `coveralls` that's ready to receive the commands covered in [usage](#usage).
+
+- **Choice of directory**: You can omit the `-C /usr/local/bin` argument to keep the binary in the current directory.
 
 ### MacOS
 
