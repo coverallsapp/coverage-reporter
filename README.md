@@ -19,6 +19,7 @@ Auto-detects your coverage artifact files and CI environment to post to [Coveral
 ### Linux
 
 #### x86_64
+
 To install the generic Linux binary (`x86_64`):
 
 ```bash
@@ -178,7 +179,6 @@ Usage: coveralls done [options]
 SSL_CERT_FILE=/etc/pki/tls/cert.pem
 ```
 
-
 ## Built-In Support
 
 ### Supported Coverage Report Formats
@@ -212,6 +212,7 @@ You can add a report parser to this project by following [these instructions](./
 - Drone
 - Buildkite
 - Xcode Cloud
+- RWX
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/ci-services#option-1-use-common-environment-variables)
 
@@ -295,6 +296,7 @@ Brief description: new coverage report support
 
 [After the release is available][github-releases], see [Homebrew
 release](#homebrew-release) instructions.
+
 #### Manual
 
 1. Bump version in [`src/coverage_reporter.cr`](./src/coverage_reporter.cr) and [`shard.yml`](./shard.yml)
@@ -307,6 +309,7 @@ available][github-releases], see [Homebrew release](#homebrew-release)
 instructions.
 
 [github-releases]: https://github.com/coverallsapp/coverage-reporter/releases
+
 #### Homebrew release
 
 In the [homebrew-coveralls repo][homebrew], a new PR will automatically get
