@@ -30,7 +30,14 @@ build:
 
 .PHONY: test
 test:
-	crystal spec --order random --error-on-warnings
+	@if [ ! -d .venv ]; then \
+	  echo "⚙️  Setting up Python venv for tests..."; \
+	  python3 -m venv .venv; \
+	  . .venv/bin/activate; \
+	  pip install --upgrade pip; \
+	  pip install coverage pytest; \
+	fi
+	. .venv/bin/activate && crystal spec --order random --error-on-warnings
 
 .PHONY: lint
 lint:

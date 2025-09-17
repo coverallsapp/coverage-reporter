@@ -13,3 +13,5 @@
 /lib/
 .coverage
 coverage.xml
+.venv/
+.vscode/

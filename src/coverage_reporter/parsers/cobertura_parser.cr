@@ -64,19 +64,31 @@ module CoverageReporter
       end
 
       files.map do |name, info|
-        branch_number : UInt64 = 0
+        branch_number : UInt64 = 0_u64
 
-        # path = File.join(@base_path.to_s, name)
+        # Build coverage array safely:
+        # If there are no positive line numbers, return an empty array
+        # to avoid constructing the invalid range (1..0).
+        max_line = info.coverage.keys.max?
+        coverage_array =
+          if max_line && max_line > 0_u64
+            # Crystal arrays take Int32 sizes; guard and convert explicitly.
+            raise "Cobertura file has too-large line number: #{max_line}" if max_line > Int32::MAX.to_u64
+            (1..max_line.to_i32).map { |n| info.coverage[n.to_u64]? }
+          else
+            [] of Hits?
+          end
+
         file_report(
           name: name,
-          coverage: (1..(info.coverage.keys.max? || 0)).map { |n| info.coverage[n]? },
+          coverage: coverage_array,
           branches: info.branches.keys.sort!.flat_map do |line|
-            branch = 0u64
+            branch = 0_u64
             info.branches[line].flat_map do |hits|
-              branch_number += 1
+              branch_number += 1_u64
               [line, branch_number, branch, hits]
             ensure
-              branch += 1
+              branch += 1_u64
             end
           end,
         )

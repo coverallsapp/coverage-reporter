@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- Fixture: only <line number="0"> entries.
+     Added Sept 2025 to reproduce and guard against Arithmetic overflow bug
+     when max_line == 0 (previously triggered by kvstore/__init__.py). -->
+<coverage line-rate="0" lines-covered="0" lines-valid="0" version="coverage.py" timestamp="0">
+  <sources>
+    <source>.</source>
+  </sources>
+  <packages>
+    <package name="kvstore" line-rate="0" branch-rate="0">
+      <classes>
+        <class name="__init__" filename="kvstore/__init__.py" line-rate="0" branch-rate="0">
+          <methods/>
+          <lines>
+            <line number="0" hits="1"/>
+            <line number="0" hits="0"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
