@@ -12,7 +12,7 @@ module CoverageReporter
 
     def send_request(dry_run : Bool = false)
       if ENV["DEBUG_WEBHOOK"]?
-        puts ">>> [Webhook] Sending request to: #{endpoint}/webhook"
+        puts ">>> [Webhook] Sending request to: #{@config.endpoint}/webhook"
       end
 
       webhook_url = "#{@config.endpoint}/webhook"
