@@ -35,7 +35,7 @@ test:
 	  python3 -m venv .venv; \
 	  . .venv/bin/activate; \
 	  pip install --upgrade pip; \
-	  pip install coverage pytest; \
+	  pip install coverage pytest pytest-cov; \
 	fi
 	. .venv/bin/activate && crystal spec --order random --error-on-warnings
 

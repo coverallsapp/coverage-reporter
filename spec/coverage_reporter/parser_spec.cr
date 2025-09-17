@@ -160,7 +160,7 @@ Spectator.describe CoverageReporter::Parser do
           it "returns report only for specified file" do
             reports = subject.parse
 
-            expect(reports.map { |r| r.to_h[:name] }).to contain("spec/fixtures/python/src/boring_math.py")
+            expect(reports.map(&.to_h[:name])).to contain("spec/fixtures/python/src/boring_math.py")
           end
         end
 
@@ -220,7 +220,8 @@ Spectator.describe CoverageReporter::Parser do
         files = subject.files
 
         # Ignore CI artifacts from kcov
-        files.reject! { |f| f.starts_with?("coverage/") }
+        files.reject!(&.starts_with?("coverage/"))
+        files.reject!(&.starts_with?(".coverage"))
 
         expect(files).to match_array [
           "spec/fixtures/lcov/coverage/test.lcov",
@@ -249,7 +250,8 @@ Spectator.describe CoverageReporter::Parser do
         files = subject.files
 
         # Ignore CI artifacts from kcov
-        files.reject! { |f| f.starts_with?("coverage/") }
+        files.reject!(&.starts_with?("coverage/"))
+        files.reject!(&.starts_with?(".coverage"))
 
         expect(files).to match_array [
           "spec/fixtures/cobertura/cobertura.xml",
