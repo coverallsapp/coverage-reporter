@@ -51,10 +51,10 @@ jobs:
         crystal: 1.13.2
     - run: make build
 
-    - name: Install kcov
-      run: |
-        sudo apt-get update
-        sudo apt-get install kcov
+    # - name: Install kcov
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install kcov
 
     - name: Install coverage.py
       run: "pip install --upgrade pip && pip install coverage && pip install pytest"
