@@ -159,7 +159,7 @@ Spectator.describe CoverageReporter::Parser do
 
           it "returns report only for specified file" do
             reports = subject.parse
-            
+
             expect(reports.map { |r| r.to_h[:name] }).to contain("spec/fixtures/python/src/boring_math.py")
           end
         end

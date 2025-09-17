@@ -14,7 +14,7 @@ module CoverageReporter
       @config : Config,
       @parallel : Bool,
       @source_files : SourceFiles,
-      @git_info : Hash(Symbol, Hash(Symbol, String) | String)
+      @git_info : Hash(Symbol, Hash(Symbol, String) | String),
     )
       service_number = @config.to_h[:service_number]?
       if @parallel

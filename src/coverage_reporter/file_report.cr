@@ -26,7 +26,7 @@ module CoverageReporter
       @branches : Array(Hits) | Nil = nil,
       @source_digest : String | Nil = nil,
       @format : String? = nil,
-      @base_path : String? = nil
+      @base_path : String? = nil,
     )
     end
 

@@ -41,7 +41,7 @@ Spectator.describe CoverageReporter::CoveragepyParser do
     context "with valid coverage file" do
       it "reads the coverage" do
         reports = subject.parse(filename)
-        
+
         expect(reports.size).to be > 0
         expect(reports.map(&.to_h.transform_keys(&.to_s)))
           .to eq YAML.parse(File.read("#{__DIR__}/coveragepy_results.yml"))

@@ -45,7 +45,7 @@ module CoverageReporter
       @flag_name : String? = nil,
       @overrides : CI::Options? = nil,
       @compare_ref : String? = nil,
-      @compare_sha : String? = nil
+      @compare_sha : String? = nil,
     )
       @yaml = YamlConfig.read(path)
 

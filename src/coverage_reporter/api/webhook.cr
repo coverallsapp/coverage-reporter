@@ -6,7 +6,7 @@ module CoverageReporter
     def initialize(
       @config : Config,
       @carryforward : String?,
-      @git : Hash(Symbol, Hash(Symbol, String) | String)
+      @git : Hash(Symbol, Hash(Symbol, String) | String),
     )
     end
 
