@@ -21,8 +21,10 @@ jobs:
         crystal: 1.13.2
     - name: Install dependencies
       run: shards install
-    - name: Install coverage.py
-      run: "pip install --upgrade pip && pip install coverage && pip install pytest"
+    # - name: Install coverage.py
+    #   run: "pip install --upgrade pip && pip install coverage && pip install pytest"
+    - name: Install Python coverage deps
+      run: python3 -m pip install --upgrade pip && pip install coverage pytest
     - name: Run tests
       run: crystal spec --verbose --order random --error-on-warnings
 

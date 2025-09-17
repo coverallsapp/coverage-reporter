@@ -74,7 +74,7 @@ module CoverageReporter
           if max_line && max_line > 0_u64
             # Crystal arrays take Int32 sizes; guard and convert explicitly.
             raise "Cobertura file has too-large line number: #{max_line}" if max_line > Int32::MAX.to_u64
-            (1..max_line.to_i32).map { |n| info.coverage[n.to_u64]? }
+            (1..max_line.to_i32).map { |line_num| info.coverage[line_num.to_u64]? }
           else
             [] of Hits?
           end
