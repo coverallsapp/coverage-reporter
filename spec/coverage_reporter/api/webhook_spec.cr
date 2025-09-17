@@ -1,5 +1,13 @@
 require "../../spec_helper"
 
+# Debug helper: log all WebMock requests during this spec file
+WebMock.after_request do |request, response|
+  puts ">>> WebMock saw: #{request.method} #{request.uri}"
+  if response.nil?
+    puts "    (no stub matched — would hit network!)"
+  end
+end
+
 Spectator.describe CoverageReporter::Api::Webhook do
   subject { described_class.new(config, "flag1,flag2", git_info) }
 

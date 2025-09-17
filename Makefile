@@ -37,7 +37,7 @@ test:
 	  pip install --upgrade pip; \
 	  pip install coverage pytest; \
 	fi
-	. .venv/bin/activate && crystal spec --verbose --order random --error-on-warnings
+	. .venv/bin/activate && crystal spec --order random --error-on-warnings
 
 .PHONY: lint
 lint:
