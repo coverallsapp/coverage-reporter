@@ -24,7 +24,7 @@ jobs:
     - name: Install coverage.py
       run: "pip install --upgrade pip && pip install coverage && pip install pytest"
     - name: Run tests
-      run: crystal spec --verbose --order random --error-on-warnings
+      run: make test
 
   lint:
     runs-on: ubuntu-latest
