@@ -73,5 +73,36 @@ Spectator.describe CoverageReporter::CoberturaParser do
         expect(reports[0].name).to match /^src\/main\/scala\/org\/scoverage\//
       end
     end
+
+    # -------------------------------------------------------------------
+    # Edge case regression tests (fixtures live in spec/fixtures/cobertura/)
+    #
+    # These cover the bug we fixed in Sept 2025 where the parser crashed
+    # with "Arithmetic overflow (OverflowError)" when max_line == 0.
+    #
+    #   • cobertura-empty-lines.xml
+    #       A class with no <line> entries at all.
+    #       Previously this triggered (1..0) → overflow.
+    #
+    #   • cobertura-zero-only.xml
+    #       A class with only line number="0" entries.
+    #       Also produced max_line = 0 → overflow.
+    #
+    # Both files are tiny repros extracted from the real-world case
+    # (kvstore/__init__.py inside a 14.3MB report (1 of 32) titled coverage-8.xml).
+    # -------------------------------------------------------------------
+    context "edge cases: empty and zero-only classes" do
+      it "parses a class with no <line> entries (no overflow)" do
+        reports = subject.parse("spec/fixtures/cobertura/cobertura-empty-lines.xml")
+        expect(reports.size).to eq 1
+        # Should not raise; coverage array may be empty and that's OK.
+      end
+
+      it "parses a class with only line number='0' entries (no overflow)" do
+        reports = subject.parse("spec/fixtures/cobertura/cobertura-zero-only.xml")
+        expect(reports.size).to eq 1
+        # Should not raise; zero-numbered lines are ignored safely.
+      end
+    end
   end
 end

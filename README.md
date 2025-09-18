@@ -260,9 +260,20 @@ shards install
 make # bin/coveralls will be created
 ```
 
-Run specs:
+### Running the test suite
+
+Run:
 
 ```bash
+make test
+```
+
+On first run this will also create a `.venv/` directory (local Python virtual environment) and install the required Python tools (`coverage.py`, `pytest`).
+
+`.venv/` is ignored by `git`, so it’s safe to delete and recreate if needed:
+
+```bash
+rm -rf .venv
 make test
 ```
 
