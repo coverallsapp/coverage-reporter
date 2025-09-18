@@ -33,6 +33,7 @@ module CoverageReporter
       CI::Wercker,
       CI::Drone,
       CI::XcodeCloud,
+      CI::Rwx,
       CI::Local,
     }
 
