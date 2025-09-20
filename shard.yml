@@ -1,5 +1,5 @@
 name: coverage-reporter
-version: 0.6.16
+version: 0.6.17
 crystal: ">= 1.17.1"
 license: MIT
 
