@@ -3,8 +3,8 @@
 # Source: https://forum.crystal-lang.org/t/cross-compiling-crystal-applications-part-1/6956
 # Repo: https://github.com/luislavena/crystal-xbuild-container
 # Background Crystal Lang Docs on:
-# - Cross-Compilation: https://crystal-lang.org/reference/1.13/syntax_and_semantics/cross-compilation.html
-# - Static Linking: https://crystal-lang.org/reference/1.13/guides/static_linking.html
+# - Cross-Compilation: https://crystal-lang.org/reference/7/syntax_and_semantics/cross-compilation.html
+# - Static Linking: https://crystal-lang.org/reference/1.17/guides/static_linking.html
 #
 # NOTE:
 # We've modified the original approach here as necessary for coverage-reporter:
@@ -15,7 +15,7 @@
 # ---
 
 # Base image from luislavena's hydrofoil-crystal image
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.13 AS base
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.17 AS base
 
 # install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
