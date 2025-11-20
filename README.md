@@ -325,3 +325,19 @@ created. Once the `brew test-bot` checks have passed, label the PR with the
 `pr-pull` tag in order to make the release available through Homebrew.
 
 [homebrew]: https://github.com/coverallsapp/homebrew-coveralls
+
+## Getting help
+
+Issues? Questions? Reach out to us [here](https://github.com/coverallsapp/coverage-reporter/issues), or at support@coveralls.io.
+
+## Contributing
+
+[Bug reports](https://github.com/coverallsapp/coverage-reporter/issues) and [pull requests](https://github.com/coverallsapp/coverage-reporter/pulls) are welcome. 
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
