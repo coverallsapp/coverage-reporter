@@ -613,5 +613,32 @@ Spectator.describe CoverageReporter::Config do
         })
       end
     end
+
+    context "for RWX" do
+      before_each do
+        ENV["RWX"] = "true"
+        ENV["RWX_GIT_REPOSITORY_NAME"] = "rwx/repo"
+        ENV["RWX_RUN_ID"] = "12345"
+        ENV["RWX_TASK_ID"] = "6789"
+        ENV["RWX_GIT_REF_NAME"] = "main"
+        ENV["RWX_RUN_URL"] = "https://cloud.rwx.com/runs/12345"
+        ENV["RWX_TASK_URL"] = "https://cloud.rwx.com/tasks/6789"
+        ENV["RWX_TASK_ATTEMPT_NUMBER"] = "3"
+        ENV["RWX_GIT_COMMIT_SHA"] = "rwx-commit-sha"
+      end
+
+      it "provides custom options" do
+        expect(subject).to eq({
+          :repo_token           => repo_token,
+          :service_name         => "rwx",
+          :service_number       => "12345",
+          :service_job_id       => "6789",
+          :service_branch       => "main",
+          :commit_sha           => "rwx-commit-sha",
+          :service_build_url    => "https://cloud.rwx.com/runs/12345",
+          :service_job_url      => "https://cloud.rwx.com/tasks/6789",
+        })
+      end
+    end
   end
 end
