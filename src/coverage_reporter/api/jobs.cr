@@ -48,7 +48,7 @@ module CoverageReporter
       Log.info "  ·job_flag: #{@config.flag_name}" if @config.flag_name
       Log.info "🚀 Posting coverage data to #{jobs_url}"
 
-      Log.debug "---\n⛑ Debug Headers:\n#{headers.to_pretty_json}"
+      Log.debug "---\n⛑ Debug Headers:\n#{headers.to_a.to_h.to_pretty_json}"
       Log.debug "---\n⛑ Debug Output:\n#{data.to_pretty_json}"
 
       return if dry_run
