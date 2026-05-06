@@ -46,13 +46,21 @@ module CoverageReporter::Cli
     ERROR
     fail(opts)
   rescue ex : Api::InternalServerError
-    Log.error "⚠️ Internal server error. Please contact Coveralls team."
+    Log.error <<-ERROR
+    ---
+    Error: #{ex.message} (#{ex.status_code})
+    Response: #{ex.response}
+    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
+    ---
+    ⚠️ Internal server error. Please contact Coveralls team with the error details above.
+    ERROR
     fail(opts)
   rescue ex : Api::UnprocessableEntity
     Log.error <<-ERROR
     ---
     Error: #{ex.message}
     Response: #{ex.response}
+    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
     ---
     🚨 Oops! It looks like your request was not processible by Coveralls.
     This is often the is the result of an incorrectly set repo token.
@@ -66,6 +74,7 @@ module CoverageReporter::Cli
     ---
     Error: #{ex.message} (#{ex.status_code})
     Message: #{ex.response}
+    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
     ---
     ERROR
     fail(opts)
