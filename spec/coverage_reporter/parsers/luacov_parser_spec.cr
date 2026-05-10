@@ -24,8 +24,8 @@ Spectator.describe CoverageReporter::LuaCovParser do
       reports = subject.parse(filename1)
       expect(reports.size).to eq 1
 
-      sample = reports.find! do |r|
-        r.name == "test.lua"
+      sample = reports.find! do |report|
+        report.name == "test.lua"
       end
 
       expect(sample.coverage).to eq [
@@ -39,16 +39,16 @@ Spectator.describe CoverageReporter::LuaCovParser do
       reports = subject.parse(filename2)
       expect(reports.size).to eq 2
 
-      sample = reports.find! do |r|
-        r.name == "my-lib.lua"
+      sample = reports.find! do |report|
+        report.name == "my-lib.lua"
       end
 
       expect(sample.coverage).to eq [
         nil, nil, nil, 1, nil, 0, nil, nil, nil,
       ] of UInt64?
 
-      sample = reports.find! do |r|
-        r.name == "test.lua"
+      sample = reports.find! do |report|
+        report.name == "test.lua"
       end
 
       expect(sample.coverage).to eq [
