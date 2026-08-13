@@ -18,7 +18,11 @@ module CoverageReporter
       include JSON::Serializable
 
       property coverage : Hash(String, Coverage | ComplexCoverage)
-      property timestamp : Int64?
+      # `timestamp` is a Unix time. Prior to simplecov v1.1.0 it was written
+      # as an integer, but v1.1.0 (see commit 234a1994) switched to
+      # `Time#to_f`, emitting a float (fractional seconds) instead.
+      # See: https://github.com/coverallsapp/github-action/issues/269
+      property timestamp : Int64 | Float64 | Nil
     end
 
     alias SimplecovReport = Hash(String, Report)
