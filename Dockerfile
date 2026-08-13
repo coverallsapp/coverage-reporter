@@ -15,7 +15,7 @@
 # ---
 
 # Base image from luislavena's hydrofoil-crystal image
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.17 AS base
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.17
 
 # install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
@@ -115,9 +115,9 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
                 xz-static \
             ; \
             # Copy the correct libz.a for each architecture \
-            # This is required because `libz.a` does not otherwise \
-            # get installed for `aarh64` and `x86_64` \
-            # just for `aarch64-apple-darwin`
+            # This is required because `zlib-static` installs `libz.a` into \
+            # `/lib` rather than `/usr/lib`, so the `cp $target_path/usr/lib/*.a` \
+            # below would otherwise miss it.
             if [ "$target_arch" = "aarch64" ]; then \
                 cp $target_path/lib/libz.a /opt/multiarch-libs/aarch64-linux-musl/lib/; \
             elif [ "$target_arch" = "x86_64" ]; then \
@@ -145,63 +145,20 @@ RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
 # MacOS
 #
 # NOTE:
-# We are not using this script to cross-compile for MacOS at this time
-# (you'll notice we have no accompanying target in our Makefile for a MacOS build).
-# Instead, we're continuing to leverage our Homebrew formula ("bottle") here: https://github.com/coverallsapp/homebrew-coveralls
+# We do not cross-compile for MacOS here (you'll notice we have no accompanying
+# target in our Makefile for a MacOS build, and our releases ship Linux and
+# Windows binaries only).
+#
+# MacOS users install via our Homebrew formula ("bottle") here: https://github.com/coverallsapp/homebrew-coveralls
 # (which our `build.yml` workflow updates using the `homebrew-bump-formula` GitHub Action).
 #
-# That said, we're continuing to build the MacOS dependencies here in case we decide to
-# switch to this method for cross-compiling MacOS binaries in the future.
+# We previously downloaded `aarch64-apple-darwin` dependencies and the MacOS SDK here,
+# speculatively, in case we ever switched to cross-compiling MacOS binaries. That was
+# never wired up, and it broke the `build-linux` job once Homebrew's formula index
+# drifted (formulas with no `stable` bottle) and Homebrew dropped its EOL `arm64_monterey`
+# bottles. It has been removed. If we ever do want MacOS cross-compilation, restore it
+# from history and target a current, supported MacOS version.
 # ---
-
-# MacOS dependencies are installed in separate target
-FROM base AS macos-packages
-COPY ./scripts/homebrew-downloader.cr /homebrew-downloader.cr
-
-RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
-    --mount=type=tmpfs,target=/tmp \
-    set -eux -o pipefail; \
-    # macOS (Monterey), supports only Apple Silicon (aarch64/arm64)
-    { \
-        pkg_path="/opt/multiarch-libs/aarch64-apple-darwin"; \
-        crystal run /homebrew-downloader.cr -- \
-            $pkg_path \
-            gmp \
-            libevent \
-            libgc \
-            libiconv \
-            libsodium \
-            libxml2 \
-            libyaml \
-            openssl@3 \
-            pcre2 \
-            sqlite \
-            zlib \
-        ; \
-    }
-
-# Copy macOS dependencies back into `base`
-FROM base
-COPY --from=macos-packages /opt/multiarch-libs/aarch64-apple-darwin /opt/multiarch-libs/aarch64-apple-darwin
-
-# Install macOS SDK
-RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
-    --mount=type=tmpfs,target=/tmp \
-    set -eux -o pipefail; \
-    { \
-        cd /tmp; \
-        export \
-            MACOS_SDK_VERSION=12.3 \
-            MACOS_SDK_MAJOR_VERSION=12 \
-            MACOS_SDK_SHA256=3abd261ceb483c44295a6623fdffe5d44fc4ac2c872526576ec5ab5ad0f6e26c \
-        ; \
-        wget -q -O sdk.tar.xz https://github.com/joseluisq/macosx-sdks/releases/download/${MACOS_SDK_VERSION}/MacOSX${MACOS_SDK_VERSION}.sdk.tar.xz; \
-        echo "${MACOS_SDK_SHA256} *sdk.tar.xz" | sha256sum -c - >/dev/null 2>&1; \
-        tar -C /opt/multiarch-libs -xf sdk.tar.xz --no-same-owner; \
-        rm sdk.tar.xz; \
-        # symlink to latest version
-        ln -nfs /opt/multiarch-libs/MacOSX${MACOS_SDK_VERSION}.sdk /opt/multiarch-libs/MacOSX${MACOS_SDK_MAJOR_VERSION}.sdk; \
-    }
 
 # Copy xbuild helper
 COPY ./scripts/xbuild.sh /usr/local/bin/xbuild
