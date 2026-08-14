@@ -17,11 +17,22 @@ module CoverageReporter
     class HTTPError < Exception
       getter status_code : Int32
       getter response : String
+      getter headers : HTTP::Headers
 
       def initialize(response : HTTP::Client::Response)
         super(response.status_message)
         @status_code = response.status_code
         @response = response.body
+        @headers = response.headers
+      end
+
+      def trace_id : String?
+        # Common tracing headers used by CDNs and cloud providers
+        headers["cf-ray"]? ||
+          headers["x-request-id"]? ||
+          headers["x-amzn-requestid"]? ||
+          headers["x-amzn-trace-id"]? ||
+          headers["x-trace-id"]?
       end
     end
 
