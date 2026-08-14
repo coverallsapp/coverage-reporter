@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Universal Coverage Reporter written in Crystal. Auto-detects coverage artifact files and CI environments to post coverage data to Coveralls.io. Supports multiple coverage formats (Lcov, SimpleCov, Cobertura, Jacoco, Gcov, Golang, Python, Clover) and CI services (GitHub Actions, CircleCI, Travis, Jenkins, GitLab, etc.).
+Universal Coverage Reporter written in Crystal. Auto-detects coverage artifact files and CI environments to post coverage data to Coveralls.io. Supports multiple coverage formats (Lcov, SimpleCov, Cobertura, Jacoco, Gcov, Golang, Python, Clover, Coveralls) and CI services (GitHub Actions, CircleCI, Travis, Jenkins, GitLab, etc.).
 
 ## Development Commands
 
