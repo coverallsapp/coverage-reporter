@@ -46,11 +46,11 @@ module CoverageReporter::Cli
     ERROR
     fail(opts)
   rescue ex : Api::InternalServerError
+    # Deliberately no response body here: a 500 is often a CDN/proxy HTML error
+    # page, which is noise for the user. The trace ID is the useful part.
     Log.error <<-ERROR
     ---
-    Error: #{ex.message} (#{ex.status_code})
-    Response: #{ex.response}
-    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
+    Error: #{ex.message} (#{ex.status_code})#{trace_line(ex)}
     ---
     ⚠️ Internal server error. Please contact Coveralls team with the error details above.
     ERROR
@@ -59,8 +59,7 @@ module CoverageReporter::Cli
     Log.error <<-ERROR
     ---
     Error: #{ex.message}
-    Response: #{ex.response}
-    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
+    Response: #{ex.response}#{trace_line(ex)}
     ---
     🚨 Oops! It looks like your request was not processible by Coveralls.
     This is often the is the result of an incorrectly set repo token.
@@ -73,8 +72,7 @@ module CoverageReporter::Cli
     HTTP error:
     ---
     Error: #{ex.message} (#{ex.status_code})
-    Message: #{ex.response}
-    #{ex.trace_id ? "Trace ID: #{ex.trace_id}" : ""}
+    Message: #{ex.response}#{trace_line(ex)}
     ---
     ERROR
     fail(opts)
@@ -371,6 +369,17 @@ module CoverageReporter::Cli
 
   private def ok
     0
+  end
+
+  # Renders the `Trace ID:` line for an API error, or nothing at all when the
+  # response carried no tracing header. Returned with a leading newline so it
+  # can be appended to the preceding line without leaving a blank one behind.
+  private def trace_line(ex : Api::HTTPError) : String
+    if trace_id = ex.trace_id
+      "\nTrace ID: #{trace_id}"
+    else
+      ""
+    end
   end
 
   private def fail(opts)
