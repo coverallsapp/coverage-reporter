@@ -532,14 +532,16 @@ Spectator.describe CoverageReporter::Config do
 
       it "provides custom options" do
         expect(subject).to eq({
-          :repo_token           => repo_token,
-          :service_name         => "rwx",
-          :service_number       => "12345",
-          :service_job_id       => "6789",
-          :service_branch       => "main",
-          :commit_sha           => "rwx-commit-sha",
-          :service_build_url    => "https://cloud.rwx.com/runs/12345",
-          :service_job_url      => "https://cloud.rwx.com/tasks/6789",
+          :repo_token        => repo_token,
+          :service_name      => "rwx",
+          :service_number    => "12345",
+          :service_job_id    => "6789",
+          :service_branch    => "main",
+          :service_attempt   => "3",
+          :commit_sha        => "rwx-commit-sha",
+          :repo_name         => "rwx/repo",
+          :service_build_url => "https://cloud.rwx.com/runs/12345",
+          :service_job_url   => "https://cloud.rwx.com/tasks/6789",
         })
       end
     end
