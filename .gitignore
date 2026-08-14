@@ -3,6 +3,7 @@
 .DS_Store
 .coveralls.yml
 /.crystal/
+.crystal-cache
 /.shards/
 /.vagrant/
 /bin/
@@ -10,7 +11,7 @@
 /dist
 /docs/
 /insecure_private_keys
-/lib/
+/lib
 coverage.xml
-.venv/
+.venv
 .vscode/
