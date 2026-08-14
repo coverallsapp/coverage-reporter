@@ -130,7 +130,7 @@ Usage: coveralls report [file reports] [options]
     -bPATH, --base-path=PATH         Path to the root folder of the project the coverage was collected in
     -jFLAG, --job-flag=FLAG          Coverage job flag name, e.g. Unit Tests
     -p, --parallel                   Set the parallel flag. Requires webhook for completion (coveralls done)
-    --format=FORMAT                  Force coverage file format, supported formats: lcov, simplecov, cobertura, jacoco, gcov, golang, python
+    --format=FORMAT                  Force coverage file format, supported formats: lcov, simplecov, cobertura, jacoco, gcov, luacov, golang, python
     --allow-empty                    Allow empty coverage results and exit 0
     --compare-ref=REF                Git branch name to compare the coverage with
     --compare-sha=SHA                Git commit SHA to compare the coverage with
@@ -190,6 +190,7 @@ With values used for `--format` option:
 - [x] Cobertura - `cobertura`
 - [x] Jacoco - `jacoco`
 - [x] Gcov - `gcov`
+- [x] LuaCov - `luacov`
 - [x] Golang coverage format - `golang`
 - [x] Coveralls JSON format - `coveralls`
 - [x] Pytest-Cov - `python`

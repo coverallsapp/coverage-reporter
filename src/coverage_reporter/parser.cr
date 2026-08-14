@@ -20,6 +20,7 @@ module CoverageReporter
       CoberturaParser,
       JacocoParser,
       GolangParser,
+      LuaCovParser,
       CoveragepyParser,
       CoverallsParser,
       LcovParser,

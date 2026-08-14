@@ -39,6 +39,16 @@ Spectator.describe CoverageReporter::Parser do
         end
       end
 
+      context "luacov" do
+        let(coverage_files) { ["spec/fixtures/luacov/single-file/luacov.report.out"] }
+
+        it "returns reports" do
+          reports = subject.parse
+
+          expect(reports.size).to be > 0
+        end
+      end
+
       context "golang" do
         let(coverage_files) { ["spec/fixtures/golang/coverage.out"] }
 
@@ -239,6 +249,18 @@ Spectator.describe CoverageReporter::Parser do
           "spec/fixtures/gcov/main.c.gcov",
           "spec/fixtures/python/.coverage",
           "spec/fixtures/coveralls/coveralls.json",
+          "spec/fixtures/luacov/single-file/luacov.report.out",
+          "spec/fixtures/luacov/two-files/luacov.report.out",
+          "spec/fixtures/luacov/first-header-content-empty/luacov.report.out",
+          "spec/fixtures/luacov/first-header-line-mismatch/luacov.report.out",
+          "spec/fixtures/luacov/first-header-without-bottom-line/luacov.report.out",
+          "spec/fixtures/luacov/first-header-without-content/luacov.report.out",
+          "spec/fixtures/luacov/first-header-without-top-line/luacov.report.out",
+          "spec/fixtures/luacov/line-info-too-many-hits/luacov.report.out",
+          "spec/fixtures/luacov/second-header-content-empty/luacov.report.out",
+          "spec/fixtures/luacov/second-header-line-mismatch/luacov.report.out",
+          "spec/fixtures/luacov/second-header-without-bottom-line/luacov.report.out",
+          "spec/fixtures/luacov/second-header-without-content/luacov.report.out",
         ]
       end
     end
