@@ -261,9 +261,20 @@ shards install
 make # bin/coveralls will be created
 ```
 
-Run specs:
+### Running the test suite
+
+Run:
 
 ```bash
+make test
+```
+
+On first run this will also create a `.venv/` directory (local Python virtual environment) and install the required Python tools (`coverage.py`, `pytest`).
+
+`.venv/` is ignored by `git`, so it’s safe to delete and recreate if needed:
+
+```bash
+rm -rf .venv
 make test
 ```
 
@@ -317,3 +328,32 @@ created. Once the `brew test-bot` checks have passed, label the PR with the
 `pr-pull` tag in order to make the release available through Homebrew.
 
 [homebrew]: https://github.com/coverallsapp/homebrew-coveralls
+
+---
+
+## Our Open-Source Promise
+
+Coveralls.io is always free for open-source projects! 
+
+Create a [free account](https://coveralls.io/pricing) for your (public) repo at Coveralls, then use one of our [official integrations](https://docs.coveralls.io/integrations#official-integrations)—[coverage-reporter](https://github.com/coverallsapp/coverage-reporter) (this project!), [github-action](https://github.com/coverallsapp/github-action), or [orb](https://github.com/coverallsapp/orb)—to upload your coverage reports to the [Coveralls API](https://docs.coveralls.io/api-introduction).
+
+Additionally, over 30 [community-created language integrations](https://docs.coveralls.io/integrations#language-integrations) exist for Coveralls.io, which you can find [here](https://docs.coveralls.io/integrations#language-integrations).
+
+## Getting help
+
+[Get started](https://docs.coveralls.io/) with our [documentation here](https://docs.coveralls.io/).
+
+Issues or Questions? Reach out to us [here](https://github.com/coverallsapp/coverage-reporter/issues), or at support@coveralls.io.
+
+## Contributing
+
+[Bug reports](https://github.com/coverallsapp/coverage-reporter/issues) and [pull requests](https://github.com/coverallsapp/coverage-reporter/pulls) are welcome. 
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+

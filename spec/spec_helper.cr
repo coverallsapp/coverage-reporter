@@ -1,3 +1,5 @@
+# NOTE: The test suite expects a local Python venv (`.venv/`) with `coverage.py` + `pytest`.
+# Run via `make test` which auto-creates/maintains the venv.
 require "../src/coverage_reporter"
 require "./support/*"
 

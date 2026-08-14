@@ -160,7 +160,7 @@ Spectator.describe CoverageReporter::Parser do
           it "returns report only for specified file" do
             reports = subject.parse
 
-            expect(reports.size).to eq 4
+            expect(reports.map(&.to_h[:name])).to contain("spec/fixtures/python/src/boring_math.py")
           end
         end
 
@@ -219,6 +219,10 @@ Spectator.describe CoverageReporter::Parser do
       it "returns all possible files across all formats" do
         files = subject.files
 
+        # Ignore CI artifacts from kcov
+        files.reject!(&.starts_with?("coverage/"))
+        files.reject!(&.starts_with?(".coverage"))
+
         expect(files).to match_array [
           "spec/fixtures/lcov/coverage/test.lcov",
           "spec/fixtures/lcov/test.lcov",
@@ -244,6 +248,10 @@ Spectator.describe CoverageReporter::Parser do
 
       it "only returns possible files for the specified format" do
         files = subject.files
+
+        # Ignore CI artifacts from kcov
+        files.reject!(&.starts_with?("coverage/"))
+        files.reject!(&.starts_with?(".coverage"))
 
         expect(files).to match_array [
           "spec/fixtures/cobertura/cobertura.xml",

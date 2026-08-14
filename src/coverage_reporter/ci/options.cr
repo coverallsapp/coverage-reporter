@@ -14,7 +14,7 @@ module CoverageReporter
         @service_pull_request : String? = nil,
         @service_attempt : String? = nil,
         @commit_sha : String? = nil,
-        @repo_name : String? = nil
+        @repo_name : String? = nil,
       ); end
 
       def to_h : Hash(Symbol, String)
