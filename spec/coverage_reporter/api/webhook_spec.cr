@@ -7,6 +7,16 @@ Spectator.describe CoverageReporter::Api::Webhook do
   let(git_info) { {:branch => "chore/add-tests", :head => {:message => "add tests"}} }
   let(endpoint) { "#{CoverageReporter::Config::DEFAULT_ENDPOINT}/webhook" }
 
+  # The expected `body` below assumes `Config#to_h` yields only the repo token,
+  # which is only true when no CI provider is detected. Under GitHub Actions the
+  # real GITHUB_* vars are present, so Config picks up service_name/service_number
+  # and the body no longer matches -- WebMock then matches no stub and raises
+  # NetConnectNotAllowedError. Whether that happened depended on whether
+  # config_spec (which clears these in its own hooks) had already run, so with
+  # `config.randomize` the failure came and went at random.
+  before_each { delete_env_vars }
+  after_each { delete_env_vars }
+
   after_each { WebMock.reset }
 
   let(headers) do
