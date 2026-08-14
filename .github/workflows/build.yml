@@ -19,7 +19,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -72,7 +72,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -113,7 +113,7 @@ jobs:
       # Removing this step will test each binary only against the latest coverage report 
       # for coverage-reporter itself, from the current CI run (in cobertura XML format).
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download x86_64 binary
         uses: actions/download-artifact@v4
@@ -159,7 +159,7 @@ jobs:
       # Removing this step will test each binary only against the latest coverage report 
       # for coverage-reporter itself, from the current CI run (in cobertura XML format).
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download aarch64 binary
         uses: actions/download-artifact@v4
@@ -203,7 +203,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
