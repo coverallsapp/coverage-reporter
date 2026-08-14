@@ -47,6 +47,8 @@ module CoverageReporter
       end
 
       false
+    rescue Exception
+      false
     end
 
     def parse(filename : String) : Array(FileReport)
@@ -97,6 +99,13 @@ module CoverageReporter
         if (state == parser_state_none || state == parser_state_line_info) && /^=+$/.matches?(line)
           if state == parser_state_line_info
             if name
+              # LuaCov writes a blank line after each file section (see
+              # `DefaultReporter:on_end_file`). That separator is not a source
+              # line, so drop it to keep the coverage array the same length as
+              # the file. A source file that genuinely ends in a blank line
+              # still gets its own entry, because LuaCov emits both.
+              coverage.pop if !coverage.empty? && coverage.last.nil?
+
               reports << file_report(name, coverage.dup)
               coverage.clear
             else

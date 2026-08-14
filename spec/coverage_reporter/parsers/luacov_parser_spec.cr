@@ -29,8 +29,12 @@ Spectator.describe CoverageReporter::LuaCovParser do
       end
 
       expect(sample.coverage).to eq [
-        nil, nil, 1, nil, 0, nil, 11, 10, 1, nil, 9, nil, nil, 1, 1, nil, 0, nil, nil, nil,
+        nil, nil, 1, nil, 0, nil, 11, 10, 1, nil, 9, nil, nil, 1, 1, nil, 0, nil, nil,
       ] of UInt64?
+
+      # the coverage array must not be longer than the file it describes
+      source_lines = File.read_lines("spec/fixtures/luacov/single-file/test.lua").size
+      expect(sample.coverage.size).to eq source_lines
     end
 
     let(filename2) { "spec/fixtures/luacov/two-files/luacov.report.out" }
@@ -44,7 +48,7 @@ Spectator.describe CoverageReporter::LuaCovParser do
       end
 
       expect(sample.coverage).to eq [
-        nil, nil, nil, 1, nil, 0, nil, nil, nil,
+        nil, nil, nil, 1, nil, 0, nil, nil,
       ] of UInt64?
 
       sample = reports.find! do |report|
@@ -52,8 +56,11 @@ Spectator.describe CoverageReporter::LuaCovParser do
       end
 
       expect(sample.coverage).to eq [
-        nil, nil, 1, nil, 0, nil, 11, 10, 1, nil, 9, nil, nil, 1, 1, nil, 0, nil, nil, nil,
+        nil, nil, 1, nil, 0, nil, 11, 10, 1, nil, 9, nil, nil, 1, 1, nil, 0, nil, nil,
       ] of UInt64?
+
+      source_lines = File.read_lines("spec/fixtures/luacov/two-files/test.lua").size
+      expect(sample.coverage.size).to eq source_lines
     end
 
     let(filename3) { "spec/fixtures/luacov/line-info-too-many-hits/luacov.report.out" }
