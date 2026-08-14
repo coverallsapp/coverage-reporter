@@ -70,5 +70,19 @@ Spectator.describe CoverageReporter::SimplecovParser do
         })
       end
     end
+
+    context "with a float timestamp (issue #269)" do
+      let(filename) { "spec/fixtures/simplecov/float-timestamp.resultset.json" }
+
+      it "parses correctly" do
+        reports = subject.parse(filename)
+        expect(reports.size).to eq 1
+        expect(reports[0].to_h).to eq({
+          :name     => "home/user/app/models/user.rb",
+          :branches => [] of UInt64,
+          :coverage => [nil, 1, 1, 0],
+        })
+      end
+    end
   end
 end

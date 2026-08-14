@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
@@ -43,7 +43,7 @@ jobs:
   coverage:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
@@ -76,7 +76,7 @@ jobs:
         echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: coverage-report
         path: ${{ env.COVERAGE_FILE }}

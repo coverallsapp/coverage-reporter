@@ -1,0 +1,37 @@
+# Dependabot keeps our release-path dependencies from silently drifting.
+#
+# Context: the v0.6.18 release surfaced three separate breakages, all caused by
+# external drift in infrastructure that had not run since Sept 2025 -- including
+# `dawidd6/action-homebrew-bump-formula` sitting five major versions behind,
+# which broke the Homebrew formula bump once Homebrew 6.0.0 introduced tap trust.
+# Dependabot would have flagged that long before it broke a release.
+#
+# NOTE: There is no Dependabot ecosystem for Crystal shards, so `shard.yml` /
+# `shard.lock` are not covered here and still need manual review.
+version: 2
+updates:
+  # GitHub Actions used by ci.yml and build.yml (including the release and
+  # Homebrew formula-bump jobs).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Base image for the cross-compilation container (Dockerfile), which produces
+  # our released Linux binaries.
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build"
+    labels:
+      - "dependencies"
+      - "docker"

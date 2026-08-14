@@ -121,6 +121,23 @@ Spectator.describe CoverageReporter::Api::Jobs do
     expect { subject.send_request }.not_to raise_error
   end
 
+  # Regression: HTTP::Headers#to_json was an undocumented Crystal stdlib path
+  # that broke in 1.20.0. We now serialize the debug-headers line via a plain
+  # Hash so we never depend on that overload.
+  # See: https://github.com/coverallsapp/coverage-reporter/issues/187
+  it "logs debug headers without invoking HTTP::Headers#to_json" do
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Debug)
+
+    WebMock.stub(:post, endpoint).with(
+      headers: headers,
+      body: request_body,
+    ).to_return(status: 200, body: {:result => "ok"}.to_json)
+
+    expect { subject.send_request }.not_to raise_error
+  ensure
+    CoverageReporter::Log.set(CoverageReporter::Log::Level::Info)
+  end
+
   it "redirects relatively" do
     redirect_path = "/api/v9/jobs"
     redirect_url = "#{CoverageReporter::Config::DEFAULT_ENDPOINT}#{redirect_path}"

@@ -19,7 +19,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -53,14 +53,14 @@ jobs:
           tar -acf coveralls-windows.zip coveralls.exe
 
       - name: Upload exe
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coveralls-windows.exe
           path: dist/coveralls.exe
           if-no-files-found: error
 
       - name: Upload zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coveralls-windows.zip
           path: dist/coveralls-windows.zip
@@ -72,7 +72,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
@@ -94,7 +94,7 @@ jobs:
         run: make package
 
       - name: Upload linux binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coveralls-linux-binaries
           path: dist/*
@@ -113,10 +113,10 @@ jobs:
       # Removing this step will test each binary only against the latest coverage report 
       # for coverage-reporter itself, from the current CI run (in cobertura XML format).
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download x86_64 binary
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: coveralls-linux-binaries
           path: test/
@@ -129,7 +129,7 @@ jobs:
           $binary --version
       
       - name: Download latest coverage report for coverage-reporter from ci.yml
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v21
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
@@ -159,10 +159,10 @@ jobs:
       # Removing this step will test each binary only against the latest coverage report 
       # for coverage-reporter itself, from the current CI run (in cobertura XML format).
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download aarch64 binary
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: coveralls-linux-binaries
           path: test/
@@ -177,7 +177,7 @@ jobs:
           qemu-aarch64 $binary --version
       
       - name: Download latest coverage report for coverage-reporter from ci.yml
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v21
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
@@ -203,7 +203,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -211,7 +211,7 @@ jobs:
         run: git fetch --force --tags
 
       - name: Download binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts/
 
@@ -255,7 +255,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v3
+        uses: dawidd6/action-homebrew-bump-formula@v8
         with:
           tap: coverallsapp/coveralls
           formula: coveralls
