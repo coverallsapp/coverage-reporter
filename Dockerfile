@@ -15,7 +15,7 @@
 # ---
 
 # Base image from luislavena's hydrofoil-crystal image
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.17
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.21
 
 # install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
