@@ -74,6 +74,37 @@ Spectator.describe CoverageReporter::CoberturaParser do
       end
     end
 
+    # Reporters like coverage.py and gcovr emit one <line> per branching line
+    # and record how many of its branches were taken in `condition-coverage`,
+    # rather than one <line> per branch.
+    context "with condition-coverage attributes" do
+      let(filename) { "spec/fixtures/cobertura/cobertura-conditions.xml" }
+
+      it "reports one branch per condition" do
+        report = subject.parse(filename).first
+
+        expect(report.name).to eq "src/branchy.py"
+        expect(report.coverage).to eq [
+          1, nil, nil, 1, nil, 1, nil, 3, nil, 0, nil, 2,
+        ] of UInt64?
+        expect(report.branches).to eq [
+          # 50% (1/2): one branch taken, one missed.
+          4, 1, 0, 1,
+          4, 2, 1, 0,
+          # 100% (2/2): both branches taken, each keeping the line's hits.
+          8, 3, 0, 3,
+          8, 4, 1, 3,
+          # 0% (0/2): line never ran, so both branches are missed.
+          10, 5, 0, 0,
+          10, 6, 1, 0,
+          # 33% (1/3): three-way branch with only the first taken.
+          12, 7, 0, 2,
+          12, 8, 1, 0,
+          12, 9, 2, 0,
+        ] of UInt64?
+      end
+    end
+
     # -------------------------------------------------------------------
     # Edge case regression tests (fixtures live in spec/fixtures/cobertura/)
     #
