@@ -30,6 +30,8 @@ Spectator.configure do |config|
   end
 
   config.after_suite do
-    File.delete("spec/fixtures/python/.coverage")
+    # delete? so a failed before_suite (or an aborted run) surfaces the real
+    # error instead of a File::NotFoundError from teardown.
+    File.delete?("spec/fixtures/python/.coverage")
   end
 end
