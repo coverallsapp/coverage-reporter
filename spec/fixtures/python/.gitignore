@@ -5,3 +5,7 @@ __pycache__/
 # artifact, not a fixture -- committing it makes every local `make test` run
 # show a spurious deletion in `git status`.
 .coverage
+
+# pytest treats this directory as its rootdir (see pytest.ini), so its cache
+# lands here too. Also a build artifact of the same spec suite hook.
+.pytest_cache/
