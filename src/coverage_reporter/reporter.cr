@@ -87,12 +87,12 @@ module CoverageReporter
 
     private def measure(name : String, &)
       return yield unless settings.measure
-      start = Time.monotonic
+      start = Time.instant
 
       yield
     ensure
       if start
-        elapsed_time = Time.monotonic - start
+        elapsed_time = Time.instant - start
         Log.info("⏱️ #{name}: #{elapsed_time}")
       end
     end
