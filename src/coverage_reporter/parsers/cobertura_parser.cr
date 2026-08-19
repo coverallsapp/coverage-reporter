@@ -7,6 +7,15 @@ module CoverageReporter
       coverage : Hash(Line, Hits?),
       branches : Hash(Line, Array(Hits))
 
+    # Reporters such as coverage.py and gcovr describe how many of a line's
+    # branches were taken with a `condition-coverage="50% (1/2)"` attribute
+    # instead of emitting one `<line>` per branch.
+    CONDITION_COVERAGE_RE = /\((\d+)\/(\d+)\)/
+
+    # Sanity limit for the branch count read out of `condition-coverage`, so a
+    # malformed attribute cannot make us allocate an enormous array.
+    MAX_BRANCHES_PER_LINE = 1024_u64
+
     def globs : Array(String)
       [
         "**/*/cobertura.xml",
@@ -50,13 +59,14 @@ module CoverageReporter
         branches = Hash(Line, Array(Hits)).new { |hh, kk| hh[kk] = [] of Hits }
 
         node.xpath_nodes("lines/line").each do |line_node|
+          line_number = line_node.attributes["number"].content.to_u64
+          line_hits = line_node.attributes["hits"].content.to_u64
+
           if line_node.attributes["branch"]?.try(&.content) == "true"
-            branches[line_node.attributes["number"].content.to_u64] <<
-              line_node.attributes["hits"].content.to_u64
+            branches[line_number].concat(branch_hits(line_node, line_hits))
           end
 
-          coverage[line_node.attributes["number"].content.to_u64] =
-            line_node.attributes["hits"].content.to_u64
+          coverage[line_number] = line_hits
         end
 
         files[name].coverage.merge!(coverage)
@@ -93,6 +103,33 @@ module CoverageReporter
           end,
         )
       end
+    end
+
+    # Returns one hit count per branch of the line.
+    #
+    # When the line carries a `condition-coverage` attribute we know how many
+    # of its branches were taken, so we expand it into that many entries: the
+    # taken ones keep the line's hit count, the rest are reported as missed.
+    # `condition-coverage` does not say *which* branches were missed, only how
+    # many, so the taken ones are listed first.
+    #
+    # Without the attribute we fall back to a single branch carrying the line's
+    # hit count, which is how reporters that emit one `<line>` per branch
+    # (for example scoverage) describe their data.
+    private def branch_hits(line_node : XML::Node, line_hits : Hits) : Array(Hits)
+      condition = line_node.attributes["condition-coverage"]?.try(&.content)
+      match = condition.try { |value| CONDITION_COVERAGE_RE.match(value) }
+      return [line_hits] if match.nil?
+
+      taken = match[1].to_u64
+      total = match[2].to_u64
+      return [line_hits] if total.zero? || taken > total || total > MAX_BRANCHES_PER_LINE
+
+      # A line cannot take a branch without being executed. If the report says
+      # otherwise, trust the branch count and report the taken ones as hit.
+      taken_hits = line_hits > 0 ? line_hits : 1_u64
+
+      Array(Hits).new(total.to_i32) { |index| index < taken ? taken_hits : 0_u64 }
     end
   end
 end
