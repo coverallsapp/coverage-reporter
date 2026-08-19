@@ -34,7 +34,7 @@
 # hold this back (see .github/dependabot.yml). Revisit once #17212 is fixed and
 # released, and verify a rebuilt binary contains no "SYSMON" string before
 # accepting the bump.
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.20.3
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.21.0
 
 # install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
