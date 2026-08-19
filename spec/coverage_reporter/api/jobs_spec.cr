@@ -69,12 +69,23 @@ Spectator.describe CoverageReporter::Api::Jobs do
     body.to_s
   end
 
+  # `request_body` above is built from `Config#to_h`, which gains service_name,
+  # service_number and friends as soon as a CI provider is detected. Under GitHub
+  # Actions the real GITHUB_* vars are present, so the stubbed body and the request
+  # `Api::Jobs` actually builds can disagree -- WebMock then matches no stub and
+  # raises NetConnectNotAllowedError instead of the expected error. Whether that
+  # happened depended on whether config_spec or webhook_spec (which clear these in
+  # their own hooks) had already run, so with `config.randomize` it came and went
+  # at random. webhook_spec had the same problem and clears the vars for the same
+  # reason; this spec was the last one still exposed.
   before_each do
+    delete_env_vars
     ENV["COVERALLS_RUN_AT"] = Time::Format::RFC_3339.format(Time.local)
   end
 
   after_each do
     WebMock.reset
+    delete_env_vars
     ENV.delete("COVERALLS_RUN_AT")
   end
 
