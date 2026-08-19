@@ -27,7 +27,11 @@ jobs:
           # NOTE: keep this in step with the Crystal version in the xbuild container's
           # base image (Dockerfile `FROM ghcr.io/luislavena/hydrofoil-crystal:<tag>`),
           # so every binary we ship is built by the same compiler.
-          crystal: 1.21.0
+          #
+          # Held at 1.20.x on purpose: Crystal 1.21's default runtime crashes at
+          # random with "Thread#execution_context cannot be nil". See the note in
+          # the Dockerfile before changing this.
+          crystal: 1.20.3
 
       - name: Build SQLite3 static library
         run: "scripts/sqlite3-static.ps1"
@@ -81,7 +85,7 @@ jobs:
         uses: crystal-lang/install-crystal@v1
         with:
           # Keep in step with the xbuild container (see note in build-windows).
-          crystal: 1.21.0
+          crystal: 1.20.3
 
       - name: Install shards dependencies
         run: shards install --production

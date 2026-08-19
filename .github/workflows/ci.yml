@@ -18,7 +18,12 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.17.1
+        # Keep in step with the compiler that builds our released binaries
+        # (Dockerfile `FROM ghcr.io/luislavena/hydrofoil-crystal:<tag>` and the
+        # `crystal:` pins in build.yml). Testing on a different version than we
+        # ship is how the v0.6.19 execution-context regression reached users:
+        # specs ran on 1.17.1 while releases were built on 1.21.0.
+        crystal: 1.20.3
     - name: Install dependencies
       run: shards install
     - name: Install coverage.py
@@ -34,7 +39,8 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.17.1
+        # Keep in step with build.yml (see note in the `test` job).
+        crystal: 1.20.3
     - name: Install dependencies
       run: shards install
     - name: Run linter
@@ -48,7 +54,8 @@ jobs:
     - name: Install Crystal
       uses: crystal-lang/install-crystal@v1
       with:
-        crystal: 1.17.1
+        # Keep in step with build.yml (see note in the `test` job).
+        crystal: 1.20.3
     - run: make build
 
     - name: Install kcov

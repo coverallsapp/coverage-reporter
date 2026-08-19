@@ -35,3 +35,16 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    # Hold the Crystal toolchain at 1.20.x.
+    #
+    # Dependabot proposed the 1.17 -> 1.21 bump in #197, we merged it, and it
+    # shipped a runtime regression in v0.6.19/v0.6.20 that crashed customer CI
+    # jobs at random ("Thread#execution_context cannot be nil"). Crystal 1.21
+    # turns on execution contexts by default; see the long note in the
+    # Dockerfile and https://github.com/crystal-lang/crystal/issues/17212.
+    #
+    # Remove this ignore only when #17212 is fixed upstream AND a rebuilt
+    # binary has been checked for the "SYSMON" string.
+    ignore:
+      - dependency-name: "ghcr.io/luislavena/hydrofoil-crystal"
+        versions: [">= 1.21"]
