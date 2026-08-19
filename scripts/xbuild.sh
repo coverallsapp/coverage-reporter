@@ -52,7 +52,32 @@ object_file="${TMPDIR:-/tmp}/$(basename "${filename%.*}-$target_platform.o")"
 
 # capture output from build
 pkg_config_libdir="$multiarch_root/$target_platform/lib/pkgconfig"
-build_cmd="crystal build --release --no-debug --static --cross-compile --target $target_platform"
+
+# `-Devloop=libevent` is required, not a tuning knob.
+#
+# Crystal >= 1.19 creates a CLOCK_BOOTTIME timerfd while starting its default
+# (epoll) event loop. Sandboxed container runtimes -- gVisor and friends, which
+# back Cloud Run, GKE Autopilot and several CI providers -- implement
+# timerfd_create() for CLOCK_REALTIME and CLOCK_MONOTONIC only and return EINVAL
+# for CLOCK_BOOTTIME. The event loop is built during startup, so the binary dies
+# before main() with a (misleadingly named) error:
+#
+#   Unhandled exception: timerfd_settime: Invalid argument (RuntimeError)
+#
+# even for `coveralls --version`. Crystal 1.21 hits the same wall a step earlier
+# and reports it as "Thread#execution_context cannot be nil" instead. This broke
+# v0.6.19, v0.6.20 and v0.6.21 for every user on such a runtime -- 100% of runs,
+# not intermittently.
+#
+# The libevent loop does not use timerfd at all, so it sidesteps the whole
+# problem rather than trading one clock for another. Upstream change that
+# introduced it: https://github.com/crystal-lang/crystal/pull/16516
+#
+# Guarded by the regression gate in .github/workflows/build.yml, which runs the
+# real shipped binary under a seccomp profile that reproduces those runtimes.
+# Revisit if Crystal grows a CLOCK_MONOTONIC fallback, and re-run that gate
+# before removing this.
+build_cmd="crystal build --release --no-debug --static -Devloop=libevent --cross-compile --target $target_platform"
 
 build_output=$(PKG_CONFIG_LIBDIR="$pkg_config_libdir" $build_cmd "$filename" -o "$object_file")
 
