@@ -15,7 +15,26 @@
 # ---
 
 # Base image from luislavena's hydrofoil-crystal image
-FROM ghcr.io/luislavena/hydrofoil-crystal:1.21
+#
+# PINNED TO 1.20.x -- DO NOT BUMP TO 1.21+ WITHOUT READING THIS.
+#
+# Crystal 1.21 enables execution contexts (RFC 0002) by default. That runtime
+# starts a bare `SYSMON` monitor thread which has no execution context of its
+# own, and it races with main-thread initialization. When it loses the race the
+# process dies with:
+#
+#   Unhandled exception: Thread#execution_context cannot be nil (NilAssertionError)
+#
+# We shipped that in v0.6.19 and v0.6.20 (the container bump landed in #197) and
+# it broke customer CI jobs at random. It is an open upstream regression:
+# https://github.com/crystal-lang/crystal/issues/17212
+#
+# 1.20.3 is the newest Crystal whose *default* runtime predates execution
+# contexts, so binaries built here are unaffected. Dependabot is configured to
+# hold this back (see .github/dependabot.yml). Revisit once #17212 is fixed and
+# released, and verify a rebuilt binary contains no "SYSMON" string before
+# accepting the bump.
+FROM ghcr.io/luislavena/hydrofoil-crystal:1.20.3
 
 # install cross-compiler (Zig) with dependencies and utilities
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
