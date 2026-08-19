@@ -1,5 +1,5 @@
 require "./coverage_reporter/*"
 
 module CoverageReporter
-  VERSION = "0.6.19"
+  VERSION = "0.6.20"
 end
