@@ -1,0 +1,30 @@
+{
+  "_comment": [
+    "Seccomp profile that models a sandboxed container runtime (gVisor and",
+    "similar), which implements timerfd_create() for CLOCK_REALTIME and",
+    "CLOCK_MONOTONIC only and returns EINVAL for CLOCK_BOOTTIME (clockid 7).",
+    "",
+    "Crystal >= 1.19 asks for a CLOCK_BOOTTIME timerfd while starting its",
+    "event loop, so a binary built that way aborts before main() in those",
+    "runtimes -- even `coveralls --version` fails. That shipped in v0.6.19,",
+    "v0.6.20 and v0.6.21 and broke a customer's CI for a week.",
+    "",
+    "Used by the regression gate in .github/workflows/build.yml. Everything",
+    "else is allowed; only the one clockid is rejected."
+  ],
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "archMap": [
+    { "architecture": "SCMP_ARCH_X86_64", "subArchitectures": ["SCMP_ARCH_X86", "SCMP_ARCH_X32"] },
+    { "architecture": "SCMP_ARCH_AARCH64", "subArchitectures": [] }
+  ],
+  "syscalls": [
+    {
+      "names": ["timerfd_create"],
+      "action": "SCMP_ACT_ERRNO",
+      "errnoRet": 22,
+      "args": [
+        { "index": 0, "value": 7, "op": "SCMP_CMP_EQ" }
+      ]
+    }
+  ]
+}

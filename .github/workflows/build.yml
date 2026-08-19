@@ -135,7 +135,37 @@ jobs:
           echo $binary
           chmod +x $binary
           $binary --version
-      
+
+      # REGRESSION GATE -- do not delete without reading this.
+      #
+      # v0.6.19, v0.6.20 and v0.6.21 all shipped binaries that could not start
+      # at all in sandboxed container runtimes (gVisor and similar, which back
+      # Cloud Run, GKE Autopilot and several CI providers). Those runtimes
+      # implement timerfd_create() for CLOCK_REALTIME/CLOCK_MONOTONIC only and
+      # return EINVAL for CLOCK_BOOTTIME, which Crystal >= 1.19 requests while
+      # starting its default event loop. Affected users saw 100% failure, even
+      # on `coveralls --version`.
+      #
+      # Ordinary CI could never catch it: GitHub runners and Docker Desktop use
+      # a real kernel, where CLOCK_BOOTTIME timerfds work fine. So we reproduce
+      # the sandbox with a seccomp profile and run the actual shipped binary
+      # under it. See scripts/xbuild.sh for the `-Devloop=libevent` fix.
+      - name: Regression check - starts in a sandboxed runtime (no CLOCK_BOOTTIME timerfd)
+        run: |
+          set -euo pipefail
+          chmod +x test/coveralls-linux-x86_64
+          if ! docker run --rm \
+              --security-opt seccomp=.github/seccomp/no-clock-boottime.json \
+              -v "$PWD/test:/test:ro" \
+              alpine:3 /test/coveralls-linux-x86_64 --version; then
+            echo "::error::Binary fails to start when CLOCK_BOOTTIME timerfds are unavailable."
+            echo "::error::This is the v0.6.19-v0.6.21 regression. Check that scripts/xbuild.sh"
+            echo "::error::still passes -Devloop=libevent, and that the Crystal version in the"
+            echo "::error::Dockerfile has not moved somewhere that reintroduces timerfd startup."
+            exit 1
+          fi
+
+
       - name: Download latest coverage report for coverage-reporter from ci.yml
         uses: dawidd6/action-download-artifact@v23
         with:
