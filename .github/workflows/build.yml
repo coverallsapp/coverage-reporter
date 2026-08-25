@@ -167,7 +167,7 @@ jobs:
 
 
       - name: Download latest coverage report for coverage-reporter from ci.yml
-        uses: dawidd6/action-download-artifact@v23
+        uses: dawidd6/action-download-artifact@v24
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
@@ -215,7 +215,7 @@ jobs:
           qemu-aarch64 $binary --version
       
       - name: Download latest coverage report for coverage-reporter from ci.yml
-        uses: dawidd6/action-download-artifact@v23
+        uses: dawidd6/action-download-artifact@v24
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ci.yml
