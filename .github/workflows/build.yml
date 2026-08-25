@@ -139,18 +139,21 @@ jobs:
       # REGRESSION GATE -- do not delete without reading this.
       #
       # v0.6.19, v0.6.20 and v0.6.21 all shipped binaries that could not start
-      # at all in sandboxed container runtimes (gVisor and similar, which back
-      # Cloud Run, GKE Autopilot and several CI providers). Those runtimes
-      # implement timerfd_create() for CLOCK_REALTIME/CLOCK_MONOTONIC only and
-      # return EINVAL for CLOCK_BOOTTIME, which Crystal >= 1.19 requests while
-      # starting its default event loop. Affected users saw 100% failure, even
-      # on `coveralls --version`.
+      # at all on Linux kernels older than 3.15 (June 2014), which is when
+      # CLOCK_BOOTTIME timerfds were added. Older kernels support
+      # timerfd_create() for CLOCK_REALTIME/CLOCK_MONOTONIC only and return
+      # EINVAL for CLOCK_BOOTTIME, which Crystal >= 1.19 requests while starting
+      # its default event loop. Affected users saw 100% failure, even on
+      # `coveralls --version`. Confirmed in the field on RHEL/CentOS 7 (kernel
+      # 3.10), still widespread in enterprise CI. Some sandboxed runtimes lack
+      # it too, but the kernel floor is the common case.
       #
       # Ordinary CI could never catch it: GitHub runners and Docker Desktop use
-      # a real kernel, where CLOCK_BOOTTIME timerfds work fine. So we reproduce
-      # the sandbox with a seccomp profile and run the actual shipped binary
-      # under it. See scripts/xbuild.sh for the `-Devloop=libevent` fix.
-      - name: Regression check - starts in a sandboxed runtime (no CLOCK_BOOTTIME timerfd)
+      # a modern kernel, where CLOCK_BOOTTIME timerfds work fine. So we
+      # reproduce that condition with a seccomp profile and run the actual
+      # shipped binary under it. See scripts/xbuild.sh for the
+      # `-Devloop=libevent` fix.
+      - name: Regression check - starts without CLOCK_BOOTTIME timerfd support
         run: |
           set -euo pipefail
           chmod +x test/coveralls-linux-x86_64
