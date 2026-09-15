@@ -296,7 +296,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v8
+        uses: dawidd6/action-homebrew-bump-formula@v10
         with:
           tap: coverallsapp/coveralls
           formula: coveralls
