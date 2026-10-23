@@ -85,7 +85,7 @@ dist/coveralls --repo-token=<...> --file coverage/coverage.mycov
 
 ### Parser design
 
-`CoverageReporter::BaseParser` provides a strict interface that needs to be implemented in order to parse coverage reports correctly and convert the report format into the data Coveralls API would understand. That's why the `#parser` method returns an array of `FileReport`, not just an array of `Hash`.
+`CoverageReporter::BaseParser` provides a strict interface that needs to be implemented in order to parse coverage reports correctly and convert the report format into the data Coveralls API would understand. That's why the `#parse` method returns an array of `FileReport`, not just an array of `Hash`.
 
 ## Support new CI options
 
