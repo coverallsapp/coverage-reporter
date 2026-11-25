@@ -34,6 +34,7 @@ module CoverageReporter
       CI::Drone,
       CI::XcodeCloud,
       CI::Rwx,
+      CI::Woodpecker,
       CI::Local,
     }
 

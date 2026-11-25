@@ -496,6 +496,58 @@ Spectator.describe CoverageReporter::Config do
       end
     end
 
+    context "for Woodpecker" do
+      before_each do
+        ENV["CI"] = "woodpecker"
+        ENV["CI_REPO"] = "owner/repo"
+        ENV["CI_PIPELINE_NUMBER"] = "42"
+        ENV["CI_PIPELINE_URL"] = "https://ci.example.com/repos/7/pipeline/42"
+        ENV["CI_WORKFLOW_NAME"] = "test"
+        ENV["CI_WORKFLOW_NUMBER"] = "2"
+        ENV["CI_STEP_URL"] = "https://ci.example.com/repos/7/pipeline/42/5"
+        ENV["CI_COMMIT_BRANCH"] = "main"
+        ENV["CI_COMMIT_SHA"] = "woodpecker-commit"
+      end
+
+      it "provides custom options" do
+        expect(subject).to eq({
+          :repo_token         => repo_token,
+          :service_name       => "woodpecker",
+          :repo_name          => "owner/repo",
+          :service_number     => "42",
+          :service_build_url  => "https://ci.example.com/repos/7/pipeline/42",
+          :service_job_id     => "test",
+          :service_job_number => "2",
+          :service_job_url    => "https://ci.example.com/repos/7/pipeline/42/5",
+          :service_branch     => "main",
+          :commit_sha         => "woodpecker-commit",
+        })
+      end
+
+      context "for a pull request" do
+        before_each do
+          ENV["CI_COMMIT_BRANCH"] = "main"
+          ENV["CI_COMMIT_SOURCE_BRANCH"] = "feature"
+          ENV["CI_COMMIT_PULL_REQUEST"] = "13"
+        end
+
+        it "reports the source branch and pull request number" do
+          expect(subject[:service_branch]).to eq("feature")
+          expect(subject[:service_pull_request]).to eq("13")
+        end
+      end
+
+      context "when CI is set by another service" do
+        before_each do
+          ENV["CI"] = "true"
+        end
+
+        it "does not detect Woodpecker" do
+          expect(subject[:service_name]?).to be_nil
+        end
+      end
+    end
+
     context "for Xcode Cloud" do
       before_each do
         ENV["CI_XCODE_PROJECT"] = "/Users/coveralls/coverage-reporter"

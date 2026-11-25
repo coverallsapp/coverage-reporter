@@ -112,4 +112,13 @@ def delete_env_vars
   ENV.delete("WERCKER_BUILD_ID")
   ENV.delete("WERCKER_GIT_BRANCH")
   ENV.delete("WERCKER_GIT_COMMIT")
+  ENV.delete("CI")
+  ENV.delete("CI_REPO")
+  ENV.delete("CI_PIPELINE_NUMBER")
+  ENV.delete("CI_WORKFLOW_NAME")
+  ENV.delete("CI_WORKFLOW_NUMBER")
+  ENV.delete("CI_STEP_URL")
+  ENV.delete("CI_COMMIT_BRANCH")
+  ENV.delete("CI_COMMIT_SOURCE_BRANCH")
+  ENV.delete("CI_COMMIT_PULL_REQUEST")
 end
