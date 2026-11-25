@@ -214,6 +214,7 @@ You can add a report parser to this project by following [these instructions](./
 - Buildkite
 - Xcode Cloud
 - RWX
+- Woodpecker
 
 [Docs on environment variables for other CI support.](https://docs.coveralls.io/ci-services#option-1-use-common-environment-variables)
 
